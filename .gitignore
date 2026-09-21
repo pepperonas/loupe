@@ -1,0 +1,30 @@
+# Xcode & SPM
+.DS_Store
+.build/
+.swiftpm/
+DerivedData/
+*.xcodeproj
+*.xcworkspace
+build/
+
+# App Bundles & Binaries
+*.app
+*.appex
+*.dSYM
+*.dmg
+*.zip
+
+# User settings
+xcuserdata/
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# Secrets & temporary files
+*.pem
+*.key
+*.cer
+*.cert
+*.p12
+*.tmp
+*.log
