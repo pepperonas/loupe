@@ -281,6 +281,10 @@ Allererstes zu prüfen**, sobald ein leeres Skelett baut: eine `.appex`, die
 schlicht „hallo" ausgibt, beantwortet die Frage in Minuten. Fällt sie negativ
 aus, ändert das den Zuschnitt grundlegend.
 
+**Ergebnis 2026-09-22: bestätigt.** Manuell in Finder verifiziert (Leertaste
+auf `~/Desktop/loupe-r1.json`) — die Loupe-Vorschau erscheint, nicht die
+System-Textvorschau.
+
 **R2 — Quick-Look-Zeitbudget.** Eine zu langsame Vorschau wird abgebrochen. Das
 Byte-orientierte Lexen (§5) adressiert es; nachzumessen ist es an einer realen
 20-MB-Datei.

@@ -17,7 +17,7 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
         let html = """
         <!DOCTYPE html>
         <html lang="de"><head><meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none';">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'">
         <style>
           body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 32px; }
           code { font-family: ui-monospace, SFMono-Regular, monospace; }
@@ -26,7 +26,7 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
         <body>
           <h1>Loupe</h1>
           <p>R1-Nachweis: Diese Vorschau stammt von Loupe, nicht von der System-Textvorschau.</p>
-          <p><code>\(url.lastPathComponent)</code> — \(size ?? 0) Bytes</p>
+          <p><code>\(HTMLEscape.escape(url.lastPathComponent))</code> — \(size) Bytes</p>
         </body></html>
         """
         let reply = QLPreviewReply(dataOfContentType: .html, contentSize: CGSize(width: 840, height: 640)) { _ in

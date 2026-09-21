@@ -53,6 +53,8 @@ das Struct wächst mit.
 - Create: `Package.swift`
 - Create: `Sources/LoupeCore/Preview/PreviewRenderer.swift`
 - Create: `Sources/LoupeCore/Configuration/LoupeSettings.swift` (Platzhalter, Task 7 ersetzt ihn)
+- Create: `Sources/LoupeCore/Render/HTMLEscape.swift` (vorgezogen aus Task 7 — die Erweiterung
+  schreibt ab dem ersten Commit einen Dateinamen ins HTML, und ein Dateiname ist fremder Eingabewert)
 - Create: `Tests/LoupeTests/main.swift` (Platzhalter, Task 2 ersetzt ihn)
 - Create: `Sources/LoupePreview/main.swift`
 - Create: `Sources/LoupePreview/PreviewProvider.swift`
@@ -190,7 +192,7 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
         let html = """
         <!DOCTYPE html>
         <html lang="de"><head><meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none';">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'">
         <style>
           body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 32px; }
           code { font-family: ui-monospace, SFMono-Regular, monospace; }
@@ -1759,7 +1761,6 @@ are expanded first so the caret lands where the eye expects it."
 ### Task 7: `HTMLEscape` und `LoupeSettings`
 
 **Files:**
-- Create: `Sources/LoupeCore/Render/HTMLEscape.swift`
 - Modify: `Sources/LoupeCore/Configuration/LoupeSettings.swift` (ersetzt den Platzhalter aus Task 1)
 - Create: `Tests/LoupeTests/HTMLEscapeTests.swift`
 - Create: `Tests/LoupeTests/SettingsTests.swift`
@@ -1865,9 +1866,12 @@ public enum SettingsTests {
 Run: `swift run LoupeTests`
 Expected: `HTMLEscape` unbekannt, `LoupeSettings` hat die Felder nicht.
 
-- [ ] **Step 3: `HTMLEscape` schreiben**
+- [ ] **Step 3: `HTMLEscape` gegenprüfen (die Datei existiert bereits)**
 
-`Sources/LoupeCore/Render/HTMLEscape.swift`:
+⚠ `Sources/LoupeCore/Render/HTMLEscape.swift` wurde in **Task 1 vorgezogen** — dort
+schreibt die Erweiterung einen Dateinamen ins HTML, und ein Dateiname ist ein fremder
+Eingabewert. Nicht neu anlegen. Prüfe, dass der Bestand exakt der folgenden Fassung
+entspricht, und korrigiere Abweichungen:
 
 ```swift
 import Foundation
@@ -2854,7 +2858,11 @@ public enum RegistryTests {
 
             runner.runTest(name: "testDocumentCarriesTheExactCSP") {
                 let html = HTMLDocument.wrap(body: "<p>x</p>", title: "t", css: "")
-                try assertTrue(html.contains("default-src 'none'; style-src 'unsafe-inline'; img-src 'none'"))
+                // Mit schliessendem Anfuehrungszeichen geprueft: ein blosses
+                // contains() wuerde ein angehaengtes ";" durchwinken, und genau
+                // dieser Fehler ist in Task 1 real aufgetreten.
+                try assertTrue(html.contains(
+                    "content=\"default-src 'none'; style-src 'unsafe-inline'; img-src 'none'\""))
             }
 
             runner.runTest(name: "testDocumentEscapesTheTitle") {
