@@ -52,6 +52,8 @@ das Struct wächst mit.
 **Files:**
 - Create: `Package.swift`
 - Create: `Sources/LoupeCore/Preview/PreviewRenderer.swift`
+- Create: `Sources/LoupeCore/Configuration/LoupeSettings.swift` (Platzhalter, Task 7 ersetzt ihn)
+- Create: `Tests/LoupeTests/main.swift` (Platzhalter, Task 2 ersetzt ihn)
 - Create: `Sources/LoupePreview/main.swift`
 - Create: `Sources/LoupePreview/PreviewProvider.swift`
 - Create: `Sources/LoupePreview/Resources/Info.plist`
@@ -3122,7 +3124,25 @@ Vorfahren komponieren, Grenze 4,5:1. Gegenprobe mit einer absichtlich zu
 blassen Farbe nicht vergessen. Unterschreitungen in `CSSGenerator.swift`
 korrigieren und den gemessenen Wert als Kommentar an die Zeile schreiben.
 
-- [ ] **Step 10: Committen**
+- [ ] **Step 10: Mutationsprobe**
+
+Die Global Constraint gilt auch hier — sieben neue Pins, drei Proben:
+
+1. In `HTMLDocument.wrap` `HTMLEscape.escape(title)` durch `title` ersetzen →
+   `testDocumentEscapesTheTitle` muss fallen.
+2. In `RendererRegistry.renderer(for:)` `all.first { … }` durch `all.first`
+   ersetzen (liefert immer den JSON-Renderer) → `testUnknownTypeResolvesToNil`
+   muss fallen.
+3. In `JSONPreviewRenderer.renderHTML` `wasTruncatedByReader: input.wasTruncatedByReader`
+   durch `wasTruncatedByReader: false` ersetzen → ein Test in der Parser-Suite
+   oder `testEmptyFileRendersBannerNotBlankPage` muss reagieren; **tut das
+   keiner, ist das ein blinder Fleck** — dann einen Pin ergänzen, der genau
+   diese Weitergabe prüft (sonst könnte die Kürzungs-Erkennung Ende-zu-Ende
+   tot sein, während die Suite grün bleibt).
+
+Jede Mutation einzeln, `md5 -q` vorher/nachher, danach `git checkout --`.
+
+- [ ] **Step 11: Committen**
 
 ```bash
 rm -f ~/Desktop/package.json ~/Desktop/broken.json ~/Desktop/unicode.json
