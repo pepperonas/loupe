@@ -919,7 +919,11 @@ public struct JSONLexer {
                   bytes[index + 1] == UInt8(ascii: "u") else {
                 throw LexError(message: "einzelnes Surrogat ohne Partner", position: start)
             }
-            index += 2
+            // NUR den Backslash ueberspringen -- readFourHexDigits erwartet
+            // index AUF dem 'u' (siehe dessen eigenes `index += 1`). Mit
+            // `index += 2` waere das 'u' schon konsumiert und die erste
+            // Hexziffer des zweiten Quads wuerde verschluckt.
+            index += 1
             let second = try readFourHexDigits(from: start)
             guard second >= 0xDC00 && second <= 0xDFFF else {
                 throw LexError(message: "ungültiges Surrogatpaar", position: start)
