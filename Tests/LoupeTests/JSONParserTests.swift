@@ -138,6 +138,51 @@ public enum JSONParserTests {
                 try assertTrue(!r.diagnostics.contains { $0.severity == .error },
                                "kein .error-Diagnostic bei einer Kuerzung")
             }
+
+            runner.runTest(name: "testLexErrorInTopLevelArrayPreservesItems") {
+                // Der Bruch kommt hier aus dem Trailing-Komma-peek() (der das
+                // naechste Token lexen muss, um zu pruefen ob es ']' ist),
+                // NICHT aus dem rekursiven parseValue-Aufruf fuer das dritte
+                // Element -- ein Array ohne umschliessendes Objekt hatte
+                // zuvor NICHTS, das diesen Fehler auffing.
+                let r = parse(#"[1,2,"\uZZZZ"]"#)
+                guard case .failed = r.outcome else {
+                    throw TestFailure(message: "haette fehlschlagen muessen", file: #file, line: #line)
+                }
+                guard case .array(let items, _)? = r.root else {
+                    throw TestFailure(message: "kein Array im Teilbaum: \(String(describing: r.root))",
+                                       file: #file, line: #line)
+                }
+                try assertEqual(items.count, 2)
+                guard case .number("1") = items[0], case .number("2") = items[1] else {
+                    throw TestFailure(message: "Werte falsch", file: #file, line: #line)
+                }
+            }
+
+            runner.runTest(name: "testArrayNestedInObjectPreservesBothLevels") {
+                // Beide Ebenen muessen ueberleben: das Geschwister "a" der
+                // Wurzel UND das bereits gelesene Element im kaputten Array
+                // unter "b" -- nicht nur eine der beiden.
+                let r = parse(#"{"a":1,"b":[9,"\uZZZZ"]}"#)
+                guard case .failed = r.outcome else {
+                    throw TestFailure(message: "haette fehlschlagen muessen", file: #file, line: #line)
+                }
+                guard case .object(let members, _)? = r.root else {
+                    throw TestFailure(message: "kein Objekt im Teilbaum: \(String(describing: r.root))",
+                                       file: #file, line: #line)
+                }
+                try assertEqual(members.map(\.key), ["a", "b"])
+                guard case .number("1") = members[0].value else {
+                    throw TestFailure(message: "a falsch", file: #file, line: #line)
+                }
+                guard case .array(let items, _) = members[1].value else {
+                    throw TestFailure(message: "b ist kein Array", file: #file, line: #line)
+                }
+                try assertEqual(items.count, 1)
+                guard case .number("9") = items[0] else {
+                    throw TestFailure(message: "b[0] falsch", file: #file, line: #line)
+                }
+            }
         }
     }
 }

@@ -161,115 +161,119 @@ extension JSONParser {
 
     mutating func parseObject(depth: Int, at open: Position) throws -> JSONValue {
         var members: [Member] = []
-        if try peek().kind == .braceClose {
-            _ = try advance()
-            return .object(members: [], omitted: 0)
-        }
-        while true {
-            let keyToken = try advance()
-            guard case .string(let key) = keyToken.kind else {
-                throw ParseError(message: "Schlüssel in Anführungszeichen erwartet",
-                                 position: keyToken.position,
-                                 partial: .object(members: members, omitted: 0))
-            }
-            let colon = try advance()
-            guard colon.kind == .colon else {
-                throw ParseError(message: "':' nach dem Schlüssel erwartet",
-                                 position: colon.position,
-                                 partial: .object(members: members, omitted: 0))
-            }
-            // Der Bruch kann auch INNERHALB des Werts liegen -- entweder ein
-            // ParseError ohne partial (parseValue wirft dort ohne partial,
-            // s. dessen eigener throw), oder ein LexError, der gar kein
-            // partial-Feld kennt (unfertiger String, kaputtes \u-Escape,
-            // fuehrende Null, ...). Letzteres ist sogar der HAEUFIGERE Fall:
-            // ein abgeschnittener Bytestrom bricht fast immer MITTEN in einem
-            // Token, nicht sauber zwischen zwei Tokens -- genau das Szenario,
-            // fuer das wasTruncatedByReader/maxBytes existieren. Ein LexError
-            // wird deshalb hier in einen ParseError mit dieser Ebene als
-            // partial gewandelt. Traegt der Fehler schon ein partial (eine
-            // tiefere Ebene hat bereits eines gesetzt), wird es NICHT einfach
-            // verworfen, sondern unter dem aktuellen Schluessel eingehaengt --
-            // sonst waeren alle bereits gelesenen Geschwister dieser Ebene
-            // verloren, sobald irgendeine tiefere Ebene zuerst ein partial
-            // setzt.
-            let value: JSONValue
-            do {
-                value = try parseValue(depth: depth)
-            } catch var e as ParseError {
-                if let deeper = e.partial {
-                    e.partial = .object(members: members + [Member(key: key, value: deeper)],
-                                        omitted: 0)
-                } else {
-                    e.partial = .object(members: members, omitted: 0)
-                }
-                throw e
-            } catch let e as LexError {
-                throw ParseError(message: e.message, position: e.position,
-                                 partial: .object(members: members, omitted: 0))
-            }
-            members.append(Member(key: key, value: value))
-
-            let sep = try advance()
-            if sep.kind == .braceClose { break }
-            guard sep.kind == .comma else {
-                throw ParseError(message: "Komma erwartet, ',' oder '}' fehlt",
-                                 position: sep.position,
-                                 partial: .object(members: members, omitted: 0))
-            }
-            // Nachgestelltes Komma vor } ist laut JSON ungueltig.
+        var omitted = 0
+        // Der Schluessel, dessen WERT gerade gelesen wird. Nur in diesem
+        // Fenster -- zwischen dem erfolgreichen Lesen von "key:" und dem
+        // erfolgreichen Anhaengen des Members -- kann parseValue in einen
+        // TIEFEREN Container abgestiegen sein, dessen eigener catch bereits
+        // ein partial gesetzt hat; nur dann wird unten genestet.
+        var pendingKey: String? = nil
+        // Der GESAMTE Rumpf steckt in einem einzigen do/catch, nicht nur der
+        // rekursive parseValue-Aufruf (das war die Luecke in der letzten
+        // Runde): der Lexer wird aus fuenf Stellen aufgerufen -- Schluessel-
+        // Token, Doppelpunkt, Wert, Trenner-Komma und der Blick voraus aufs
+        // schliessende '}'. Ein Bruch KANN aus jeder davon kommen, nicht nur
+        // aus dem Wert (Beleg: ein Trailing-Komma-peek() vor einem kaputten
+        // Token liegt AUSSERHALB des Werts).
+        do {
             if try peek().kind == .braceClose {
-                let brace = try advance()
-                throw ParseError(message: "Komma vor '}' ist nicht erlaubt",
-                                 position: brace.position,
-                                 partial: .object(members: members, omitted: 0))
+                _ = try advance()
+                return .object(members: [], omitted: 0)
             }
+            while true {
+                let keyToken = try advance()
+                guard case .string(let key) = keyToken.kind else {
+                    throw ParseError(message: "Schlüssel in Anführungszeichen erwartet",
+                                     position: keyToken.position)
+                }
+                pendingKey = key
+                let colon = try advance()
+                guard colon.kind == .colon else {
+                    throw ParseError(message: "':' nach dem Schlüssel erwartet",
+                                     position: colon.position)
+                }
+                let value = try parseValue(depth: depth)
+                members.append(Member(key: key, value: value))
+                pendingKey = nil
+
+                let sep = try advance()
+                if sep.kind == .braceClose { break }
+                guard sep.kind == .comma else {
+                    throw ParseError(message: "Komma erwartet, ',' oder '}' fehlt",
+                                     position: sep.position)
+                }
+                // Nachgestelltes Komma vor } ist laut JSON ungueltig.
+                if try peek().kind == .braceClose {
+                    let brace = try advance()
+                    throw ParseError(message: "Komma vor '}' ist nicht erlaubt",
+                                     position: brace.position)
+                }
+            }
+            return .object(members: members, omitted: omitted)
+        } catch var e as ParseError {
+            // partial ist an JEDER Wurfstelle oben bewusst NICHT gesetzt
+            // (Default nil): nur diese eine Stelle entscheidet, ob genestet
+            // wird. Traegt e schon ein partial UND war ein Schluessel gerade
+            // in Arbeit, kam der Bruch aus dessen WERT (einem tieferen
+            // Container) -- der gehoert unter diesen Schluessel, nicht lose
+            // daneben. Sonst (kein partial, oder der Bruch lag zwischen zwei
+            // Members, wo kein Schluessel offen ist) zaehlen nur die bereits
+            // vollstaendigen Members dieser Ebene.
+            if let deeper = e.partial, let key = pendingKey {
+                e.partial = .object(members: members + [Member(key: key, value: deeper)],
+                                    omitted: omitted)
+            } else {
+                e.partial = .object(members: members, omitted: omitted)
+            }
+            throw e
+        } catch let e as LexError {
+            throw ParseError(message: e.message, position: e.position,
+                             partial: .object(members: members, omitted: omitted))
         }
-        return .object(members: members, omitted: 0)
     }
 
     mutating func parseArray(depth: Int, at open: Position) throws -> JSONValue {
         var items: [JSONValue] = []
-        if try peek().kind == .bracketClose {
-            _ = try advance()
-            return .array(items: [], omitted: 0)
-        }
-        while true {
-            // Gleiche Begruendung wie in parseObject: der Bruch kann innerhalb
-            // des Werts liegen -- als ParseError ohne partial ODER als
-            // LexError (kein partial-Feld, und mit Abstand der haeufigere
-            // Fall bei einer Byte-Kuerzung). Ein bereits vorhandenes partial
-            // wird unter dem aktuellen Index eingehaengt statt verworfen,
-            // sonst gingen bereits gelesene Geschwister-Elemente verloren.
-            let value: JSONValue
-            do {
-                value = try parseValue(depth: depth)
-            } catch var e as ParseError {
-                if let deeper = e.partial {
-                    e.partial = .array(items: items + [deeper], omitted: 0)
-                } else {
-                    e.partial = .array(items: items, omitted: 0)
-                }
-                throw e
-            } catch let e as LexError {
-                throw ParseError(message: e.message, position: e.position,
-                                 partial: .array(items: items, omitted: 0))
-            }
-            items.append(value)
-            let sep = try advance()
-            if sep.kind == .bracketClose { break }
-            guard sep.kind == .comma else {
-                throw ParseError(message: "Komma erwartet, ',' oder ']' fehlt",
-                                 position: sep.position,
-                                 partial: .array(items: items, omitted: 0))
-            }
+        var omitted = 0
+        // Gleiche Begruendung wie in parseObject: der GESAMTE Rumpf steckt in
+        // einem do/catch, nicht nur der rekursive parseValue-Aufruf -- auch
+        // hier kann der Lexer aus dem Trenner-Komma oder dem Blick voraus
+        // aufs schliessende ']' werfen, ausserhalb des Werts.
+        do {
             if try peek().kind == .bracketClose {
-                let bracket = try advance()
-                throw ParseError(message: "Komma vor ']' ist nicht erlaubt",
-                                 position: bracket.position,
-                                 partial: .array(items: items, omitted: 0))
+                _ = try advance()
+                return .array(items: [], omitted: 0)
             }
+            while true {
+                let value = try parseValue(depth: depth)
+                items.append(value)
+                let sep = try advance()
+                if sep.kind == .bracketClose { break }
+                guard sep.kind == .comma else {
+                    throw ParseError(message: "Komma erwartet, ',' oder ']' fehlt",
+                                     position: sep.position)
+                }
+                if try peek().kind == .bracketClose {
+                    let bracket = try advance()
+                    throw ParseError(message: "Komma vor ']' ist nicht erlaubt",
+                                     position: bracket.position)
+                }
+            }
+            return .array(items: items, omitted: omitted)
+        } catch var e as ParseError {
+            // Kein "pendingIndex" noetig wie bei parseObject: ein bereits
+            // gesetztes partial kann nur aus dem rekursiven parseValue fuer
+            // das NAECHSTE Element stammen (items enthaelt es noch nicht),
+            // also wird es einfach angehaengt.
+            if let deeper = e.partial {
+                e.partial = .array(items: items + [deeper], omitted: omitted)
+            } else {
+                e.partial = .array(items: items, omitted: omitted)
+            }
+            throw e
+        } catch let e as LexError {
+            throw ParseError(message: e.message, position: e.position,
+                             partial: .array(items: items, omitted: omitted))
         }
-        return .array(items: items, omitted: 0)
     }
 }
