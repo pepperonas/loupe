@@ -213,6 +213,61 @@ public enum JSONParserTests {
                 try assertEqual(r.outcome, .truncatedByLimit(.children))
             }
 
+            runner.runTest(name: "testChildrenLimitTruncatesAndCountsObject") {
+                // Review-Fund (Finding 2): nur das Array war fuer die exakte
+                // omitted-Zahl gepinnt -- wer "omitted += 1" aus parseObjects
+                // eigenem Zweig entfernt, blieb bislang unentdeckt (die volle
+                // 36er-Suite blieb gruen).
+                let members = (0 ..< 1500).map { "\"k\($0)\":\($0)" }.joined(separator: ",")
+                let r = parse("{\(members)}")
+                guard case .object(let kept, let omitted)? = r.root else {
+                    throw TestFailure(message: "kein Objekt", file: #file, line: #line)
+                }
+                try assertEqual(kept.count, 1000)
+                try assertEqual(omitted, 500)
+                try assertEqual(r.outcome, .truncatedByLimit(.children))
+            }
+
+            runner.runTest(name: "testChildrenLimitAppliesOnFailurePathForArray") {
+                // Review-Fund (Finding 1): die Kinder-Grenze wurde nur im
+                // GLUECKLICHEN Pfad geprueft. Bricht das 1001. Element selbst
+                // (und traegt dabei ein `partial`, weil der Bruch aus einem
+                // TIEFEREN Container kommt), nestete der catch es bislang
+                // UNGEPRUEFT -- items wuchs auf 1001, omitted blieb 0.
+                let good = (0 ..< 1000).map(String.init).joined(separator: ",")
+                let r = parse("[\(good),{\"x\":1,\"y\":}]")
+                guard case .array(let items, let omitted)? = r.root else {
+                    throw TestFailure(message: "kein Array im Teilbaum: \(String(describing: r.root))",
+                                       file: #file, line: #line)
+                }
+                try assertEqual(items.count, 1000)
+                try assertEqual(omitted, 1)
+                // `noteLimit(.children)` fires as part of handling THIS throw,
+                // so failure() reports the limit rather than .failed even
+                // though ".y":} is a genuine syntax error -- see task-5-fix-report.md
+                // "Finding 1 / a tension surfaced, not asked for" for why this
+                // is pinned as the observed behavior rather than silently
+                // changed: it's a real design question (which fact wins when
+                // both are true of the same file), not something this fix
+                // round asked me to resolve.
+                try assertEqual(r.outcome, .truncatedByLimit(.children))
+            }
+
+            runner.runTest(name: "testChildrenLimitAppliesOnFailurePathForObject") {
+                // Objekt-Gegenstueck zu testChildrenLimitAppliesOnFailurePathForArray --
+                // derselbe Fund, derselbe Fix, andere Funktion (parseObject statt
+                // parseArray), damit beide Catch-Klauseln je einen eigenen Pin haben.
+                let good = (0 ..< 1000).map { "\"k\($0)\":\($0)" }.joined(separator: ",")
+                let r = parse("{\(good),\"k1000\":{\"x\":1,\"y\":}}")
+                guard case .object(let members, let omitted)? = r.root else {
+                    throw TestFailure(message: "kein Objekt im Teilbaum: \(String(describing: r.root))",
+                                       file: #file, line: #line)
+                }
+                try assertEqual(members.count, 1000)
+                try assertEqual(omitted, 1)
+                try assertEqual(r.outcome, .truncatedByLimit(.children))
+            }
+
             runner.runTest(name: "testNodeLimitStopsBuilding") {
                 var limits = ParseLimits()
                 limits.maxNodes = 50
@@ -223,6 +278,9 @@ public enum JSONParserTests {
             }
 
             runner.runTest(name: "testLongStringIsTruncatedForDisplay") {
+                // Review-Fund (Finding 4): `assertLessThan(s.count, 100)` liesse
+                // eine Regression auf z. B. 50 Zeichen unbemerkt durch -- der
+                // exakte Inhalt (Laenge UND Auslassungszeichen) ist der Vertrag.
                 var limits = ParseLimits()
                 limits.maxStringDisplayLength = 16
                 let long = String(repeating: "x", count: 100)
@@ -231,7 +289,23 @@ public enum JSONParserTests {
                       case .string(let s) = members[0].value else {
                     throw TestFailure(message: "Struktur falsch", file: #file, line: #line)
                 }
-                try assertLessThan(s.count, 100)
+                try assertEqual(s, String(repeating: "x", count: 16) + "…")
+                try assertEqual(r.outcome, .truncatedByLimit(.stringLength))
+            }
+
+            runner.runTest(name: "testLongObjectKeyIsTruncatedForDisplay") {
+                // Review-Fund (Finding 3): maxStringDisplayLength kappte bislang
+                // nur WERT-Strings. Ein Schluessel wird dem Nutzer genauso
+                // angezeigt wie ein Wert -- dieselbe Grenze muss also fuer
+                // beide gelten, mit demselben Auslassungszeichen.
+                var limits = ParseLimits()
+                limits.maxStringDisplayLength = 16
+                let longKey = String(repeating: "k", count: 9000)
+                let r = parse("{\"\(longKey)\":1}", limits: limits)
+                guard case .object(let members, _)? = r.root else {
+                    throw TestFailure(message: "kein Objekt", file: #file, line: #line)
+                }
+                try assertEqual(members[0].key, String(repeating: "k", count: 16) + "…")
                 try assertEqual(r.outcome, .truncatedByLimit(.stringLength))
             }
 

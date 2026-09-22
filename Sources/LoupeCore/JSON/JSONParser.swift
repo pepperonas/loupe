@@ -173,11 +173,7 @@ extension JSONParser {
         case .braceOpen:    return try parseObject(depth: depth + 1, at: token.position)
         case .bracketOpen:  return try parseArray(depth: depth + 1, at: token.position)
         case .string(let s):
-            if s.count > limits.maxStringDisplayLength {
-                noteLimit(.stringLength)
-                return .string(String(s.prefix(limits.maxStringDisplayLength)) + "…")
-            }
-            return .string(s)
+            return .string(truncatedForDisplay(s))
         case .number(let n):  return .number(n)
         case .literalTrue:    return .bool(true)
         case .literalFalse:   return .bool(false)
@@ -194,6 +190,16 @@ extension JSONParser {
     /// die erste erklaert, warum das Ergebnis unvollstaendig ist.
     private mutating func noteLimit(_ kind: LimitKind) {
         if hitLimit == nil { hitLimit = kind }
+    }
+
+    /// Kappt einen Anzeige-String auf `maxStringDisplayLength` -- fuer WERTE
+    /// UND SCHLUESSEL gleichermassen (Review-Fund/Finding 3: ein Schluessel
+    /// wird dem Nutzer genauso angezeigt wie ein Wert, also gilt fuer beide
+    /// dieselbe Grenze mit demselben Auslassungszeichen).
+    private mutating func truncatedForDisplay(_ s: String) -> String {
+        guard s.count > limits.maxStringDisplayLength else { return s }
+        noteLimit(.stringLength)
+        return String(s.prefix(limits.maxStringDisplayLength)) + "…"
     }
 
     /// Ueberspringt einen Wert, ohne einen Baum zu bauen -- ITERATIV.
@@ -235,10 +241,11 @@ extension JSONParser {
             }
             while true {
                 let keyToken = try advance()
-                guard case .string(let key) = keyToken.kind else {
+                guard case .string(let rawKey) = keyToken.kind else {
                     throw ParseError(message: "Schlüssel in Anführungszeichen erwartet",
                                      position: keyToken.position)
                 }
+                let key = truncatedForDisplay(rawKey)
                 pendingKey = key
                 let colon = try advance()
                 guard colon.kind == .colon else {
@@ -278,8 +285,20 @@ extension JSONParser {
             // Members, wo kein Schluessel offen ist) zaehlen nur die bereits
             // vollstaendigen Members dieser Ebene.
             if let deeper = e.partial, let key = pendingKey {
-                e.partial = .object(members: members + [Member(key: key, value: deeper)],
-                                    omitted: omitted)
+                // Review-Fund (Finding 1): dieser Zweig hielt sich bislang
+                // NICHT an die Kinder-Grenze -- ein Container, der bereits
+                // exakt am Limit stand, wuchs hier trotzdem um eins, weil
+                // der gluecklicher-Pfad-Test (`members.count < …`) nur im
+                // `while true`-Loop stand, nicht hier. Dieselbe Pruefung wie
+                // dort, damit die Grenze auf JEDEM Pfad gilt.
+                if members.count < limits.maxChildrenPerContainer {
+                    e.partial = .object(members: members + [Member(key: key, value: deeper)],
+                                        omitted: omitted)
+                } else {
+                    omitted += 1
+                    noteLimit(.children)
+                    e.partial = .object(members: members, omitted: omitted)
+                }
             } else {
                 e.partial = .object(members: members, omitted: omitted)
             }
@@ -329,7 +348,15 @@ extension JSONParser {
             // das NAECHSTE Element stammen (items enthaelt es noch nicht),
             // also wird es einfach angehaengt.
             if let deeper = e.partial {
-                e.partial = .array(items: items + [deeper], omitted: omitted)
+                // Review-Fund (Finding 1), Array-Gegenstueck: gleiche Luecke,
+                // gleicher Fix wie in parseObject oben.
+                if items.count < limits.maxChildrenPerContainer {
+                    e.partial = .array(items: items + [deeper], omitted: omitted)
+                } else {
+                    omitted += 1
+                    noteLimit(.children)
+                    e.partial = .array(items: items, omitted: omitted)
+                }
             } else {
                 e.partial = .array(items: items, omitted: omitted)
             }
