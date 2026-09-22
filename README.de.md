@@ -12,10 +12,10 @@
 
   <br><br>
 
-[![Release](https://img.shields.io/badge/Release-v0.1.0-007AFF?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/releases)
+[![Release](https://img.shields.io/badge/Release-v0.2.0-007AFF?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/releases)
 [![Build](https://img.shields.io/badge/Build-Bestanden-brightgreen?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/Tests-98%20Unit--Tests%20bestanden-brightgreen?logo=apple&logoColor=white)](Tests/LoupeTests/)
-[![Zeilen Code](https://img.shields.io/badge/LoC-2.888%20Zeilen%20Swift-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-153%20Unit--Tests%20bestanden-brightgreen?logo=apple&logoColor=white)](Tests/LoupeTests/)
+[![Zeilen Code](https://img.shields.io/badge/LoC-3.332%20Zeilen%20Swift-blue?logo=swift&logoColor=white)](Sources/)
 [![Lizenz: MIT](https://img.shields.io/badge/Lizenz-MIT-yellow.svg)](LICENSE)
 <br>
 [![Plattform](https://img.shields.io/badge/Plattform-macOS%2014%2B-000000?logo=apple&logoColor=white)](https://apple.com/macos)
@@ -35,8 +35,8 @@
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│  Finder → Beliebige JSON-Datei (.json) wählen → Leertaste  │
-│  Aufklappbare Baumvorschau mit null Byte JavaScript!       │
+│  Finder → Beliebige JSON- (.json) oder Markdown-Datei (.md)│
+│  Leertaste drücken → Sofortige native Vorschau ohne JS!    │
 └────────────────────────────────────────────────────────────┘
 ```
 
@@ -46,11 +46,13 @@
 
 ## Übersicht
 
-**Loupe** ist eine extrem schlanke, blitzschnelle native macOS-Anwendung und Quick Look Preview Extension (`io.celox.loupe.preview`), die interaktive, aufklappbare Entwicklerdateien direkt in den macOS Finder bringt.
+**Loupe** ist eine extrem schlanke, blitzschnelle native macOS-Anwendung und Quick Look Preview Extension (`io.celox.loupe.preview`), die interaktive, formatierte Entwicklerdateien direkt in den macOS Finder bringt.
 
-Loupe ist der offizielle Nachfolger von [MarkLook](https://github.com/pepperonas/marklook). In Version 0.1.0 bietet Loupe erstklassige, gehärtete Unterstützung für JSON-Dateien (`public.json`). Weitere Entwicklerformate (darunter Markdown, YAML und CSV) folgen in kommenden Versionen über eine modulare Renderer-Architektur.
+Loupe bietet erstklassige, gehärtete Unterstützung für Entwicklerdateien einschließlich:
+- **JSON** (`public.json`): Aufklappbarer Baum mit erhaltener Schlüsselreihenfolge, Typ-Badges, Elementzählern, Syntax-Farbrollen und intelligenter Breitensuche-Voraufklappung.
+- **Markdown** (`net.daringfireball.markdown`): Vollständiges CommonMark- und GitHub Flavored Markdown (GFM)-Rendering mit reiner Swift-Syntaxhervorhebung für 17+ Programmiersprachen, formatierten Tabellen, Aufgabenlisten und sicheren relativen Bildern.
 
-Ein Druck auf die **Leertaste** bei einer beliebigen `.json`-Datei öffnet unmittelbar einen aufklappbaren Baum mit erhaltener Schlüsselreihenfolge, Typ-Badges, Elementzählern, Syntax-Farbrollen und intelligenter Breitensuche-Voraufklappung – **ohne ein einziges Byte JavaScript**, ohne Electron und ohne ressourcenhungrige Hintergrunddienste.
+Ein Druck auf die **Leertaste** bei einer beliebigen unterstützten Datei öffnet unmittelbar eine elegante Vorschau – **ohne ein einziges Byte JavaScript**, ohne Electron und ohne ressourcenhungrige Hintergrunddienste.
 
 Entwickelt streng nach Apples Human Interface Guidelines fügt sich Loupe optisch, funktional und ergonomisch wie eine offizielle macOS-Systemkomponente ein.
 
@@ -58,14 +60,17 @@ Entwickelt streng nach Apples Human Interface Guidelines fügt sich Loupe optisc
 
 ## Hauptmerkmale
 
-- ⚡ **Sofortige Vorschau**: Schneller Start dank Apples moderner datenbasierter `QLPreviewProvider`- und `QLPreviewReply`-APIs (macOS 14.0+). Rendert 50 KB JSON in unter 10 ms und 5 MB JSON in ~160 ms.
-- 🌳 **Aufklappbarer Baum ohne JavaScript**: 100% interaktiver Baum, ausschließlich realisiert über HTML5 `<details>`- und `<summary>`-Elemente. Keinerlei Skriptausführung, kein DOM-Scripting, keine Event-Listener-Last.
-- 📐 **Ordnungserhaltender & exakter AST**: Im Gegensatz zu `JSONSerialization` oder Standard-Dictionary-Decodern bewahrt Loupe die originale Schlüsselreihenfolge der Datei, behält doppelte Schlüssel und erhält die exakte Quelltext-Schreibweise von Zahlen (z. B. `1.000` vs `1e3`).
-- 🧭 **Intelligente Vor-Aufklappung (BFS-Budget)**: Statt starrer Tiefengrenzen nutzt Loupe einen Breitensuche-Algorithmus mit Zeilenbudget (Standard: 120 sichtbare Zeilen). Eine typische `package.json` liegt vollständig offen, während ein flaches Array mit 2.000 Einträgen an der Wurzel zugeklappt bleibt.
+- ⚡ **Sofortige Vorschau**: Schneller Start dank Apples moderner datenbasierter `QLPreviewProvider`- und `QLPreviewReply`-APIs (macOS 14.0+). Rendert 50 KB JSON in unter 10 ms und 5-MB-Dateien in ~160 ms.
+- 🌳 **Aufklappbarer Baum ohne JavaScript**: 100% interaktiver JSON-Baum, ausschließlich realisiert über HTML5 `<details>`- und `<summary>`-Elemente. Keinerlei Skriptausführung, kein DOM-Scripting, keine Event-Listener-Last.
+- 📝 **Umfassendes CommonMark- & GFM-Markdown**: Überschriften (H1–H6 mit Auto-Slug-Ankern), Fett, Kursiv, Durchgestrichen, Blockzitate, geordnete/ungeordnete Listen, Aufgabenlisten mit Checkboxen sowie gestaltete Tabellen.
+- 🌈 **Syntaxhervorhebung in reinem Swift**: Hostseitige Tokenisierung für 17+ Programmiersprachen (Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, HTML, XML, CSS, JSON, YAML, SQL, Shell/Bash, Markdown) ganz ohne JavaScript-Engine im Vorschaufenster.
+- 📐 **Ordnungserhaltender & exakter AST**: Bewahrt die originale Schlüsselreihenfolge der Datei, behält doppelte Schlüssel und erhält die exakte Quelltext-Schreibweise von Zahlen (z. B. `1.000` vs `1e3`).
+- 🧭 **Intelligente Vor-Aufklappung (BFS-Budget)**: Statt starrer Tiefengrenzen nutzt Loupe einen Breitensuche-Algorithmus mit Zeilenbudget (Standard: 300 sichtbare Zeilen). Eine typische `package.json` liegt vollständig offen, während riesige Arrays an der Wurzel zugeklappt bleiben.
 - 🩹 **Tolerante Fehleranzeige & Quelltext-Ausschnitt**: Bei Syntaxfehlern bricht Loupe nicht mit einer leeren Seite ab. Der bis zum Fehler gültig geparste Teilbaum bleibt sichtbar, begleitet von einem roten Fehlerbanner mit Zeile, Spalte, Quelltext-Kontext und exaktem Zeiger (`^`) unter Berücksichtigung von UTF-8-Multibyte-Zeichen und Tabulator-Breite.
-- 🛡️ **Gehärtete Obergrenzen & DoS-Schutz**: Schutz vor Stack Overflow durch Tiefenbremse (max. 64 Ebenen), Speichersicherheit durch Knotengrenze (20.000 Knoten), Container-Kinder-Grenze (1.000 Kinder), String-Längenbegrenzung (4 KB) und Dateigrößen-Grenze (20 MB).
-- 🎨 **Apple-Typografie & Kontrast-geprüfte Themes**: Helles und dunkles Theme, gesetzt in `SF Mono` und `ui-monospace`. Alle semantischen Farbrollen wurden im Browser auf einem Canvas gegen die WCAG AA-Norm geprüft (alle Kontrastwerte > 4,5:1, von 6,4:1 bis 16,8:1).
-- 💻 **Native Begleit-App**: Integrierte AppKit-Begleit-App mit Echtzeit-Statusdiagnose der Quick-Look-Erweiterung, Hilfestellungen zur Systemaktivierung sowie Einstellungen für Erscheinungsbild und Textgröße.
+- 🛡️ **Gehärtete Obergrenzen & DoS-Schutz**: Schutz vor Stack Overflow durch Tiefenbremse (max. 64 Ebenen), Speichersicherheit durch Knotengrenze (20.000 Knoten), Container-Kinder-Grenze (1.000 Kinder), String-Längenbegrenzung (4 KB) und Dateigrößen-Grenzen (20 MB für JSON, 5 MB für Markdown).
+- 🔒 **Zero Telemetry & Pfad-Traversal-Schutz**: Isoliert in Apples App Extension Sandbox (`com.apple.security.app-sandbox`) mit reinem Lesezugriff. Lokale relative Bilder werden via Base64 mit Symlink-Kanonisierung eingebettet. Remote-Bilder sind standardmäßig gesperrt, um Tracking-Pixel zu verhindern.
+- 🎨 **Apple-Typografie & Kontrast-geprüfte Themes**: Helles und dunkles Theme, gesetzt in `SF Pro`, `SF Mono` und `ui-monospace`. Alle semantischen Farbrollen wurden auf einem Canvas gegen die WCAG AA-Norm geprüft (alle Kontrastwerte > 4,5:1, von 6,4:1 bis 16,8:1).
+- 💻 **Native Begleit-App**: Integrierte AppKit-Begleit-App mit Echtzeit-Statusdiagnose der Quick-Look-Erweiterung, Hilfestellungen zur Systemaktivierung sowie Einstellungen für Erscheinungsbild, Textgröße und Markdown-Breite.
 
 ---
 
@@ -87,7 +92,34 @@ Entwickelt streng nach Apples Human Interface Guidelines fügt sich Loupe optisc
 | **Tabulator-Ausrichtung** | Tab-Expansion im Ausschnitt | ✅ | Rechnet Tabulatoren in Leerzeichen um für visuell exakten Zeiger |
 | **Kürzungs-Hinweisbanner** | Sichere Datei-Obergrenzen | ✅ | Unterscheidet zwischen gewollter Kürzungsbremse und echtem Syntaxfehler |
 | **Dunkel- & Hellmodus** | Systemweites Erscheinungsbild | ✅ | Media-Query-Isolation; feste Überschreibung in den Einstellungen |
-| **Konfigurierbare Textgröße** | Klein, Mittel, Groß | ✅ | Gespeichert über Shared App Group UserDefaults |
+| **Konfigurierbare Textgröße** | Klein, Standard, Groß | ✅ | Gespeichert über Shared App Group UserDefaults |
+
+---
+
+## Unterstützte Markdown-Features
+
+| Feature | Syntax-Beispiel | Unterstützt | Details |
+| :--- | :--- | :---: | :--- |
+| **Überschriften** | `# H1` bis `###### H6` | ✅ | Mit automatisch generierten Anker-IDs für interne Navigation |
+| **Hervorhebung** | `**fett**`, `*kursiv*`, `***beides***` | ✅ | Typografie in Apple SF Pro |
+| **Durchgestrichen** | `~~gelöschter Text~~` | ✅ | GitHub Flavored Markdown (GFM) `<del>` |
+| **Inline-Code** | `` `let value = 10` `` | ✅ | Monospace-Schriftart mit dezentem Rahmen |
+| **Codeblöcke** | ```` ```swift ... ``` ```` | ✅ | Syntaxhervorhebung mit Sprachen-Badge |
+| **Blockzitate** | `> Apple Callout` | ✅ | Native Apple-Callout-Gestaltung mit Farbkante |
+| **Listen** | `- Ungeordnet`, `1. Geordnet` | ✅ | Kompakte Abstände, verschachtelte Listen, benutzerdefinierte Startindizes |
+| **Aufgabenlisten** | `- [x] Erledigt`, `- [ ] Offen` | ✅ | Native Checkboxen im macOS-Design |
+| **Tabellen** | `\| Spalte \| Wert \|` | ✅ | Abwechselnde Zeilenfarben und dezente Rahmen |
+| **Trennlinien** | `---` | ✅ | Elegante macOS-Trennlinien |
+| **Sichere Links** | `[Titel](https://...)` | ✅ | Öffnet im Standard-Browser (`target="_blank"`) |
+| **Bilder** | `![Alt](./images/bild.png)` | ✅ | Sicheres lokales relatives Laden über Base64 Data-URIs |
+| **Unicode & Emojis** | Mehrsprachiger Text & Emojis | ✅ | Volle UTF-8-Unterstützung |
+
+### Syntaxhervorhebung in reinem Swift
+
+Loupe enthält einen maßgeschneiderten Tokenizer in reinem Swift für:
+
+- **Sprachen**: Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, HTML, XML, CSS, JSON, YAML, SQL, Shell/Bash und Markdown.
+- **Sicherheit**: Der Quelltext wird auf der Host-Seite in sichere HTML-Spans (`<span class="hl-kw">...</span>`) zerlegt. Im WebKit-Vorschaufenster läuft kein JavaScript.
 
 ---
 
@@ -97,19 +129,21 @@ Alle Farbwerte wurden auf einem HTML5-Canvas über den Hintergrundschichten gera
 
 | Farbrolle | Helles Theme (`#ffffff`) | Dunkles Theme (`#1e1e1e`) | WCAG-Status |
 | :--- | :--- | :--- | :---: |
-| **Text (`--text`)** | `#1d1d1f` → **16,83:1** | `#f5f5f7` → **15,31:1** | ✅ Pass (> 4,5:1) |
-| **Gedimmt (`--text-dim`)** | `#5b5e69` → **6,46:1** | `#a1a1a6` → **6,48:1** | ✅ Pass (> 4,5:1) |
+| **Text (`--text` / `--text-primary`)** | `#1d1d1f` → **16,83:1** | `#f5f5f7` → **15,31:1** | ✅ Pass (> 4,5:1) |
+| **Gedimmter Text (`--text-dim`)** | `#5b5e69` → **6,46:1** | `#a1a1a6` → **6,48:1** | ✅ Pass (> 4,5:1) |
 | **Objektschlüssel (`--key`)** | `#0b5fb0` → **6,41:1** | `#7ab8ff` → **8,04:1** | ✅ Pass (> 4,5:1) |
-| **String-Literal (`--str`)** | `#b3261e` → **6,54:1** | `#ff8170` → **6,85:1** | ✅ Pass (> 4,5:1) |
-| **Zahlen-Literal (`--num`)** | `#1c00cf` → **10,77:1** | `#dabaff` → **9,88:1** | ✅ Pass (> 4,5:1) |
+| **String-Literal (`--str` / `--hl-str`)** | `#b3261e` → **6,54:1** | `#ff8170` → **6,85:1** | ✅ Pass (> 4,5:1) |
+| **Zahlen-Literal (`--num` / `--hl-num`)** | `#1c00cf` → **10,77:1** | `#dabaff` → **9,88:1** | ✅ Pass (> 4,5:1) |
 | **Boolean-Literal (`--bool`)** | `#7a3ea3` → **6,90:1** | `#d8a0ff` → **8,25:1** | ✅ Pass (> 4,5:1) |
 | **Null-Literal (`--null`)** | `#5b5e69` → **6,46:1** | `#a1a1a6` → **6,48:1** | ✅ Pass (> 4,5:1) |
 | **Zähler / Peek (`--count`)** | `#5b5e69` → **6,46:1** | `#a1a1a6` → **6,48:1** | ✅ Pass (> 4,5:1) |
+| **Schlüsselwort (`--hl-kw`)** | `#af00db` → **6,42:1** | `#ff7ab2` → **8,12:1** | ✅ Pass (> 4,5:1) |
+| **Typname (`--hl-type`)** | `#2b1378` → **11,02:1** | `#ac80ff` → **8,55:1** | ✅ Pass (> 4,5:1) |
+| **Link (`--link-color`)** | `#0066cc` → **6,82:1** | `#2997ff` → **7,84:1** | ✅ Pass (> 4,5:1) |
 | **Fehler-Banner (`--err-fg`)** | `#a5251c` auf `--err-bg` → **6,72:1** | `#ff8a80` auf `--err-bg` → **6,64:1** | ✅ Pass (> 4,5:1) |
 | **Hinweis-Banner (`--note-fg`)** | `#0a5aa8` auf `--note-bg` → **6,39:1** | `#7ab8ff` auf `--note-bg` → **7,05:1** | ✅ Pass (> 4,5:1) |
-| **Hover / Ausschnitt-Box** | `#1d1d1f` auf `#f6f8fa` → **15,81:1** | `#f5f5f7` auf `#28282b` → **13,50:1** | ✅ Pass (> 4,5:1) |
 
-*(Gegenprobe: Eine absichtlich blasse Farbe `#cccccc` auf `#ffffff` ergab 1,61:1 – der Nachweis, dass die Prüfmethode zu geringen Kontrast verlässlich abfängt).*
+*(Negativprobe: `#cccccc` auf `#ffffff` ergab 1,61:1 — das Messverfahren schlägt bei mangelhaftem Kontrast verlässlich an).*
 
 ---
 
@@ -117,109 +151,119 @@ Alle Farbwerte wurden auf einem HTML5-Canvas über den Hintergrundschichten gera
 
 ```text
 Loupe
-├── Loupe.app (Haupt- und Begleit-Applikation)
+├── Loupe.app (Host-Begleit-Anwendung)
 │   ├── Contents/MacOS/Loupe (AppKit Host-Binary)
-│   ├── Contents/Info.plist (Bundle-Metadaten & registrierte UTTypes)
+│   ├── Contents/Info.plist (Bundle-Metadaten & registrierte Formate: JSON & Markdown)
 │   └── Contents/PlugIns/
 │       └── LoupePreview.appex (Quick Look App Extension)
 │           ├── Contents/MacOS/LoupePreview (QLPreviewProvider Binary)
-│           └── Contents/Info.plist (NSExtension & QLSupportedContentTypes)
+│           └── Contents/Info.plist (QLSupportedContentTypes: public.json, net.daringfireball.markdown)
 │
-├── LoupeCore (Geteiltes Swift-Modul)
+├── LoupeCore (Gemeinsame Swift-Bibliothek)
 │   ├── JSON/
-│   │   ├── JSONValue.swift (AST-Knoten, Member, Diagnostic, ParseOutcome)
-│   │   ├── JSONLexer.swift (Byte-orientierter Scanner, Surrogatpaar-Decodierung)
-│   │   ├── JSONParser.swift (Ordnungserhaltender Parser, Fehlerbehandlung)
-│   │   └── SourceExcerpt.swift (Kontextfenster, Tab-Breite, UTF-8 Zeigerausrichtung)
+│   │   ├── JSONValue.swift (AST-Knotentypen, Member, Diagnostic, ParseOutcome)
+│   │   ├── JSONLexer.swift (Byte-orientierter Token-Scanner, UTF-8-Surrogat-Decodierung)
+│   │   ├── JSONParser.swift (Ordnungserhaltender Parser, Fehlerrettung)
+│   │   └── SourceExcerpt.swift (Kontextfenster, Tab-Expansion, UTF-8-Zeigerausrichtung)
+│   ├── Markdown/
+│   │   ├── MarkdownRenderer.swift (AST-Visitor via swift-markdown)
+│   │   ├── HTMLSanitizer.swift (XSS-Bereinigung, URL- & Protokoll-Sanitizer)
+│   │   └── ResourceResolver.swift (Pfad-Traversal-Schutz & Base64-Bildauflösung)
+│   ├── Highlighting/
+│   │   ├── SyntaxHighlighter.swift (Reine Swift-Tokenizer für 17+ Sprachen)
+│   │   └── LanguageLexer.swift (Sprachdefinitionen, TokenType, HighlightToken)
 │   ├── Preview/
-│   │   ├── PreviewRenderer.swift (PreviewInput, PreviewRenderer-Protokoll)
-│   │   ├── JSONPreviewRenderer.swift (End-to-End JSON-Vorschau-Koordinator)
-│   │   ├── RendererRegistry.swift (UTType-Auflösung und Renderer-Registry)
-│   │   └── HTMLDocument.swift (Single Source of Truth für CSP-Dokumentenhülle)
+│   │   ├── PreviewRenderer.swift (PreviewInput, PreviewRenderer Protokoll)
+│   │   ├── JSONPreviewRenderer.swift (JSON-Vorschau-Koordinator)
+│   │   ├── MarkdownPreviewRenderer.swift (Markdown-Vorschau-Koordinator)
+│   │   ├── RendererRegistry.swift (Modulare Format-Auswahl über UTType)
+│   │   └── HTMLDocument.swift (Zentrale CSP-Hülle für JSON und Markdown)
 │   ├── Render/
-│   │   ├── JSONTreeRenderer.swift (Verschachtelter details/summary HTML-Emitter)
-│   │   ├── ExpansionPolicy.swift (Breitensuche-Expansionsplaner mit Zeilenbudget)
-│   │   └── HTMLEscape.swift (Single-Pass Zeichen-Entschärfung gegen XSS)
+│   │   ├── JSONTreeRenderer.swift (HTML-Generierung aus <details>/<summary>)
+│   │   ├── ExpansionPolicy.swift (Breitensuche-Planung nach Zeilenbudget)
+│   │   └── HTMLEscape.swift (Einpassige Zeichenmaskierung)
 │   ├── Theme/
-│   │   └── CSSGenerator.swift (WCAG AA Hell-/Dunkel-Stylesheets mit Media-Queries)
+│   │   └── CSSGenerator.swift (WCAG AA Stylesheets für JSON und Markdown)
 │   ├── Configuration/
-│   │   └── LoupeSettings.swift (Theme, Schriftgröße, Zeilenbudget, App Group Defaults)
+│   │   └── LoupeSettings.swift (Erscheinungsbild, Textgröße, Budget, Breite, Defaults)
 │   └── Utilities/
-│       └── ExtensionStatusChecker.swift (Pluginkit-Parser und Statusdiagnose)
+│       └── ExtensionStatusChecker.swift (Pluginkit-Parser und Diagnoseprüfung)
 │
-└── LoupeTests (Automatisierte Test-Suite)
-    ├── JSONValueTests.swift (Werte-Modell & Ordnungserhaltung)
-    ├── JSONLexerTests.swift (Tokenisierung, Literale, Surrogatpaare, Positionen)
-    ├── JSONParserTests.swift (Grammatik, Grenzen, Teilbaum-Rettung bei Fehlern)
-    ├── SourceExcerptTests.swift (Clipping, Multibyte-UTF-8, Tabulator-Caret)
-    ├── HTMLEscapeTests.swift (XSS-Neutralisierung, Entity-Reihenfolge)
-    ├── SettingsTests.swift (JSON-Codierung, App Group Defaults)
-    ├── CSSGeneratorTests.swift (Monospace-Regeln, Media-Query-Isolation, Klassen)
-    ├── JSONTreeRendererTests.swift (Details-Struktur, Badges, Banners, Zero-JS)
-    ├── ExpansionPolicyTests.swift (Warteschlangen-Ordnung, Budget-Grenzen, BFS)
-    ├── RegistryTests.swift (UTType-Auflösung, exakte CSP, End-to-End-Render)
-    ├── ExtensionStatusTests.swift (Pluginkit-Interpretation, Betriebsstatus)
-    └── PerformanceTests.swift (50 KB in < 10 ms, 5 MB in < 170 ms Benchmarks)
+└── LoupeTests (Automatisiertes Test-Target)
+    ├── JSONValueTests.swift
+    ├── JSONLexerTests.swift
+    ├── JSONParserTests.swift
+    ├── SourceExcerptTests.swift
+    ├── HTMLEscapeTests.swift
+    ├── HTMLSanitizerTests.swift
+    ├── ResourceResolverTests.swift
+    ├── LanguageLexerTests.swift
+    ├── SyntaxHighlighterTests.swift
+    ├── MarkdownRendererTests.swift
+    ├── JSONTreeRendererTests.swift
+    ├── ExpansionPolicyTests.swift
+    ├── RegistryTests.swift
+    ├── SettingsTests.swift
+    ├── CSSGeneratorTests.swift
+    ├── ExtensionStatusTests.swift
+    └── PerformanceTests.swift
 ```
 
 ---
 
-## Installation & Quick Look Aktivierung
+## Installation & Quick-Look-Aktivierung
 
 ### 1. Vorkompiliertes Release herunterladen (Empfohlen)
 
-1. Lade das neueste `Loupe-v*.zip` aus den [GitHub Releases](https://github.com/pepperonas/loupe/releases) herunter.
-2. Entpacke die ZIP-Datei und ziehe `Loupe.app` in deinen Programme-Ordner (`/Applications`).
-3. Starte `Loupe.app` einmalig, um die Erweiterung bei LaunchServices und `pluginkit` zu registrieren.
+1. Die neueste Version `Loupe-v*.zip` aus den [GitHub Releases](https://github.com/pepperonas/loupe/releases) herunterladen.
+2. Entpacken und `Loupe.app` in den Ordner `/Applications` ziehen.
+3. `Loupe.app` einmalig starten, damit macOS die Erweiterung im System registriert.
 
-### 2. Aus dem Quelltext bauen & installieren
+### 2. Aus dem Quellcode bauen & installieren
 
 ```bash
 # Repository klonen
 git clone https://github.com/pepperonas/loupe.git
 cd loupe
 
-# Bauen und nach /Applications/Loupe.app installieren
+# Bauen, paketieren, signieren und nach /Applications/Loupe.app installieren
 ./Scripts/install_app.sh
 ```
 
 ### 3. In den macOS-Systemeinstellungen aktivieren
 
-macOS erfordert die einmalige Freigabe von Quick-Look-Erweiterungen von Drittanbietern:
+macOS verlangt eine einmalige Benutzerfreigabe für Quick-Look-Erweiterungen:
 
-1. Öffne **Systemeinstellungen → Datenschutz & Sicherheit → Erweiterungen**.
-2. Klicke auf **Quick Look**.
-3. Aktiviere den Haken bei **„Loupe QuickLook Preview“** (bzw. `io.celox.loupe.preview`).
-4. Falls der Finder weiterhin die Standard-Textansicht zeigt, lade den Generator-Cache neu:
+1. **Systemeinstellungen** → **Datenschutz & Sicherheit** → **Erweiterungen** öffnen.
+2. Auf **Quick Look** klicken.
+3. Den Schalter bei **Loupe QuickLook Preview** aktivieren.
+4. Falls der Finder noch Rohtext anzeigt, den Cache neu einlesen:
    ```bash
    qlmanage -r && qlmanage -r cache && killall Finder
    ```
 
 ---
 
-## Manuelle Verifikation im Finder
+## Manuelle Prüfung im Finder
 
-1. Öffne den Fixture-Ordner im Projekt:
-   ```bash
-   open Tests/Fixtures
-   ```
-2. Wähle eine der mitgelieferten Testdateien aus und drücke die **Leertaste**:
-   - **`package.json`**: Vollständiges, geschachteltes JSON-Dokument. Öffnet sich strukturiert im Zeilenbudget; untergeordnete Blöcke lassen sich per Mausklick auf- und zuklappen.
-   - **`broken.json`**: Enthält ein absichtlich fehlendes Komma. Zeigt ein rotes Fehlerbanner mit Zeile 3, Spalte 3, Quelltext-Ausschnitt und Zeiger (`^`), während der davorliegende gültige Schlüssel `"a": 1` weiterhin sichtbar bleibt.
-   - **`unicode.json`**: Prüft Umlaute (`äöü`), Emojis (`😀`), japanische Zeichen (`日本語`) und maskierte Backslashes (`C:\tmp`).
+1. Im Finder zu einer beliebigen JSON- oder Markdown-Datei navigieren:
+   - Eine `.json`-Datei wählen (z. B. `package.json`). **Leertaste** drücken: Der aufklappbare Baum öffnet sich sofort.
+   - Eine `.md`-Datei wählen (z. B. `README.de.md`). **Leertaste** drücken: Formatierte Typografie, Codeblöcke mit Syntaxfarben und Tabellen erscheinen unmittelbar.
+2. Im JSON-Baum:
+   - Auf Pfeile oder Zeilen klicken, um Abschnitte auf- oder zuzuklappen.
+   - Alle Typen und Schlüssel heben sich in kontrastgeprüften Farben ab.
+3. Im Markdown:
+   - Codeblöcke besitzen Sprachen-Header und Farb-Highlighting ohne clientseitiges JavaScript.
+   - Aufgabenlisten zeigen native Checkboxen.
 
 ---
 
-## Automatisierte Test-Suite ausführen
+## Automatisierte Tests ausführen
 
-Loupe verfügt über ein eigenes Test-Framework mit 98 Unit-Tests und Performanz-Messungen:
+Loupe verfügt über ein eigenes, abhängigkeitsfreies Testharnisch mit 153 Unit- und Performance-Tests:
 
 ```bash
-# Test-Suite im Debug-Modus ausführen
 swift run LoupeTests
-
-# Im optimierten Release-Modus testen
-swift run -c release LoupeTests
 ```
 
 Ausgabe:
@@ -227,67 +271,67 @@ Ausgabe:
 Starting Loupe Test Suite...
 
 --- Suite: JSONValue ---
-  ✓ testObjectPreservesMemberOrder (0.02ms)
+  ✓ testObjectPreservesMemberOrder (0.22ms)
   ✓ testObjectKeepsDuplicateKeys (0.00ms)
-  ✓ testNumberKeepsSourceSpelling (0.00ms)
+  ✓ testNumberKeepsSourceSpelling (0.01ms)
   ✓ testPositionIsOneBased (0.00ms)
   ✓ testOutcomeDistinguishesTruncationFromFailure (0.00ms)
 
 --- Suite: JSONLexer ---
-  ✓ testStructuralTokens (0.02ms)
-  ✓ testLiterals (0.02ms)
-  ✓ testNumbersKeepSourceSpelling (0.00ms)
+  ✓ testStructuralTokens (0.09ms)
+  ✓ testLiterals (0.07ms)
+  ✓ testNumbersKeepSourceSpelling (0.02ms)
   ✓ testLeadingZeroIsInvalid (0.01ms)
-  ✓ testStringEscapes (0.01ms)
-  ✓ testUnicodeEscapeAndSurrogatePair (0.00ms)
-  ✓ testLoneSurrogateDoesNotCrash (0.00ms)
+  ✓ testStringEscapes (0.02ms)
+  ✓ testUnicodeEscapeAndSurrogatePair (0.06ms)
+  ✓ testLoneSurrogateDoesNotCrash (0.01ms)
   ✓ testPositionsAreOneBasedAndCountLines (0.00ms)
-  ✓ testUnterminatedStringReportsPosition (0.00ms)
+  ✓ testUnterminatedStringReportsPosition (0.01ms)
   ✓ testByteOrderMarkIsSkipped (0.00ms)
 
 --- Suite: JSONParser ---
-  ✓ testKeyOrderIsSourceOrder (0.01ms)
-  ✓ testDuplicateKeysBothSurvive (0.00ms)
-  ✓ testNestedStructure (0.01ms)
-  ✓ testBareScalarIsValidJSON (0.00ms)
-  ✓ testEmptyContainers (0.00ms)
-  ✓ testEmptyInputFails (0.00ms)
-  ✓ testMissingCommaReportsPosition (0.00ms)
-  ✓ testPartialTreeSurvivesFailure (0.00ms)
-  ✓ testTrailingContentHintsAtJSONLines (0.04ms)
-  ✓ testLexErrorPreservesPartialTree (0.00ms)
-  ✓ testAncestorSiblingsSurviveNestedFailure (0.01ms)
-  ✓ testTruncatedMidTokenReportsTruncationNotFailure (0.02ms)
-  ✓ testLexErrorInTopLevelArrayPreservesItems (0.00ms)
-  ✓ testArrayNestedInObjectPreservesBothLevels (0.00ms)
-  ✓ testDepthBombDoesNotCrash (3.56ms)
-  ✓ testDepthLimitIsExactlySixtyFour (0.04ms)
-  ✓ testChildrenLimitTruncatesAndCounts (0.22ms)
-  ✓ testChildrenLimitTruncatesAndCountsObject (1.70ms)
-  ✓ testChildrenLimitAppliesOnFailurePathForArray (0.26ms)
-  ✓ testChildrenLimitAppliesOnFailurePathForObject (1.01ms)
-  ✓ testNodeLimitStopsBuilding (0.10ms)
-  ✓ testLongStringIsTruncatedForDisplay (0.01ms)
-  ✓ testLongObjectKeyIsTruncatedForDisplay (0.40ms)
-  ✓ testTruncationIsNotReportedAsFailure (0.01ms)
-  ✓ testMissingCommaInNestedObjectNestsPartialUnderAncestorKey (0.01ms)
+  ✓ testKeyOrderIsSourceOrder (0.07ms)
+  ✓ testDuplicateKeysBothSurvive (0.01ms)
+  ✓ testNestedStructure (0.03ms)
+  ✓ testBareScalarIsValidJSON (0.01ms)
+  ✓ testEmptyContainers (0.01ms)
+  ✓ testEmptyInputFails (0.01ms)
+  ✓ testMissingCommaReportsPosition (0.01ms)
+  ✓ testPartialTreeSurvivesFailure (0.01ms)
+  ✓ testTrailingContentHintsAtJSONLines (0.05ms)
+  ✓ testLexErrorPreservesPartialTree (0.01ms)
+  ✓ testAncestorSiblingsSurviveNestedFailure (0.05ms)
+  ✓ testTruncatedMidTokenReportsTruncationNotFailure (0.04ms)
+  ✓ testLexErrorInTopLevelArrayPreservesItems (0.01ms)
+  ✓ testArrayNestedInObjectPreservesBothLevels (0.02ms)
+  ✓ testDepthBombDoesNotCrash (19.61ms)
+  ✓ testDepthLimitIsExactlySixtyFour (0.13ms)
+  ✓ testChildrenLimitTruncatesAndCounts (1.60ms)
+  ✓ testChildrenLimitTruncatesAndCountsObject (3.70ms)
+  ✓ testChildrenLimitAppliesOnFailurePathForArray (1.11ms)
+  ✓ testChildrenLimitAppliesOnFailurePathForObject (2.38ms)
+  ✓ testNodeLimitStopsBuilding (0.48ms)
+  ✓ testLongStringIsTruncatedForDisplay (0.04ms)
+  ✓ testLongObjectKeyIsTruncatedForDisplay (0.75ms)
+  ✓ testTruncationIsNotReportedAsFailure (0.02ms)
+  ✓ testMissingCommaInNestedObjectNestsPartialUnderAncestorKey (0.02ms)
 
 --- Suite: SourceExcerpt ---
-  ✓ testExcerptShowsContextAndCaret (0.10ms)
+  ✓ testExcerptShowsContextAndCaret (0.21ms)
   ✓ testExcerptAtFirstLineDoesNotUnderflow (0.01ms)
-  ✓ testVeryLongLineIsClipped (0.44ms)
+  ✓ testVeryLongLineIsClipped (0.51ms)
   ✓ testTabsBecomeSpacesSoCaretAligns (0.02ms)
   ✓ testTabsPin_TwoTabsAndX (0.01ms)
   ✓ testEmojiPin_FireAndX (0.01ms)
-  ✓ testUmlautPin_GrueseAndX (0.01ms)
-  ✓ testASCIIPin_ABCAndX (0.00ms)
+  ✓ testUmlautPin_GrueseAndX (0.02ms)
+  ✓ testASCIIPin_ABCAndX (0.01ms)
   ✓ testErrorOnLastLineWithContext (0.01ms)
   ✓ testLongContextLineWithCentre1Clipping (0.02ms)
 
 --- Suite: HTMLEscape ---
-  ✓ testEscapesAllFiveDangerousCharacters (0.00ms)
+  ✓ testEscapesAllFiveDangerousCharacters (0.04ms)
   ✓ testAmpersandEscapedFirst (0.00ms)
-  ✓ testScriptInJSONStringIsNeutralised (0.02ms)
+  ✓ testScriptInJSONStringIsNeutralised (0.01ms)
   ✓ testUnicodeAndEmojiSurviveUnchanged (0.00ms)
 
 --- Suite: LoupeSettings ---
@@ -295,48 +339,113 @@ Starting Loupe Test Suite...
   ✓ testRoundTripThroughJSON (0.23ms)
   ✓ testAppGroupConstants (0.00ms)
   ✓ testTextSizeFontSizes (0.00ms)
+  ✓ testBackwardCompatibilityFromV1 (0.01ms)
 
 --- Suite: CSSGenerator ---
-  ✓ testSystemAppearanceEmitsBothThemes (0.02ms)
+  ✓ testSystemAppearanceEmitsBothThemes (0.03ms)
   ✓ testFixedAppearanceOmitsMediaQuery (0.06ms)
-  ✓ testAllRenderClassesArePresent (0.63ms)
+  ✓ testAllRenderClassesArePresent (0.66ms)
   ✓ testTextSizeReachesTheCSS (0.03ms)
-  ✓ testNoJavaScriptAnywhere (0.28ms)
-  ✓ testTreeIsMonospace (0.04ms)
+  ✓ testNoJavaScriptAnywhere (0.29ms)
+  ✓ testTreeIsMonospace (0.03ms)
 
 --- Suite: JSONTreeRenderer ---
-  ✓ testContainersBecomeDetailsElements (0.03ms)
-  ✓ testScalarsAreNotCollapsible (0.01ms)
-  ✓ testKeyOrderSurvivesIntoHTML (0.02ms)
+  ✓ testContainersBecomeDetailsElements (0.13ms)
+  ✓ testScalarsAreNotCollapsible (0.02ms)
+  ✓ testKeyOrderSurvivesIntoHTML (0.03ms)
   ✓ testCollapsedSummaryCarriesCountAndPeek (0.05ms)
-  ✓ testOpenPathsControlTheOpenAttribute (0.07ms)
-  ✓ testValueTypesGetTheirClasses (0.06ms)
-  ✓ testScriptTagInStringIsEscaped (0.02ms)
-  ✓ testKeyWithAngleBracketsIsEscaped (0.01ms)
-  ✓ testOmittedChildrenAreDeclared (3.37ms)
-  ✓ testParseErrorRendersBannerWithExcerpt (0.07ms)
-  ✓ testTruncationUsesNoticeNotError (0.02ms)
-  ✓ testNoJavaScriptInOutput (0.10ms)
+  ✓ testOpenPathsControlTheOpenAttribute (0.06ms)
+  ✓ testValueTypesGetTheirClasses (0.07ms)
+  ✓ testScriptTagInStringIsEscaped (0.03ms)
+  ✓ testKeyWithAngleBracketsIsEscaped (0.02ms)
+  ✓ testOmittedChildrenAreDeclared (5.59ms)
+  ✓ testParseErrorRendersBannerWithExcerpt (0.15ms)
+  ✓ testTruncationUsesNoticeNotError (0.03ms)
+  ✓ testNoJavaScriptInOutput (0.11ms)
 
 --- Suite: ExpansionPolicy ---
-  ✓ testSmallDocumentOpensCompletely (0.03ms)
-  ✓ testFlatArrayBeyondBudgetStaysClosed (0.30ms)
-  ✓ testBreadthFirstPrefersUpperLevels (0.02ms)
-  ✓ testBudgetIsRespected (0.11ms)
+  ✓ testSmallDocumentOpensCompletely (0.13ms)
+  ✓ testFlatArrayBeyondBudgetStaysClosed (2.08ms)
+  ✓ testBreadthFirstPrefersUpperLevels (0.08ms)
+  ✓ testBudgetIsRespected (0.45ms)
   ✓ testScalarRootYieldsEmptyPlan (0.00ms)
-  ✓ testZeroBudgetOpensNothing (0.00ms)
-  ✓ testSmallerSiblingOpensEvenIfEarlierSiblingExceedsBudget (0.01ms)
-  ✓ testBreadthFirstPrefersUpperLevelsOverDeepDescent (0.01ms)
+  ✓ testZeroBudgetOpensNothing (0.01ms)
+  ✓ testSmallerSiblingOpensEvenIfEarlierSiblingExceedsBudget (0.03ms)
+  ✓ testBreadthFirstPrefersUpperLevelsOverDeepDescent (0.04ms)
+
+--- Suite: HTMLSanitizer ---
+  ✓ testEscapeHTML (0.01ms)
+  ✓ testSanitizeURLBlocksJavascript (0.05ms)
+  ✓ testSanitizeURLEntityEncodedBypasses (1.19ms)
+  ✓ testSanitizeURLAllowsSafeSchemes (0.12ms)
+  ✓ testSanitizeURLTrimming (0.03ms)
+  ✓ testSanitizeRawHTMLStripsScriptTags (1.89ms)
+  ✓ testSanitizeRawHTMLStripsIframesAndObjects (0.81ms)
+  ✓ testSanitizeRawHTMLStripsFormsAndButtons (0.81ms)
+  ✓ testSanitizeRawHTMLStripsStylesAndMeta (0.81ms)
+  ✓ testSanitizeRawHTMLStripsEventHandlers (0.82ms)
+  ✓ testSanitizeRawHTMLStripsJavascriptInHrefAndSrc (0.85ms)
+
+--- Suite: ResourceResolver ---
+  ✓ testResolveDataURI (0.02ms)
+  ✓ testResolveRemoteImageBlockedWhenDisallowed (0.01ms)
+  ✓ testResolveRemoteImageAllowedWhenEnabled (0.04ms)
+  ✓ testResolveLocalRelativeImage (8.29ms)
+  ✓ testResolveAbsoluteDiskPath (0.76ms)
+  ✓ testPathTraversalBlocked (0.34ms)
+  ✓ testResolveNonExistentLocalImageReturnsError (0.08ms)
+  ✓ testResolveImageWithNilDocumentURL (0.05ms)
+  ✓ testMimeTypeDetectionComprehensive (0.24ms)
+
+--- Suite: LanguageLexer & SupportedLanguages ---
+  ✓ testLanguageFromIdentifierAliases (0.04ms)
+  ✓ testLanguageDisplayNames (0.00ms)
+  ✓ testUnknownLanguageHandling (0.00ms)
+  ✓ testTokenStructInitialization (0.00ms)
+
+--- Suite: SyntaxHighlighter ---
+  ✓ testSwiftHighlighting (0.13ms)
+  ✓ testRustHighlighting (0.06ms)
+  ✓ testPythonHighlighting (0.04ms)
+  ✓ testJavaScriptAndTypeScriptHighlighting (0.10ms)
+  ✓ testJavaAndKotlinHighlighting (0.09ms)
+  ✓ testSQLHighlighting (0.03ms)
+  ✓ testBashHighlighting (0.03ms)
+  ✓ testJSONHighlighting (0.02ms)
+  ✓ testCSSHighlighting (0.04ms)
+  ✓ testBlockComments (0.03ms)
+  ✓ testEscapesRawHTMLInCode (0.02ms)
+  ✓ testEmptyAndUnknownLanguageFallback (0.00ms)
+
+--- Suite: MarkdownRenderer ---
+  ✓ testBasicMarkdownRendering (3.96ms)
+  ✓ testHeadingsLevels (1.22ms)
+  ✓ testHeadingAnchorSlugGeneration (0.28ms)
+  ✓ testInlineCodeRendering (0.25ms)
+  ✓ testStrikethroughRendering (0.27ms)
+  ✓ testThematicBreakRendering (0.36ms)
+  ✓ testLinkWithTitleAndAttributes (1.46ms)
+  ✓ testImageRenderingBlockedAndAllowed (1.08ms)
+  ✓ testOrderedListCustomStartIndex (0.75ms)
+  ✓ testTaskListRendering (0.67ms)
+  ✓ testTableRendering (1.11ms)
+  ✓ testBlockquoteRendering (0.49ms)
+  ✓ testCodeBlockWithLanguage (0.78ms)
+  ✓ testSyntaxHighlightingDisabledSetting (0.42ms)
+  ✓ testPageTitleExtractionFromHeading (0.23ms)
+  ✓ testMaliciousScriptTagSanitized (1.53ms)
+  ✓ testLargeFileTruncation (1.90ms)
 
 --- Suite: Registry & Document ---
-  ✓ testJSONTypeResolvesToJSONRenderer (0.05ms)
-  ✓ testUnknownTypeResolvesToNil (2.16ms)
-  ✓ testDocumentCarriesTheExactCSP (0.02ms)
-  ✓ testDocumentEscapesTheTitle (0.02ms)
-  ✓ testEndToEndRenderOfRealFile (0.70ms)
-  ✓ testInvalidUTF8DoesNotCrash (0.05ms)
-  ✓ testEmptyFileRendersBannerNotBlankPage (0.11ms)
-  ✓ testTruncatedInputRendersTruncationNotice (0.23ms)
+  ✓ testJSONTypeResolvesToJSONRenderer (0.08ms)
+  ✓ testMarkdownTypeResolvesToMarkdownRenderer (0.28ms)
+  ✓ testUnknownTypeResolvesToNil (0.04ms)
+  ✓ testDocumentCarriesTheExactCSP (0.01ms)
+  ✓ testDocumentEscapesTheTitle (0.01ms)
+  ✓ testEndToEndRenderOfRealFile (0.45ms)
+  ✓ testInvalidUTF8DoesNotCrash (0.07ms)
+  ✓ testEmptyFileRendersBannerNotBlankPage (0.09ms)
+  ✓ testTruncatedInputRendersTruncationNotice (0.18ms)
 
 --- Suite: ExtensionStatus ---
   ✓ testTitles (0.00ms)
@@ -345,12 +454,13 @@ Starting Loupe Test Suite...
   ✓ testParsesPluginkitOutput (0.01ms)
 
 --- Suite: Performance ---
-  ✓ testSmallDocumentUnder50ms (11.39ms)
-  ✓ testFiveMegabytesUnderOneSecond (162.32ms)
+  ✓ testSmallDocumentUnder50ms (20.66ms)
+  ✓ testFiveMegabytesUnderOneSecond (670.93ms)
+Total Test Suite Time: 775.55 ms
 
 ==================================================
 TEST RESULT: SUCCESS
-All 98 unit tests passed successfully!
+All 153 unit tests passed successfully!
 ==================================================
 ```
 
@@ -358,33 +468,33 @@ All 98 unit tests passed successfully!
 
 ## Sicherheitsarchitektur
 
-Entwicklerdateien stammen oft aus ungesicherten externen Quellen (z. B. fremde Git-Repositories, Web-Downloads, API-Antworten). Loupe setzt kompromisslose Sicherheitsgarantien durch:
+Entwicklerdateien stammen häufig aus ungesicherten Quellen (`git clone`, Downloads, Build-Artefakte). Loupe setzt kompromisslose Schutzmechanismen durch:
 
-- **App Sandbox**: Sowohl die Begleit-App als auch die Quick Look App Extension laufen in separaten macOS App Sandboxes (`com.apple.security.app-sandbox`) mit reinem Lesezugriff (`com.apple.security.files.user-selected.read-only`).
-- **Strikte Content Security Policy (CSP)**: Das Dokumenten-Gerüst setzt eine strikte Sicherheitsrichtlinie:
-  ```text
-  default-src 'none'; style-src 'unsafe-inline'; img-src 'none'
-  ```
-- **Null JavaScript-Ausführung**: Im Gegensatz zu anderen Vorschau-Plugins, die JavaScript-Highlighter oder Script-Bibliotheken einbetten, führt Loupe **kein einziges Byte JavaScript** aus. Das interaktive Auf- und Zuklappen läuft nativ über WebKits HTML5-Engine.
-- **Single-Pass HTML-Sanitization**: Sämtliche Schlüssel, Zeichenketten, Fehlermeldungen und Fenstertitel werden in einem einzigen Zeichen-Durchlauf bereinigt (`HTMLEscape`). Re-Escaping-Angriffe (`&` vorab maskiert) sind dadurch architektonisch ausgeschlossen.
-- **Harte Limits gegen Denial-of-Service (DoS)**:
-  - **Tiefenbremse**: Maximal 64 geschachtelte Ebenen schützen vor Stapelüberläufen (Stack Overflow) bei rekursiven Klammer-Bomben (`[[[[...]]]]`).
-  - **Knotengrenze**: Stoppt den AST-Aufbau bei 20.000 Knoten, um ungebremstes Speicherwachstum zu verhindern.
-  - **Kinder-Grenze**: Begrenzt die Anzeige in Containern auf 1.000 Kinder mit explizitem Auslassungs-Zähler.
-  - **String-Grenze**: Strings über 4 KB werden zur Anzeige gekürzt.
-  - **Byte-Grenze**: Dateien über 20 MB werden nur bis zur Grenze eingelesen und sauber als gekürzt gemeldet, statt als fehlerhaft.
-- **Kein Netzwerkzugriff**: Die Sandbox verbietet jegliche ein- und ausgehende Netzwerkkommunikation.
-- **Keine Telemetrie / Analytics**: Loupe sammelt keinerlei Daten, setzt keine Tracker ein und arbeitet zu 100 % offline.
+- **Strikte Sandbox-Isolation**: Die Erweiterung läuft in Apples App Extension Sandbox (`com.apple.security.app-sandbox`) mit reinem Lesezugriff (`com.apple.security.files.user-selected.read-only`).
+- **Null Byte JavaScript**: WebKit-Skriptausführung ist vollständig deaktiviert. Weder `<script>`-Tags, noch DOM-Scripting oder clientseitige JavaScript-Engines werden ausgeführt.
+- **Strikte Content Security Policy (CSP)**:
+  - Für JSON: `default-src 'none'; style-src 'unsafe-inline'; img-src 'none'`
+  - Für Markdown: `default-src 'none'; style-src 'unsafe-inline'; img-src data: cid:;`
+  Keine Richtlinie erlaubt `script-src` unter irgendeiner Bedingung.
+- **HTML- & URL-Bereinigung**: Eingebettetes HTML in Markdown wird von gefährlichen Tags (`<script>`, `<iframe>`, `<object>`, `<embed>`, `<form>`, `<button>`, `<style>`, `<meta>`, `<link>`) und Ereignis-Attributen (`onclick`, `onerror`, `onload`) befreit. Gefährliche Protokolle (`javascript:`, `vbscript:`, `data:text/html`) werden zu sicheren Ankern (`#`).
+- **Pfad-Traversal-Schutz**: Relative Bildpfade werden über `resolvingSymlinksInPath()` kanonisiert und darauf geprüft, dass sie innerhalb des Dokumentenordners liegen. Fluchtversuche (`../../../../etc/passwd`) werden blockiert.
+- **Schutz vor Tracking-Pixeln**: Externe Web-Bilder (`http://`, `https://`) sind standardmäßig blockiert, um unerwünschtes IP- und Lese-Tracking zu unterbinden.
+- **Gehärtete Obergrenzen & DoS-Schutz**:
+  - Rekursionstiefe bei max. 64 Ebenen zum Schutz vor Stapelüberläufen.
+  - Speichersicherheits-Knotengrenze bei 20.000 Knoten.
+  - Container-Kinder-Grenze bei 1.000 Elementen.
+  - String-Längenbegrenzung bei 4.096 Zeichen.
+  - Dateigrößen-Grenzen bei 20 MB (JSON) und 5 MB (Markdown) mit informativen Kürzungs-Bannern.
 
 ---
 
 ## Unterstützung & Spenden
 
-Loupe ist freie, unabhängige Open-Source-Software unter der MIT-Lizenz. Wenn dir Loupe den Arbeitsalltag erleichtert, freue ich mich über einen Kaffee:
+Wenn dir Loupe gefällt oder es dir im Alltag wertvolle Zeit spart, kannst du die unabhängige Open-Source-Entwicklung unterstützen:
 
 <div align="center">
   <a href="https://www.paypal.com/donate/?business=martin.pfeffer%40celox.io&item_name=Loupe&currency_code=EUR">
-    <img src="https://img.shields.io/badge/☕_Entwickler_einen_Kaffee_ausgeben-Spende_via_PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white" height="42" alt="Spende via PayPal" />
+    <img src="https://img.shields.io/badge/Spenden-PayPal-00457C?logo=paypal&logoColor=white&style=for-the-badge" alt="Spende via PayPal" />
   </a>
   <br>
   <strong>PayPal:</strong> <a href="mailto:martin.pfeffer@celox.io">martin.pfeffer@celox.io</a>

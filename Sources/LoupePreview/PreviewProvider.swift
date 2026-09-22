@@ -35,8 +35,10 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
                 truncated = false
             }
 
-            let type = (try? url.resourceValues(forKeys: [.contentTypeKey]).contentType) ?? .json
-            guard let renderer = RendererRegistry.renderer(for: type) else {
+            let renderer = RendererRegistry.renderer(for: url)
+                ?? ((try? url.resourceValues(forKeys: [.contentTypeKey]).contentType).flatMap { RendererRegistry.renderer(for: $0) })
+                ?? RendererRegistry.renderer(for: .json)
+            guard let renderer else {
                 completionHandler(nil, CocoaError(.fileReadUnsupportedScheme))
                 return
             }

@@ -5,6 +5,22 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+## [0.2.0] - 2026-09-22
+
+### Hinzugefügt
+- Vollständige Markdown-Unterstützung (`net.daringfireball.markdown`, `.md`, `.markdown`):
+  - CommonMark- und GitHub Flavored Markdown (GFM)-Rendering
+  - Überschriften (H1–H6) mit automatisch generierten Anker-Slugs
+  - Tabellen mit abwechselnden Zeilenfarben und Ausrichtung
+  - Aufgabenlisten mit nativen Checkboxen
+  - Blockzitate im Apple-Callout-Stil
+- Syntaxhervorhebung in reinem Swift für 17+ Programmiersprachen (Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, HTML, XML, CSS, JSON, YAML, SQL, Shell/Bash, Markdown)
+- Sicheres relatives Laden lokaler Bilder via Base64 mit Pfad-Traversal-Schutz
+- Schutz vor Tracking-Pixeln durch Blockieren entfernter Bilder als Standard
+- Strikte Content Security Policy für Markdown (`img-src data: cid:`, null JavaScript)
+- Einstellungen für konfigurierbare Markdown-Inhaltsbreite in der Begleit-App
+- 55 neue Unit-Tests für Markdown, Syntaxhervorhebung, Bildauflösung und HTML-Sanitizing (Gesamt: 153 Tests)
+
 ## [0.1.0] - 2026-09-22
 
 ### Hinzugefügt

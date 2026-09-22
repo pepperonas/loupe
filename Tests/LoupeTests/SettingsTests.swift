@@ -34,6 +34,23 @@ public enum SettingsTests {
                 try assertEqual(LoupeTextSize.small.baseFontSizePx, 12)
                 try assertEqual(LoupeTextSize.standard.baseFontSizePx, 13)
                 try assertEqual(LoupeTextSize.large.baseFontSizePx, 15)
+                try assertEqual(LoupeTextSize.small.markdownBaseFontSizePx, 14)
+                try assertEqual(LoupeTextSize.standard.markdownBaseFontSizePx, 16)
+                try assertEqual(LoupeTextSize.large.markdownBaseFontSizePx, 18)
+            }
+
+            runner.runTest(name: "testBackwardCompatibilityFromV1") {
+                let v1JSON = """
+                {"appearance":"dark","textSize":"small","expansionLineBudget":120,"showTypeBadges":false}
+                """
+                let decoded = try JSONDecoder().decode(LoupeSettings.self, from: Data(v1JSON.utf8))
+                try assertEqual(decoded.appearance, .dark)
+                try assertEqual(decoded.textSize, .small)
+                try assertEqual(decoded.expansionLineBudget, 120)
+                try assertFalse(decoded.showTypeBadges)
+                try assertEqual(decoded.contentWidth, .standard)
+                try assertFalse(decoded.allowRemoteImages)
+                try assertTrue(decoded.enableSyntaxHighlighting)
             }
         }
     }

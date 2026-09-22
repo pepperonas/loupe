@@ -11,8 +11,17 @@ let package = Package(
         .executable(name: "LoupePreview", targets: ["LoupePreview"]),
         .executable(name: "LoupeTests", targets: ["LoupeTests"])
     ],
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-markdown.git", from: "0.5.0")
+    ],
     targets: [
-        .target(name: "LoupeCore", path: "Sources/LoupeCore"),
+        .target(
+            name: "LoupeCore",
+            dependencies: [
+                .product(name: "Markdown", package: "swift-markdown")
+            ],
+            path: "Sources/LoupeCore"
+        ),
         .executableTarget(
             name: "Loupe",
             dependencies: ["LoupeCore"],

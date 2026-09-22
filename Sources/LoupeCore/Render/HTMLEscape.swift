@@ -1,9 +1,6 @@
 import Foundation
 
-/// Bewusste Kopie aus MarkLooks HTMLSanitizer.
-///
-/// ⚠ Diese 15 Zeilen liegen in zwei Repos. Eine Korrektur hier erreicht
-/// MarkLook NICHT von selbst (siehe Spec §9).
+/// HTML-Escaping fuer Sonderzeichen (&, <, >, ", ').
 public enum HTMLEscape {
     public static func escape(_ text: String) -> String {
         var result = String()

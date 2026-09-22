@@ -12,6 +12,13 @@ public enum RegistryTests {
                 try assertTrue(RendererRegistry.renderer(for: .json) != nil)
             }
 
+            runner.runTest(name: "testMarkdownTypeResolvesToMarkdownRenderer") {
+                if let mdType = UTType("net.daringfireball.markdown") {
+                    try assertTrue(RendererRegistry.renderer(for: mdType) != nil)
+                }
+                try assertTrue(RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/README.md")) != nil)
+            }
+
             runner.runTest(name: "testUnknownTypeResolvesToNil") {
                 try assertTrue(RendererRegistry.renderer(for: .mp3) == nil)
             }

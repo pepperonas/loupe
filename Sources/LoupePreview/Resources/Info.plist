@@ -9,7 +9,7 @@
     <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
     <key>CFBundleName</key><string>LoupePreview</string>
     <key>CFBundlePackageType</key><string>XPC!</string>
-    <key>CFBundleShortVersionString</key><string>0.1.0</string>
+    <key>CFBundleShortVersionString</key><string>0.2.0</string>
     <key>CFBundleVersion</key><string>1</string>
     <key>CFBundleSupportedPlatforms</key><array><string>MacOSX</string></array>
     <key>LSMinimumSystemVersion</key><string>14.0</string>
@@ -19,7 +19,12 @@
         <dict>
             <key>QLIsDataBasedPreview</key><true/>
             <key>QLSupportedContentTypes</key>
-            <array><string>public.json</string></array>
+            <array>
+                <string>public.json</string>
+                <string>net.daringfireball.markdown</string>
+                <string>public.markdown</string>
+                <string>text.markdown</string>
+            </array>
             <key>QLSupportsSearchableItems</key><false/>
         </dict>
         <key>NSExtensionPointIdentifier</key><string>com.apple.quicklook.preview</string>
