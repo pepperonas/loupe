@@ -2796,6 +2796,28 @@ public enum ExpansionPolicyTests {
                 let root = parse(#"{"a":1}"#)
                 try assertEqual(ExpansionPolicy.plan(root: root, budget: 0).count, 0)
             }
+
+            runner.runTest(name: "testSmallerSiblingOpensEvenIfEarlierSiblingExceedsBudget") {
+                // Wenn ein Geschwisterknoten das Budget sprengt, darf ein kleinerer danach
+                // trotzdem noch aufgehen (continue statt break).
+                let root = parse(#"{"big":[1,2,3,4,5,6,7,8,9,10],"small":{"x":1}}"#)
+                let open = ExpansionPolicy.plan(root: root, budget: 5)
+                try assertTrue(open.contains([]), "Wurzel muss offen sein")
+                try assertFalse(open.contains([0]), "big darf nicht offen sein")
+                try assertTrue(open.contains([1]), "small muss offen sein")
+            }
+
+            runner.runTest(name: "testBreadthFirstPrefersUpperLevelsOverDeepDescent") {
+                // BFS oeffnet Geschwister auf Ebene 1 (L und R), bevor es in die Tiefe abtaucht.
+                // DFS wuerde in L -> LL abtauchen und R auf Ebene 1 verhungern lassen.
+                let json = #"{"L":{"LL":{"a":1,"b":2},"LR":{"a":1,"b":2}},"R":{"RL":{"a":1,"b":2},"RR":{"a":1,"b":2}}}"#
+                let root = parse(json)
+                let open = ExpansionPolicy.plan(root: root, budget: 6)
+                try assertTrue(open.contains([]), "Wurzel muss offen sein")
+                try assertTrue(open.contains([0]), "Ebene 1 'L' muss offen sein")
+                try assertTrue(open.contains([1]), "Ebene 1 'R' muss offen sein")
+                try assertFalse(open.contains([0, 0]), "Ebene 2 'LL' darf bei Budget 6 noch nicht offen sein")
+            }
         }
     }
 }
@@ -2876,10 +2898,10 @@ Expected: alle grün.
 - [ ] **Step 5: Mutationsprobe**
 
 1. `guard spent + cost <= budget else { continue }` → `else { break }` →
-   `testBudgetIsRespected` oder `testSmallDocumentOpensCompletely` muss fallen.
+   `testSmallerSiblingOpensEvenIfEarlierSiblingExceedsBudget` muss fallen.
 2. Die Prüfung ganz entfernen → `testFlatArrayBeyondBudgetStaysClosed` muss fallen.
 3. Die Warteschlange in eine Tiefensuche umbauen (`queue.insert(..., at: head)`) →
-   `testBreadthFirstPrefersUpperLevels` muss fallen.
+   `testBreadthFirstPrefersUpperLevelsOverDeepDescent` muss fallen.
 
 - [ ] **Step 6: Committen**
 
