@@ -1,28 +1,23 @@
-import Cocoa
+import Foundation
 import QuickLookUI
-import WebKit
 import UniformTypeIdentifiers
 import LoupeCore
 import os
 
 private let logger = Logger(subsystem: "io.celox.loupe.preview", category: "Preview")
-private let maxBytes = ParseLimits().maxBytes
 
-@objc(PreviewViewController)
-public final class PreviewViewController: NSViewController, @preconcurrency QLPreviewingController {
+@objc(PreviewProvider)
+public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
 
-    private var webView: WKWebView!
+    private static let maxBytes = ParseLimits().maxBytes
 
-    public override func loadView() {
-        let config = WKWebViewConfiguration()
-        config.preferences.setValue(true, forKey: "developerExtrasEnabled")
-        webView = WKWebView(frame: NSRect(x: 0, y: 0, width: 840, height: 640), configuration: config)
-        webView.setValue(false, forKey: "drawsBackground")
-        self.view = webView
-        self.preferredContentSize = NSSize(width: 840, height: 640)
-    }
+    public override init() { super.init() }
 
-    public func preparePreviewOfFile(at url: URL, completionHandler handler: @escaping (Error?) -> Void) {
+    public func providePreview(
+        for request: QLFilePreviewRequest,
+        completionHandler: @escaping (QLPreviewReply?, (any Error)?) -> Void
+    ) {
+        let url = request.fileURL
         let accessed = url.startAccessingSecurityScopedResource()
         defer {
             if accessed {
@@ -30,7 +25,7 @@ public final class PreviewViewController: NSViewController, @preconcurrency QLPr
             }
         }
 
-        logger.notice("preparePreviewOfFile START: url=\(url.path, privacy: .public) (securityScoped=\(accessed))")
+        logger.notice("providePreview START: url=\(url.path, privacy: .public) (securityScoped=\(accessed))")
 
         let settings = LoupeSettings.load()
 
@@ -40,10 +35,10 @@ public final class PreviewViewController: NSViewController, @preconcurrency QLPr
 
             let data: Data
             let truncated: Bool
-            if size > maxBytes {
+            if size > Self.maxBytes {
                 let handle = try FileHandle(forReadingFrom: url)
                 defer { try? handle.close() }
-                data = handle.readData(ofLength: maxBytes)
+                data = handle.readData(ofLength: Self.maxBytes)
                 truncated = true
             } else {
                 data = try Data(contentsOf: url)
@@ -55,7 +50,7 @@ public final class PreviewViewController: NSViewController, @preconcurrency QLPr
                 ?? RendererRegistry.renderer(for: .json)
             guard let renderer else {
                 logger.error("No renderer found for url: \(url.path, privacy: .public)")
-                handler(CocoaError(.fileReadUnsupportedScheme))
+                completionHandler(nil, CocoaError(.fileReadUnsupportedScheme))
                 return
             }
 
@@ -67,10 +62,14 @@ public final class PreviewViewController: NSViewController, @preconcurrency QLPr
 
             logger.notice("Rendered HTML (\(html.utf8.count) bytes) for \(url.lastPathComponent, privacy: .public)")
 
-            self.webView.loadHTMLString(html, baseURL: url.deletingLastPathComponent())
-            handler(nil)
+            let reply = QLPreviewReply(dataOfContentType: .html,
+                                       contentSize: CGSize(width: 840, height: 640)) { _ in
+                html.data(using: .utf8) ?? Data()
+            }
+            reply.title = url.lastPathComponent
+            completionHandler(reply, nil)
         } catch {
-            logger.error("preparePreviewOfFile ERROR: \(error.localizedDescription, privacy: .public)")
+            logger.error("providePreview ERROR: \(error.localizedDescription, privacy: .public)")
             let body = """
             <div class="lp-banner lp-banner-error">Die Datei konnte nicht gelesen werden: \
             \(HTMLEscape.escape(error.localizedDescription))</div>
@@ -78,8 +77,11 @@ public final class PreviewViewController: NSViewController, @preconcurrency QLPr
             let html = HTMLDocument.wrap(body: body,
                                          title: url.lastPathComponent,
                                          css: CSSGenerator.generateCSS(settings: settings))
-            self.webView.loadHTMLString(html, baseURL: nil)
-            handler(nil)
+            let reply = QLPreviewReply(dataOfContentType: .html,
+                                       contentSize: CGSize(width: 520, height: 300)) { _ in
+                html.data(using: .utf8) ?? Data()
+            }
+            completionHandler(reply, nil)
         }
     }
 }
