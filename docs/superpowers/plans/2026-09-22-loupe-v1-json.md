@@ -1680,7 +1680,10 @@ public enum SourceExcerptTests {
                 let lines = SourceExcerpt.make(bytes: Array(src.utf8),
                                                around: Position(line: 3, column: 3, offset: 0),
                                                contextLines: 1)
-                try assertEqual(lines.map(\.number), [2, 3])
+                // Kontext ist SYMMETRISCH (wie `grep -C`): eine Zeile davor,
+                // eine danach. Die Quelle hat vier Zeilen, der Fehler sitzt in
+                // Zeile 3 -> [2, 3, 4].
+                try assertEqual(lines.map(\.number), [2, 3, 4])
                 try assertEqual(lines[1].caretColumn, 3)
                 try assertEqual(lines[0].caretColumn, nil)
                 try assertTrue(lines[1].text.contains("private"))
