@@ -17,7 +17,7 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.3.0</string>
+    <string>0.3.1</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>CFBundleSupportedPlatforms</key>
@@ -35,25 +35,40 @@
         <dict>
             <key>CFBundleTypeName</key><string>JSON Document</string>
             <key>CFBundleTypeRole</key><string>Viewer</string>
-            <key>LSHandlerRank</key><string>Alternate</string>
+            <key>LSHandlerRank</key><string>Default</string>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                <string>json</string>
+            </array>
             <key>LSItemContentTypes</key>
             <array><string>public.json</string></array>
         </dict>
         <dict>
             <key>CFBundleTypeName</key><string>Markdown Document</string>
             <key>CFBundleTypeRole</key><string>Viewer</string>
-            <key>LSHandlerRank</key><string>Alternate</string>
+            <key>LSHandlerRank</key><string>Default</string>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                <string>md</string>
+                <string>markdown</string>
+                <string>mdown</string>
+                <string>mkd</string>
+            </array>
             <key>LSItemContentTypes</key>
             <array>
                 <string>net.daringfireball.markdown</string>
                 <string>public.markdown</string>
-                <string>text.markdown</string>
             </array>
         </dict>
         <dict>
             <key>CFBundleTypeName</key><string>Delimited Values Document</string>
             <key>CFBundleTypeRole</key><string>Viewer</string>
-            <key>LSHandlerRank</key><string>Alternate</string>
+            <key>LSHandlerRank</key><string>Default</string>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                <string>csv</string>
+                <string>tsv</string>
+            </array>
             <key>LSItemContentTypes</key>
             <array>
                 <string>public.comma-separated-values-text</string>

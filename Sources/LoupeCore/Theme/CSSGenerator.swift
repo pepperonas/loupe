@@ -567,13 +567,9 @@ public enum CSSGenerator {
 
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
         }
 
-        html, body {
-            height: 100%;
-            margin: 0;
+        html {
             background-color: var(--bg);
             color: var(--text);
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif;
@@ -583,18 +579,17 @@ public enum CSSGenerator {
         }
 
         body {
-            padding: 14px 18px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            margin: 0;
+            padding: 16px 20px 32px 20px;
+            background-color: var(--bg);
+            color: var(--text);
         }
 
         .lp-csv-container {
             display: flex;
             flex-direction: column;
-            height: 100%;
-            min-height: 0;
-            gap: 10px;
+            gap: 12px;
+            width: 100%;
         }
 
         .lp-csv-toolbar {
@@ -603,7 +598,7 @@ public enum CSSGenerator {
             gap: 8px;
             font-size: 11.5px;
             color: var(--text-dim);
-            flex-shrink: 0;
+            flex-wrap: wrap;
         }
 
         .lp-csv-badge {
@@ -617,9 +612,8 @@ public enum CSSGenerator {
         }
 
         .lp-csv-table-wrapper {
-            flex: 1 1 auto;
-            min-height: 0;
-            overflow: auto;
+            overflow-x: auto;
+            max-width: 100%;
             border: 1px solid var(--border);
             border-radius: 6px;
             background-color: var(--bg);

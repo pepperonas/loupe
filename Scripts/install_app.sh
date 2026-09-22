@@ -4,10 +4,8 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# Build first if not already built
-if [ ! -d "${ROOT_DIR}/build/Loupe.app" ]; then
-    "${SCRIPT_DIR}/build_app.sh" release
-fi
+# Build release
+"${SCRIPT_DIR}/build_app.sh" release
 
 DEST_DIR="/Applications"
 if [ ! -w "${DEST_DIR}" ]; then

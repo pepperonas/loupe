@@ -6,7 +6,6 @@ public struct MarkdownPreviewRenderer: PreviewRenderer {
         var types: [UTType] = []
         if let md = UTType("net.daringfireball.markdown") { types.append(md) }
         if let pubMd = UTType("public.markdown") { types.append(pubMd) }
-        if let textMd = UTType("text.markdown") { types.append(textMd) }
         if let tagMd = UTType(filenameExtension: "md") {
             if !types.contains(tagMd) { types.append(tagMd) }
         }
