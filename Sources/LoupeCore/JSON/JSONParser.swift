@@ -117,6 +117,22 @@ public struct JSONParser {
     }
 
     private mutating func failure(message: String, at position: Position) -> ParseResult {
+        if let kind = hitLimit {
+            // Der Bruch ist Folge UNSERER Kuerzung (Tiefe/Knoten/Kinder/
+            // Stringlaenge), nicht eines Dateifehlers. skipValue() nach einer
+            // gegriffenen Grenze hinterlaesst haeufig eine syntaktisch nicht
+            // mehr schliessbare Restdatei (Paradebeispiel: eine Tiefenbombe
+            // ganz ohne schliessende Klammern) -- der Lexer laeuft beim
+            // Wiederaufsetzen der wartenden aeusseren Ebenen dann in
+            // .endOfInput, was ohne diese Pruefung faelschlich als
+            // .failed(at:) durchgereicht wuerde. Wie beim
+            // wasTruncatedByReader-Zweig unten: kein .error-Diagnostic,
+            // sonst erscheint eine von UNS gekuerzte, aber sonst gueltige
+            // Datei als kaputt (Spec §8) -- symmetrisch dazu haengt auch
+            // finalOutcome() bei hitLimit keinen Diagnostic an.
+            return ParseResult(root: partialRoot, outcome: .truncatedByLimit(kind),
+                               diagnostics: diagnostics)
+        }
         if wasTruncatedByReader {
             // Der Bruch ist Folge UNSERER Kuerzung, nicht eines Dateifehlers.
             diagnostics.append(Diagnostic(
@@ -141,12 +157,27 @@ struct ParseError: Error {
 extension JSONParser {
 
     mutating func parseValue(depth: Int) throws -> JSONValue {
+        if depth > limits.maxDepth {
+            noteLimit(.depth)
+            try skipValue()            // Rest dieses Zweigs verwerfen, nicht absteigen
+            return .null
+        }
+        if nodeCount >= limits.maxNodes {
+            noteLimit(.nodes)
+            try skipValue()
+            return .null
+        }
         nodeCount += 1
         let token = try advance()
         switch token.kind {
         case .braceOpen:    return try parseObject(depth: depth + 1, at: token.position)
         case .bracketOpen:  return try parseArray(depth: depth + 1, at: token.position)
-        case .string(let s):  return .string(s)
+        case .string(let s):
+            if s.count > limits.maxStringDisplayLength {
+                noteLimit(.stringLength)
+                return .string(String(s.prefix(limits.maxStringDisplayLength)) + "…")
+            }
+            return .string(s)
         case .number(let n):  return .number(n)
         case .literalTrue:    return .bool(true)
         case .literalFalse:   return .bool(false)
@@ -157,6 +188,28 @@ extension JSONParser {
             throw ParseError(message: "Datei endet unerwartet — Wert erwartet",
                              position: token.position)
         }
+    }
+
+    /// Merkt sich die ERSTE greifende Grenze. Spaetere ueberschreiben sie nicht --
+    /// die erste erklaert, warum das Ergebnis unvollstaendig ist.
+    private mutating func noteLimit(_ kind: LimitKind) {
+        if hitLimit == nil { hitLimit = kind }
+    }
+
+    /// Ueberspringt einen Wert, ohne einen Baum zu bauen -- ITERATIV.
+    /// Rekursives Ueberspringen haette genau den Stapelueberlauf, den die
+    /// Tiefenbremse verhindern soll.
+    private mutating func skipValue() throws {
+        var openContainers = 0
+        repeat {
+            let token = try advance()
+            switch token.kind {
+            case .braceOpen, .bracketOpen:   openContainers += 1
+            case .braceClose, .bracketClose: openContainers -= 1
+            case .endOfInput:                return
+            default:                         break
+            }
+        } while openContainers > 0
     }
 
     mutating func parseObject(depth: Int, at open: Position) throws -> JSONValue {
@@ -193,7 +246,12 @@ extension JSONParser {
                                      position: colon.position)
                 }
                 let value = try parseValue(depth: depth)
-                members.append(Member(key: key, value: value))
+                if members.count < limits.maxChildrenPerContainer {
+                    members.append(Member(key: key, value: value))
+                } else {
+                    omitted += 1
+                    noteLimit(.children)
+                }
                 pendingKey = nil
 
                 let sep = try advance()
@@ -246,7 +304,12 @@ extension JSONParser {
             }
             while true {
                 let value = try parseValue(depth: depth)
-                items.append(value)
+                if items.count < limits.maxChildrenPerContainer {
+                    items.append(value)
+                } else {
+                    omitted += 1
+                    noteLimit(.children)
+                }
                 let sep = try advance()
                 if sep.kind == .bracketClose { break }
                 guard sep.kind == .comma else {

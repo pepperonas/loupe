@@ -183,6 +183,99 @@ public enum JSONParserTests {
                     throw TestFailure(message: "b[0] falsch", file: #file, line: #line)
                 }
             }
+
+            runner.runTest(name: "testDepthBombDoesNotCrash") {
+                // 100.000 Ebenen sind ~100 KB. Ohne Bremse stirbt der Prozess
+                // am Stapelueberlauf -- der Test wuerde nicht rot, sondern
+                // die ganze Suite abbrechen.
+                let deep = String(repeating: "[", count: 100_000)
+                let r = parse(deep)
+                try assertEqual(r.outcome, .truncatedByLimit(.depth))
+            }
+
+            runner.runTest(name: "testDepthLimitIsExactlySixtyFour") {
+                func nested(_ n: Int) -> String {
+                    String(repeating: "[", count: n) + "1" + String(repeating: "]", count: n)
+                }
+                try assertEqual(parse(nested(60)).outcome, .complete)
+                try assertEqual(parse(nested(200)).outcome, .truncatedByLimit(.depth))
+            }
+
+            runner.runTest(name: "testChildrenLimitTruncatesAndCounts") {
+                let items = (0 ..< 1500).map(String.init).joined(separator: ",")
+                let r = parse("[\(items)]")
+                guard case .array(let kept, let omitted)? = r.root else {
+                    throw TestFailure(message: "kein Array", file: #file, line: #line)
+                }
+                try assertEqual(kept.count, 1000)
+                // Die Zahl muss STIMMEN -- sie steht spaeter so in der Anzeige.
+                try assertEqual(omitted, 500)
+                try assertEqual(r.outcome, .truncatedByLimit(.children))
+            }
+
+            runner.runTest(name: "testNodeLimitStopsBuilding") {
+                var limits = ParseLimits()
+                limits.maxNodes = 50
+                let items = (0 ..< 500).map(String.init).joined(separator: ",")
+                let r = parse("[\(items)]", limits: limits)
+                try assertEqual(r.outcome, .truncatedByLimit(.nodes))
+                try assertTrue(r.root != nil, "Teilbaum muss stehen bleiben")
+            }
+
+            runner.runTest(name: "testLongStringIsTruncatedForDisplay") {
+                var limits = ParseLimits()
+                limits.maxStringDisplayLength = 16
+                let long = String(repeating: "x", count: 100)
+                let r = parse("{\"a\":\"\(long)\"}", limits: limits)
+                guard case .object(let members, _)? = r.root,
+                      case .string(let s) = members[0].value else {
+                    throw TestFailure(message: "Struktur falsch", file: #file, line: #line)
+                }
+                try assertLessThan(s.count, 100)
+                try assertEqual(r.outcome, .truncatedByLimit(.stringLength))
+            }
+
+            runner.runTest(name: "testTruncationIsNotReportedAsFailure") {
+                // Eine GUELTIGE Datei, die WIR gekuerzt haben, darf nie als
+                // kaputt erscheinen. Sonst luegt die Vorschau ueber die Datei.
+                let r = parse(#"{"a":1,"b"#, truncated: true)
+                guard case .truncatedByLimit = r.outcome else {
+                    throw TestFailure(message: "als Fehler gemeldet statt als Kuerzung",
+                                      file: #file, line: #line)
+                }
+                try assertFalse(r.diagnostics.contains { $0.severity == .error },
+                                "Kuerzung darf keine Fehlermeldung erzeugen")
+            }
+
+            runner.runTest(name: "testMissingCommaInNestedObjectNestsPartialUnderAncestorKey") {
+                // Luecke aus Task 4: der geweitete catch in parseObject war fuer
+                // NICHT-Wert-Wurfstellen (Schluessel/Doppelpunkt/Komma) in einem
+                // VERSCHACHTELTEN Objekt nicht mutationsgeprueft -- nur der
+                // Wert-Wurfpfad (ueber parseValue, siehe
+                // testAncestorSiblingsSurviveNestedFailure) hatte einen Pin.
+                // Ein fehlendes Komma im INNEREN Objekt (Wurfstelle liegt beim
+                // Trenner-advance(), NICHT im rekursiven parseValue-Aufruf) muss
+                // trotzdem als Teilbaum unter dem AEUSSEREN Schluessel auftauchen
+                // -- sowohl die Daten des inneren Objekts als auch dessen
+                // Zuordnung zu "outer" muessen erhalten bleiben.
+                let r = parse(#"{"outer":{"a":1 "b":2}}"#)
+                guard case .failed = r.outcome else {
+                    throw TestFailure(message: "haette fehlschlagen muessen", file: #file, line: #line)
+                }
+                guard case .object(let outerMembers, _)? = r.root else {
+                    throw TestFailure(message: "kein Objekt im Teilbaum: \(String(describing: r.root))",
+                                       file: #file, line: #line)
+                }
+                try assertEqual(outerMembers.map(\.key), ["outer"])
+                guard case .object(let innerMembers, _) = outerMembers[0].value else {
+                    throw TestFailure(message: "outer-Wert ist kein genestetes Objekt",
+                                       file: #file, line: #line)
+                }
+                try assertEqual(innerMembers.map(\.key), ["a"])
+                guard case .number("1") = innerMembers[0].value else {
+                    throw TestFailure(message: "a falsch", file: #file, line: #line)
+                }
+            }
         }
     }
 }
