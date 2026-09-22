@@ -17,20 +17,23 @@
     <dict>
         <key>NSExtensionAttributes</key>
         <dict>
-            <key>QLIsDataBasedPreview</key><true/>
+            <key>QLIsDataBasedPreview</key><false/>
             <key>QLSupportedContentTypes</key>
             <array>
                 <string>public.json</string>
                 <string>net.daringfireball.markdown</string>
                 <string>public.markdown</string>
+                <string>com.apple.csv</string>
+                <string>public.comma-separated-values</string>
                 <string>public.comma-separated-values-text</string>
+                <string>public.tab-separated-values</string>
                 <string>public.tab-separated-values-text</string>
                 <string>public.delimited-values-text</string>
             </array>
             <key>QLSupportsSearchableItems</key><false/>
         </dict>
         <key>NSExtensionPointIdentifier</key><string>com.apple.quicklook.preview</string>
-        <key>NSExtensionPrincipalClass</key><string>PreviewProvider</string>
+        <key>NSExtensionPrincipalClass</key><string>PreviewViewController</string>
     </dict>
 </dict>
 </plist>

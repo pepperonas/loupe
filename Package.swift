@@ -37,7 +37,8 @@ let package = Package(
                 .linkedFramework("QuickLookUI"),
                 .linkedFramework("Quartz"),
                 .linkedFramework("UniformTypeIdentifiers"),
-                .linkedFramework("AppKit")
+                .linkedFramework("AppKit"),
+                .linkedFramework("WebKit")
             ]
         ),
         .executableTarget(name: "LoupeTests", dependencies: ["LoupeCore"], path: "Tests/LoupeTests")

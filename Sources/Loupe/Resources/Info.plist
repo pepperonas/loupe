@@ -71,7 +71,10 @@
             </array>
             <key>LSItemContentTypes</key>
             <array>
+                <string>com.apple.csv</string>
+                <string>public.comma-separated-values</string>
                 <string>public.comma-separated-values-text</string>
+                <string>public.tab-separated-values</string>
                 <string>public.tab-separated-values-text</string>
                 <string>public.delimited-values-text</string>
             </array>

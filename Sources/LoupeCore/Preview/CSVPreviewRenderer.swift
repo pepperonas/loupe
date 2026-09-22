@@ -17,6 +17,15 @@ public struct CSVPreviewRenderer: PreviewRenderer {
         if let delimited = UTType("public.delimited-values-text"), !types.contains(delimited) {
             types.append(delimited)
         }
+        if let appleCsv = UTType("com.apple.csv"), !types.contains(appleCsv) {
+            types.append(appleCsv)
+        }
+        if let pubCsv = UTType("public.comma-separated-values"), !types.contains(pubCsv) {
+            types.append(pubCsv)
+        }
+        if let pubTsv = UTType("public.tab-separated-values"), !types.contains(pubTsv) {
+            types.append(pubTsv)
+        }
         if let tagCsv = UTType(filenameExtension: "csv"), !types.contains(tagCsv) {
             types.append(tagCsv)
         }
