@@ -1360,6 +1360,30 @@ extension JSONParser {
 > in `parseArray` analog mit `.array(items: items, omitted: 0)`. In `parse()`
 > im `catch let e as ParseError`-Zweig vor dem `failure(...)`-Aufruf
 > `if partialRoot == nil { partialRoot = e.partial }` setzen.
+>
+> ⚠️ **Das genügt NICHT** (Feldbefund 2026-09-22, vom Test gefunden): der Bruch in
+> `{"gut":1,"kaputt":}` entsteht in **`parseValue`**, das seinen eigenen
+> `ParseError` **ohne** `partial` wirft — keine der vier obigen Stellen wird je
+> erreicht. Deshalb müssen `parseObject` und `parseArray` ihre rekursiven
+> `parseValue`-Aufrufe zusätzlich umschließen und das bis dahin Gelesene
+> nachtragen, wenn noch niemand tiefer eines gesetzt hat:
+>
+> ```swift
+> do {
+>     value = try parseValue(depth: depth)
+> } catch var e as ParseError {
+>     if e.partial == nil { e.partial = .object(members: members, omitted: 0) }
+>     throw e
+> }
+> ```
+>
+> (in `parseArray` analog mit `.array(items: items, omitted: 0)`).
+>
+> **Bekannte Grenze, bewusst akzeptiert:** bei mehrfacher Verschachtelung kommt so
+> der INNERSTE Container heraus, nicht der vollständige Pfad zur Wurzel. Für einen
+> Betrachter tragbar, weil das Fehlerbanner Zeile, Spalte und Quelltext-Ausschnitt
+> ohnehin zeigt — der Fund ist also lokalisiert, auch wenn der Teilbaum ein
+> Fragment ist.
 
 - [ ] **Step 5: `main.swift` erweitern, Tests grün sehen**
 
