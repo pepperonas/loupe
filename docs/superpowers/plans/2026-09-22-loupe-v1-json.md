@@ -1557,6 +1557,12 @@ In `JSONParser` ein Hilfsmittel und vier Prüfstellen. Zuerst in `parseValue`,
         if hitLimit == nil { hitLimit = kind }
     }
 
+    // ⚠️ `failure()` (Task 4) braucht einen ZUSAETZLICHEN hitLimit-Zweig, VOR dem
+    // wasTruncatedByReader-Zweig: greift eine Grenze und wirft danach noch etwas,
+    // waere das Ergebnis sonst `.failed` statt `.truncatedByLimit(.depth)` -- die
+    // Tiefenbombe wuerde abgefangen, aber als kaputte Datei gemeldet.
+    // Feldbefund 2026-09-22.
+
     /// Ueberspringt einen Wert, ohne einen Baum zu bauen -- ITERATIV.
     /// Rekursives Ueberspringen haette genau den Stapelueberlauf, den die
     /// Tiefenbremse verhindern soll.
@@ -1612,8 +1618,13 @@ Prozess zu beenden.
    stürzt wieder ab (Absturz zählt als „rot", aber notiere ihn als solchen).
 2. In `parseArray` `omitted += 1` entfernen → `testChildrenLimitTruncatesAndCounts`
    muss fallen (Zahl stimmt nicht mehr).
-3. In `finalOutcome()` `if wasTruncatedByReader` entfernen →
-   `testTruncationIsNotReportedAsFailure` muss fallen.
+3. ⚠️ **Nicht** `finalOutcome()` mutieren — diese Probe ist BLIND (Feldbefund
+   2026-09-22): das Szenario von `testTruncationIsNotReportedAsFailure` WIRFT und
+   laeuft damit ueber `failure()`, nicht ueber `finalOutcome()`. Die Mutation
+   liesse den Test gruen und gaukelte eine Zusicherung vor, die es nicht gibt.
+   Richtig ist der `if wasTruncatedByReader`-Zweig in **`failure()`** → dann faellt
+   der Test. **Lehre: eine Mutation, die man nicht hat zuenden sehen, prueft
+   nichts — sie prueft nur, dass man die falsche Zeile getroffen hat.**
 4. `skipValue` rekursiv statt iterativ machen → Tiefenbombe stürzt ab.
 
 - [ ] **Step 6: Committen**
