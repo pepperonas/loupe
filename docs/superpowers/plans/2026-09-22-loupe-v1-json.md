@@ -1557,11 +1557,18 @@ In `JSONParser` ein Hilfsmittel und vier Prüfstellen. Zuerst in `parseValue`,
         if hitLimit == nil { hitLimit = kind }
     }
 
-    // ⚠️ `failure()` (Task 4) braucht einen ZUSAETZLICHEN hitLimit-Zweig, VOR dem
-    // wasTruncatedByReader-Zweig: greift eine Grenze und wirft danach noch etwas,
-    // waere das Ergebnis sonst `.failed` statt `.truncatedByLimit(.depth)` -- die
-    // Tiefenbombe wuerde abgefangen, aber als kaputte Datei gemeldet.
-    // Feldbefund 2026-09-22.
+    // ⚠️ Rangfolge in `failure()` (Feldbefund + Entscheid 2026-09-22, in DIESER
+    // Reihenfolge -- eine fruehere Fassung dieser Notiz sagte das Gegenteil und
+    // war falsch):
+    //   1. wasTruncatedByReader -> .truncatedByLimit(.bytes) + Notiz.
+    //      Dort ist der Bruch Folge UNSERES Schnitts, nicht der Datei.
+    //   2. echter Wurf -> .failed(at:) + Fehlermeldung, PLUS Notiz falls
+    //      zusaetzlich eine Grenze griff. Ein Syntaxfehler ist handlungsfaehig,
+    //      eine Grenzen-Notiz ist blosse Information -- und die fruehere
+    //      Rangfolge liess die Fehlermeldung RESTLOS verschwinden.
+    //   3. sauberer Rueckweg mit hitLimit -> `finalOutcome()`, unveraendert.
+    // Folge, gewollt: 100.000 UNGESCHLOSSENE Klammern melden `.failed` (die Datei
+    // ist wirklich kaputt), 100.000 GESCHLOSSENE melden `.truncatedByLimit(.depth)`.
 
     /// Ueberspringt einen Wert, ohne einen Baum zu bauen -- ITERATIV.
     /// Rekursives Ueberspringen haette genau den Stapelueberlauf, den die
