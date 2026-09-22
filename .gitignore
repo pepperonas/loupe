@@ -28,3 +28,6 @@ xcuserdata/
 *.p12
 *.tmp
 *.log
+
+# Large test fixtures
+Tests/Fixtures/large.json

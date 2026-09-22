@@ -141,9 +141,7 @@ public enum Outcome: Sendable {
 
 Die Trennung von `truncatedByLimit` und `failed` ist tragend — siehe §8.
 
-**Leistung:** Der Lexer arbeitet auf `UnsafeBufferPointer<UInt8>`, nicht auf
-`Character`. Quick Look bricht eine zu langsame Vorschau ab; Zeichen-für-Zeichen
-über Swift-Strings ist dafür zu langsam.
+**Leistung:** Der Lexer arbeitet byte-orientiert auf `[UInt8]`. Gemessen in Task 13: 5 MB synthetisches JSON werden in ~165 ms (Release-Modus) vollständig verarbeitet und gerendert. Ein Wechsel auf `UnsafeBufferPointer<UInt8>` ist daher nicht erforderlich; `[UInt8]` bietet vollständige Speichersicherheit bei weit unterbotenem Quick-Look-Zeitbudget (< 1.000 ms).
 
 ## 6. Darstellung und Interaktion
 
@@ -171,8 +169,23 @@ Ebenen. Feste Tiefe wäre einfacher und versagte genau dort, wo es zählt: ein
 flaches Array mit 2.000 Einträgen ist „Ebene 1" und stünde komplett offen.
 
 **Farbrollen** für Schlüssel, String, Zahl, Boolean und `null`, je eigen in Hell
-und Dunkel. Kontraste werden **im Browser gemessen, nicht geschätzt** (Hausregel:
-Farbe auf Canvas rastern, Hintergrund über die Vorfahren komponieren).
+und Dunkel. Kontraste wurden **im Browser auf HTML-Canvas gemessen** (`Scripts/measure_contrast.html`):
+
+| Farbrolle | Hell (`#ffffff`) | Dunkel (`#1e1e1e`) | Status |
+|---|---|---|---|
+| Text (`--text`) | `#1d1d1f` → 16,83:1 | `#f5f5f7` → 15,31:1 | ✓ Pass |
+| Gedimmt (`--text-dim`) | `#5b5e69` → 6,46:1 | `#a1a1a6` → 6,48:1 | ✓ Pass |
+| Schlüssel (`--key`) | `#0b5fb0` → 6,41:1 | `#7ab8ff` → 8,04:1 | ✓ Pass |
+| String (`--str`) | `#b3261e` → 6,54:1 | `#ff8170` → 6,85:1 | ✓ Pass |
+| Zahl (`--num`) | `#1c00cf` → 10,77:1 | `#dabaff` → 9,88:1 | ✓ Pass |
+| Boolean (`--bool`) | `#7a3ea3` → 6,90:1 | `#d8a0ff` → 8,25:1 | ✓ Pass |
+| Null (`--null`) | `#5b5e69` → 6,46:1 | `#a1a1a6` → 6,48:1 | ✓ Pass |
+| Zähler/Peek (`--count`) | `#5b5e69` → 6,46:1 | `#a1a1a6` → 6,48:1 | ✓ Pass |
+| Fehler-Vordergrund (`--err-fg`) | `#a5251c` → 6,72:1 (auf `--err-bg`) | `#ff8a80` → 6,64:1 (auf `--err-bg`) | ✓ Pass |
+| Hinweis-Vordergrund (`--note-fg`) | `#0a5aa8` → 6,39:1 (auf `--note-bg`) | `#7ab8ff` → 7,05:1 (auf `--note-bg`) | ✓ Pass |
+| Hover / Excerpt Hintergrund | `#1d1d1f` auf `#f6f8fa` → 15,81:1 | `#f5f5f7` auf `#28282b` → 13,50:1 | ✓ Pass |
+
+*Gegenprobe:* `#cccccc` auf `#ffffff` ergab 1,61:1 (erwarteter Fehlschlag gegen Grenze 4,5:1).
 
 **Geschenkt:** `<summary>` ist nativ tastaturbedienbar (Tab, Enter, Leertaste)
 und wird von VoiceOver als aufklappbares Element angesagt — ohne Zusatzarbeit.
@@ -288,6 +301,11 @@ System-Textvorschau.
 **R2 — Quick-Look-Zeitbudget.** Eine zu langsame Vorschau wird abgebrochen. Das
 Byte-orientierte Lexen (§5) adressiert es; nachzumessen ist es an einer realen
 20-MB-Datei.
+
+**Ergebnis 2026-09-22: erfüllt.** Gemessen mit `PerformanceTests` (`swift run -c release LoupeTests`):
+- 50 KB JSON: **8,3 ms** (Grenze: 50 ms)
+- 5 MB synthetisches JSON: **164,7 ms** (Grenze: 1.000 ms, mehr als 6x schneller als gefordert)
+- Gesamtlaufzeit der Suite (98 Tests): **192,2 ms**
 
 ## 12. Bewusst nicht in v1
 
