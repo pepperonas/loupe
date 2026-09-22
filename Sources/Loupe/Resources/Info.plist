@@ -61,20 +61,28 @@
             </array>
         </dict>
         <dict>
-            <key>CFBundleTypeName</key><string>Delimited Values Document</string>
+            <key>CFBundleTypeName</key><string>CSV Document</string>
             <key>CFBundleTypeRole</key><string>Viewer</string>
             <key>LSHandlerRank</key><string>Owner</string>
             <key>CFBundleTypeExtensions</key>
             <array>
                 <string>csv</string>
+            </array>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>public.comma-separated-values-text</string>
+            </array>
+        </dict>
+        <dict>
+            <key>CFBundleTypeName</key><string>TSV Document</string>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>Owner</string>
+            <key>CFBundleTypeExtensions</key>
+            <array>
                 <string>tsv</string>
             </array>
             <key>LSItemContentTypes</key>
             <array>
-                <string>com.apple.csv</string>
-                <string>public.comma-separated-values</string>
-                <string>public.comma-separated-values-text</string>
-                <string>public.tab-separated-values</string>
                 <string>public.tab-separated-values-text</string>
                 <string>public.delimited-values-text</string>
             </array>
