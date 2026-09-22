@@ -12,10 +12,10 @@
 
   <br><br>
 
-[![Release](https://img.shields.io/badge/Release-v0.2.0-007AFF?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/releases)
+[![Release](https://img.shields.io/badge/Release-v0.3.0-007AFF?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/releases)
 [![Build](https://img.shields.io/badge/Build-Bestanden-brightgreen?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/Tests-153%20Unit--Tests%20bestanden-brightgreen?logo=apple&logoColor=white)](Tests/LoupeTests/)
-[![Zeilen Code](https://img.shields.io/badge/LoC-3.332%20Zeilen%20Swift-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-183%20Unit--Tests%20bestanden-brightgreen?logo=apple&logoColor=white)](Tests/LoupeTests/)
+[![Zeilen Code](https://img.shields.io/badge/LoC-4.021%20Zeilen%20Swift-blue?logo=swift&logoColor=white)](Sources/)
 [![Lizenz: MIT](https://img.shields.io/badge/Lizenz-MIT-yellow.svg)](LICENSE)
 <br>
 [![Plattform](https://img.shields.io/badge/Plattform-macOS%2014%2B-000000?logo=apple&logoColor=white)](https://apple.com/macos)
@@ -34,10 +34,10 @@
 <br><br>
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│  Finder → Beliebige JSON- (.json) oder Markdown-Datei (.md)│
-│  Leertaste drücken → Sofortige native Vorschau ohne JS!    │
-└────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────┐
+│  Finder → Beliebige JSON- (.json), Markdown- (.md) oder CSV/TSV-Datei      │
+│  Leertaste drücken → Sofortige native Vorschau ohne JavaScript!            │
+└────────────────────────────────────────────────────────────────────────────┘
 ```
 
 </div>
@@ -51,6 +51,7 @@
 Loupe bietet erstklassige, gehärtete Unterstützung für Entwicklerdateien einschließlich:
 - **JSON** (`public.json`): Aufklappbarer Baum mit erhaltener Schlüsselreihenfolge, Typ-Badges, Elementzählern, Syntax-Farbrollen und intelligenter Breitensuche-Voraufklappung.
 - **Markdown** (`net.daringfireball.markdown`): Vollständiges CommonMark- und GitHub Flavored Markdown (GFM)-Rendering mit reiner Swift-Syntaxhervorhebung für 17+ Programmiersprachen, formatierten Tabellen, Aufgabenlisten und sicheren relativen Bildern.
+- **CSV & TSV** (`public.comma-separated-values-text`, `public.tab-separated-values-text`, `public.delimited-values-text`): Nativer Tabellen-Renderer mit vollständiger Dark-Mode-Unterstützung (keine grell-weiße Blendung wie bei macOS Quick Look). Mit automatischer Trennzeichenerkennung (`,`, `;`, `\t`), fixierter Kopfzeile, Zeilennummern `#` und Zahlenausrichtung.
 
 Ein Druck auf die **Leertaste** bei einer beliebigen unterstützten Datei öffnet unmittelbar eine elegante Vorschau – **ohne ein einziges Byte JavaScript**, ohne Electron und ohne ressourcenhungrige Hintergrunddienste.
 
@@ -70,6 +71,7 @@ Entwickelt streng nach Apples Human Interface Guidelines fügt sich Loupe optisc
 - 🛡️ **Gehärtete Obergrenzen & DoS-Schutz**: Schutz vor Stack Overflow durch Tiefenbremse (max. 64 Ebenen), Speichersicherheit durch Knotengrenze (20.000 Knoten), Container-Kinder-Grenze (1.000 Kinder), String-Längenbegrenzung (4 KB) und Dateigrößen-Grenzen (20 MB für JSON, 5 MB für Markdown).
 - 🔒 **Zero Telemetry & Pfad-Traversal-Schutz**: Isoliert in Apples App Extension Sandbox (`com.apple.security.app-sandbox`) mit reinem Lesezugriff. Lokale relative Bilder werden via Base64 mit Symlink-Kanonisierung eingebettet. Remote-Bilder sind standardmäßig gesperrt, um Tracking-Pixel zu verhindern.
 - 🎨 **Apple-Typografie & Kontrast-geprüfte Themes**: Helles und dunkles Theme, gesetzt in `SF Pro`, `SF Mono` und `ui-monospace`. Alle semantischen Farbrollen wurden auf einem Canvas gegen die WCAG AA-Norm geprüft (alle Kontrastwerte > 4,5:1, von 6,4:1 bis 16,8:1).
+- 📊 **Natives, Theme-konformes CSV & TSV**: Beseitigt den Blendeffekt der standardmäßigen macOS-Vorschau, die CSV-Dateien auch im Dunkelmodus grell weiß anzeigt. RFC 4180-Parser mit automatischer Trennzeichenerkennung (`,`, `;`, `\t`), fixierter Tabellenkopfzeile, fixierter Zeilennummer `#` und rechtsbündiger Zahlenausrichtung.
 - 💻 **Native Begleit-App**: Integrierte AppKit-Begleit-App mit Echtzeit-Statusdiagnose der Quick-Look-Erweiterung, Hilfestellungen zur Systemaktivierung sowie Einstellungen für Erscheinungsbild, Textgröße und Markdown-Breite.
 
 ---
@@ -123,6 +125,24 @@ Loupe enthält einen maßgeschneiderten Tokenizer in reinem Swift für:
 
 ---
 
+## Unterstützte CSV- & TSV-Features
+
+macOS verfügt zwar über eine standardmäßige CSV-Vorschau, diese ignoriert das dunkle System-Erscheinungsbild jedoch vollständig und blendet Anwender mit einer rein weißen Seite. Loupe ersetzt dies durch eine elegante, vollständige Desktop-Tabellendarstellung:
+
+| Feature | Beschreibung | Unterstützt | Technisches Detail |
+| :--- | :--- | :---: | :--- |
+| **Dunkel- & Hellmodus** | Theme-gerechte Tabellendarstellung | ✅ | Fügt sich nahtlos ins System ein; verhindert Blendung im Dark Mode |
+| **Trennzeichen-Erkennung** | Intelligente Delimiter-Erkennung | ✅ | Erkennt Komma (`,`), Semikolon (`;` für deutsche Excel-CSVs) und Tabulator (`\t`) |
+| **Fixierte Kopfzeile** | Pinned Spaltenköpfe | ✅ | `thead th` mit `position: sticky; top: 0` bleibt beim Scrollen fixiert |
+| **Fixierte Zeilennummern** | Pinned Index-Spalte (`#`) | ✅ | Spalte `#` bleibt beim horizontalen Scrollen am linken Rand fixiert |
+| **Rechtsbündige Zahlen** | Tabellarische Ziffern | ✅ | Erkennt Zahlenwerte automatisch und richtet sie mit `tabular-nums` rechtsbündig aus |
+| **RFC 4180-Maskierung** | Vollständige Anführungszeichen | ✅ | Quoted Fields, maskierte Anführungszeichen (`""`) und mehrzeilige Zellen |
+| **Status-Toolbar** | Tabellen-Statistiken | ✅ | Badges mit Zeilenanzahl, Spaltenanzahl und verwendetem Trennzeichen |
+| **Sichere Obergrenzen** | Speicher- & DoS-Schutz | ✅ | Begrenzt auf 2.000 Zeilen / 200 Spalten mit sauberem Kürzungs-Hinweis |
+| **Kein JavaScript** | Reines HTML5/CSS | ✅ | Null client-seitiges JavaScript, geschützt durch strikte CSP |
+
+---
+
 ## Kontrast-geprüfte Farbrollen (WCAG AA)
 
 Alle Farbwerte wurden auf einem HTML5-Canvas über den Hintergrundschichten gerastert und pixelgenau gemessen (`Scripts/measure_contrast.html`):
@@ -153,11 +173,11 @@ Alle Farbwerte wurden auf einem HTML5-Canvas über den Hintergrundschichten gera
 Loupe
 ├── Loupe.app (Host-Begleit-Anwendung)
 │   ├── Contents/MacOS/Loupe (AppKit Host-Binary)
-│   ├── Contents/Info.plist (Bundle-Metadaten & registrierte Formate: JSON & Markdown)
+│   ├── Contents/Info.plist (Bundle-Metadaten & registrierte Formate: JSON, Markdown & CSV)
 │   └── Contents/PlugIns/
 │       └── LoupePreview.appex (Quick Look App Extension)
 │           ├── Contents/MacOS/LoupePreview (QLPreviewProvider Binary)
-│           └── Contents/Info.plist (QLSupportedContentTypes: public.json, net.daringfireball.markdown)
+│           └── Contents/Info.plist (QLSupportedContentTypes: public.json, net.daringfireball.markdown, CSV/TSV)
 │
 ├── LoupeCore (Gemeinsame Swift-Bibliothek)
 │   ├── JSON/
@@ -169,6 +189,9 @@ Loupe
 │   │   ├── MarkdownRenderer.swift (AST-Visitor via swift-markdown)
 │   │   ├── HTMLSanitizer.swift (XSS-Bereinigung, URL- & Protokoll-Sanitizer)
 │   │   └── ResourceResolver.swift (Pfad-Traversal-Schutz & Base64-Bildauflösung)
+│   ├── CSV/
+│   │   ├── CSVParser.swift (RFC 4180-Parser, automatische Delimiter-Erkennung, CRLF-Handling)
+│   │   └── CSVTableRenderer.swift (HTML-Tabellengenerator, fixierte Kopfzeilen, Zahlenausrichtung)
 │   ├── Highlighting/
 │   │   ├── SyntaxHighlighter.swift (Reine Swift-Tokenizer für 17+ Sprachen)
 │   │   └── LanguageLexer.swift (Sprachdefinitionen, TokenType, HighlightToken)
@@ -176,14 +199,15 @@ Loupe
 │   │   ├── PreviewRenderer.swift (PreviewInput, PreviewRenderer Protokoll)
 │   │   ├── JSONPreviewRenderer.swift (JSON-Vorschau-Koordinator)
 │   │   ├── MarkdownPreviewRenderer.swift (Markdown-Vorschau-Koordinator)
+│   │   ├── CSVPreviewRenderer.swift (CSV- & TSV-Vorschau-Koordinator)
 │   │   ├── RendererRegistry.swift (Modulare Format-Auswahl über UTType)
-│   │   └── HTMLDocument.swift (Zentrale CSP-Hülle für JSON und Markdown)
+│   │   └── HTMLDocument.swift (Zentrale CSP-Hülle für JSON, Markdown und CSV)
 │   ├── Render/
 │   │   ├── JSONTreeRenderer.swift (HTML-Generierung aus <details>/<summary>)
 │   │   ├── ExpansionPolicy.swift (Breitensuche-Planung nach Zeilenbudget)
 │   │   └── HTMLEscape.swift (Einpassige Zeichenmaskierung)
 │   ├── Theme/
-│   │   └── CSSGenerator.swift (WCAG AA Stylesheets für JSON und Markdown)
+│   │   └── CSSGenerator.swift (WCAG AA Stylesheets für JSON, Markdown und CSV)
 │   ├── Configuration/
 │   │   └── LoupeSettings.swift (Erscheinungsbild, Textgröße, Budget, Breite, Defaults)
 │   └── Utilities/
@@ -200,6 +224,8 @@ Loupe
     ├── LanguageLexerTests.swift
     ├── SyntaxHighlighterTests.swift
     ├── MarkdownRendererTests.swift
+    ├── CSVParserTests.swift
+    ├── CSVTableRendererTests.swift
     ├── JSONTreeRendererTests.swift
     ├── ExpansionPolicyTests.swift
     ├── RegistryTests.swift

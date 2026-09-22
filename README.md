@@ -12,10 +12,10 @@
 
   <br><br>
 
-[![Release](https://img.shields.io/badge/Release-v0.2.0-007AFF?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/releases)
+[![Release](https://img.shields.io/badge/Release-v0.3.0-007AFF?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/releases)
 [![Build](https://img.shields.io/badge/Build-Passing-brightgreen?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/Tests-153%20Unit--Tests%20passed-brightgreen?logo=apple&logoColor=white)](Tests/LoupeTests/)
-[![Lines of Code](https://img.shields.io/badge/LoC-3%2C332%20Lines%20of%20Swift-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-183%20Unit--Tests%20passed-brightgreen?logo=apple&logoColor=white)](Tests/LoupeTests/)
+[![Lines of Code](https://img.shields.io/badge/LoC-4%2C021%20Lines%20of%20Swift-blue?logo=swift&logoColor=white)](Sources/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 <br>
 [![Platform](https://img.shields.io/badge/Platform-macOS%2014%2B-000000?logo=apple&logoColor=white)](https://apple.com/macos)
@@ -34,10 +34,10 @@
 <br><br>
 
 ```
-┌────────────────────────────────────────────────────────────┐
-│  Finder → Select Any JSON (.json) or Markdown (.md) File   │
-│  Press Space → Instant native preview with zero JavaScript!│
-└────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────────┐
+│  Finder → Select Any JSON (.json), Markdown (.md), or CSV/TSV File         │
+│  Press Space → Instant native preview with zero JavaScript!                │
+└────────────────────────────────────────────────────────────────────────────┘
 ```
 
 </div>
@@ -51,6 +51,7 @@
 Loupe provides first-class, hardened support for developer files including:
 - **JSON** (`public.json`): Collapsible tree with source-order preservation, type badges, member counts, syntax color roles, and smart breadth-first expansion.
 - **Markdown** (`net.daringfireball.markdown`): Full CommonMark and GitHub Flavored Markdown (GFM) rendering with pure-Swift syntax highlighting for 17+ languages, formatted tables, task lists, and safe relative images.
+- **CSV & TSV** (`public.comma-separated-values-text`, `public.tab-separated-values-text`, `public.delimited-values-text`): Clean, theme-aware tabular preview that fixes the macOS default preview's blinding white background in Dark Mode. Features automatic delimiter detection (`,`, `;`, `\t`), sticky headers, sticky row numbers, and numeric right-alignment.
 
 Pressing **Space** on any supported file instantly renders a gorgeous preview — **without a single byte of JavaScript**, without Electron, and without background daemons.
 
@@ -70,6 +71,7 @@ Designed strictly according to Apple's Human Interface Guidelines, Loupe looks, 
 - 🛡️ **Hardened Limits & DoS Protection**: Stack-overflow protection through a depth guard (max 64 levels), memory safety via node limits (20,000 nodes), container child limits (1,000 children), string display caps (4 KB), and file size boundaries (20 MB for JSON, 5 MB for Markdown).
 - 🔒 **Zero Telemetry & Path Traversal Guards**: Isolated within macOS's App Extension Sandbox (`com.apple.security.app-sandbox`) with read-only access. Local relative images are safely embedded via Base64 with symlink canonicalization. Remote images are blocked by default to prevent tracking pixels.
 - 🎨 **Apple Typography & Contrast-Verified Themes**: Dual Light and Dark themes styled with `SF Pro`, `SF Mono`, and `ui-monospace`. All semantic color roles are verified on an HTML5 canvas against WCAG AA standards (all ratios > 4.5:1, ranging from 6.4:1 to 16.8:1).
+- 📊 **Native, Theme-Aware CSV & TSV**: Fixes macOS Quick Look's glaring white CSV preview by honoring macOS Dark Mode. Features RFC 4180 parsing, automatic delimiter detection (`,`, `;`, `\t`), sticky header row, sticky row numbering (`#`), and numeric right-alignment.
 - 💻 **Native Companion App**: Built-in AppKit companion app providing live Quick Look extension registration status, troubleshooting tips, and user preferences for appearance, text size, and Markdown content width.
 
 ---
@@ -123,6 +125,24 @@ Loupe includes a custom in-process tokenizer written in pure Swift supporting:
 
 ---
 
+## Supported CSV & TSV Features
+
+macOS includes a default CSV preview, but it completely ignores system Dark Mode — blinding users with bright white backgrounds. Loupe replaces this with a fully theme-aware, desktop-class tabular preview experience:
+
+| Feature | Description | Supported | Technical Detail |
+| :--- | :--- | :---: | :--- |
+| **Dark & Light Modes** | Theme-aware table styling | ✅ | Matches system appearance seamlessly; eliminates white glare in Dark Mode |
+| **Delimiter Auto-Detection** | Smart delimiter scanner | ✅ | Auto-detects comma (`,`), semicolon (`;` for European CSVs), and tab (`\t` for TSV) |
+| **Sticky Header Row** | Pinned table columns | ✅ | `thead th` uses `position: sticky; top: 0` to keep headers visible when scrolling |
+| **Sticky Row Numbers** | Pinned index column (`#`) | ✅ | `th`/`td.lp-csv-row-num` stick to `left: 0` during horizontal table scroll |
+| **Numeric Right-Alignment** | Tabular numbers | ✅ | Auto-detects numeric columns/cells and aligns right with `tabular-nums` |
+| **RFC 4180 Quoting** | Standard quoting support | ✅ | Quoted fields, escaped quotes (`""`), and multiline strings preserved |
+| **Summary Toolbar** | File overview stats | ✅ | Badges showing total rows, columns, and detected delimiter |
+| **Safe Limits & Truncation** | Memory & DoS guard | ✅ | Caps display at 2,000 rows / 200 cols with a clean informational notice banner |
+| **Zero JavaScript** | Pure HTML/CSS execution | ✅ | Zero client-side scripts, protected by strict Content Security Policy |
+
+---
+
 ## Contrast-Verified Color Roles (WCAG AA)
 
 All color roles are measured on an HTML5 canvas composited over background layers (`Scripts/measure_contrast.html`), ensuring compliance with accessibility guidelines:
@@ -153,11 +173,11 @@ All color roles are measured on an HTML5 canvas composited over background layer
 Loupe
 ├── Loupe.app (Host Companion Application)
 │   ├── Contents/MacOS/Loupe (AppKit host binary)
-│   ├── Contents/Info.plist (Bundle metadata & registered UTTypes: JSON & Markdown)
+│   ├── Contents/Info.plist (Bundle metadata & registered UTTypes: JSON, Markdown & CSV)
 │   └── Contents/PlugIns/
 │       └── LoupePreview.appex (Quick Look App Extension)
 │           ├── Contents/MacOS/LoupePreview (QLPreviewProvider extension binary)
-│           └── Contents/Info.plist (QLSupportedContentTypes: public.json, net.daringfireball.markdown)
+│           └── Contents/Info.plist (QLSupportedContentTypes: public.json, net.daringfireball.markdown, CSV/TSV)
 │
 ├── LoupeCore (Shared Swift Package Library Target)
 │   ├── JSON/
@@ -169,6 +189,9 @@ Loupe
 │   │   ├── MarkdownRenderer.swift (AST visitor via swift-markdown)
 │   │   ├── HTMLSanitizer.swift (XSS & dangerous tag cleaner, protocol sanitizer)
 │   │   └── ResourceResolver.swift (Path traversal guard & Base64 relative image loader)
+│   ├── CSV/
+│   │   ├── CSVParser.swift (RFC 4180 parser, auto-delimiter scanner, CRLF handling)
+│   │   └── CSVTableRenderer.swift (HTML table generator, sticky headers, numeric alignment)
 │   ├── Highlighting/
 │   │   ├── SyntaxHighlighter.swift (Pure-Swift tokenizers for 17+ languages)
 │   │   └── LanguageLexer.swift (Supported languages, TokenType, HighlightToken)
@@ -176,14 +199,15 @@ Loupe
 │   │   ├── PreviewRenderer.swift (PreviewInput, PreviewRenderer protocol)
 │   │   ├── JSONPreviewRenderer.swift (JSON preview coordinator)
 │   │   ├── MarkdownPreviewRenderer.swift (Markdown preview coordinator)
+│   │   ├── CSVPreviewRenderer.swift (CSV & TSV preview coordinator)
 │   │   ├── RendererRegistry.swift (Modular UTType matching and renderer lookup)
-│   │   └── HTMLDocument.swift (Strict CSP envelopes for JSON and Markdown)
+│   │   └── HTMLDocument.swift (Strict CSP envelopes for JSON, Markdown, and CSV)
 │   ├── Render/
 │   │   ├── JSONTreeRenderer.swift (Nested details/summary HTML emitter)
 │   │   ├── ExpansionPolicy.swift (Breadth-first expansion planner within line budget)
 │   │   └── HTMLEscape.swift (Single-pass character escaping)
 │   ├── Theme/
-│   │   └── CSSGenerator.swift (WCAG AA light/dark stylesheets for JSON and Markdown)
+│   │   └── CSSGenerator.swift (WCAG AA light/dark stylesheets for JSON, Markdown, and CSV)
 │   ├── Configuration/
 │   │   └── LoupeSettings.swift (Appearance, font size, line budget, content width, Defaults)
 │   └── Utilities/

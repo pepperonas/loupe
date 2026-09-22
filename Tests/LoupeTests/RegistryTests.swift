@@ -75,6 +75,45 @@ public enum RegistryTests {
                 try assertTrue(html.contains("<div class=\"lp-banner lp-banner-notice\">"))
                 try assertTrue(html.contains("Datei abgeschnitten"))
             }
+
+            runner.runTest(name: "testCSVTypeResolvesToCSVRenderer") {
+                try assertTrue(RendererRegistry.renderer(for: .commaSeparatedText) != nil)
+                try assertTrue(RendererRegistry.renderer(for: .tabSeparatedText) != nil)
+                try assertTrue(RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/data.csv")) != nil)
+                try assertTrue(RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/data.tsv")) != nil)
+            }
+
+            runner.runTest(name: "testCSVEndToEndRenderOfRealFile") {
+                let csv = "Name,Age,Role\nAlice,30,Engineer\nBob,25,Designer"
+                let input = PreviewInput(data: Data(csv.utf8),
+                                         url: URL(fileURLWithPath: "/tmp/team.csv"),
+                                         wasTruncatedByReader: false)
+                let renderer = RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/team.csv"))
+                try assertTrue(renderer != nil)
+                let html = renderer!.renderHTML(input: input, settings: LoupeSettings())
+                try assertTrue(html.hasPrefix("<!DOCTYPE html>"))
+                try assertTrue(html.contains("<table class=\"lp-csv-table\">"))
+                try assertTrue(html.contains("Alice"))
+                try assertTrue(html.contains("Engineer"))
+                try assertFalse(html.lowercased().contains("<script"))
+            }
+
+            runner.runTest(name: "testCSVEmptyFileRendersBanner") {
+                let input = PreviewInput(data: Data(),
+                                         url: URL(fileURLWithPath: "/tmp/empty.csv"),
+                                         wasTruncatedByReader: false)
+                let html = CSVPreviewRenderer().renderHTML(input: input, settings: LoupeSettings())
+                try assertTrue(html.contains("lp-banner"))
+            }
+
+            runner.runTest(name: "testCSVTruncatedInputRendersTruncationNotice") {
+                let input = PreviewInput(data: Data("a,b\n1,2".utf8),
+                                         url: URL(fileURLWithPath: "/tmp/trunc.csv"),
+                                         wasTruncatedByReader: true)
+                let html = CSVPreviewRenderer().renderHTML(input: input, settings: LoupeSettings())
+                try assertTrue(html.contains("lp-banner lp-banner-notice"))
+                try assertTrue(html.contains("Datei abgeschnitten"))
+            }
         }
     }
 }

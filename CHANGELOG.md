@@ -5,6 +5,21 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+## [0.3.0] - 2026-09-22
+
+### Hinzugefügt
+- Nativer CSV- und TSV-Vorschau-Renderer (`public.comma-separated-values-text`, `public.tab-separated-values-text`, `public.delimited-values-text`, `.csv`, `.tsv`):
+  - Vollständige Dark- und Light-Mode-Unterstützung: Behebt das bekannte Problem von macOS Quick Look, CSV-Dateien im dunklen System-Erscheinungsbild mit grell-weißer Blendung anzuzeigen.
+  - Fixierte Tabellenkopfzeile (`<thead>`), die beim Scrollen durch große Tabellen stets sichtbar bleibt.
+  - Fixierte Index-Spalte `#` mit Zeilennummern.
+  - Automatische Erkennung des Trennzeichens (Komma `,`, Semikolon `;` für europäische/deutsche CSV-Dateien, Tabulator `\t` für TSV).
+  - Automatische Zahlenerkennung mit rechtsbündiger Ausrichtung und `tabular-nums`.
+  - RFC 4180-Konformität: Unterstützung für Anführungszeichen, maskierte Anführungszeichen (`""`) und mehrzeilige Textzellen.
+  - Zusammenfassungsleiste mit Zeilenanzahl, Spaltenanzahl und Trennzeichen-Badge.
+  - Sichere Obergrenzen (maximal 2.000 Zeilen, 200 Spalten) mit Informationsbanner bei gekürzten Dateien.
+  - 100% JavaScript-frei mit strikter Content Security Policy.
+- 30 neue Unit-Tests für CSV-Parsing, Tabellen-Rendering, Themes und Registry-Auflösung (Gesamt: 183 Tests).
+
 ## [0.2.0] - 2026-09-22
 
 ### Hinzugefügt

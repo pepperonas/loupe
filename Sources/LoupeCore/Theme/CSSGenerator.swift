@@ -96,6 +96,42 @@ public enum CSSGenerator {
         --badge-text: #aeaeb2;
     """
 
+    private static let csvLightVars = """
+        --bg: #ffffff;
+        --bg-secondary: #f5f5f7;
+        --bg-alt: #f8f9fa;
+        --bg-hover: #eef3fd;
+        --text: #1d1d1f;
+        --text-dim: #6e6e73;
+        --border: #e5e5ea;
+        --border-strong: #d1d1d6;
+        --num: #1c00cf;
+        --badge-bg: #f2f2f7;
+        --badge-text: #48484a;
+        --note-bg: rgba(0, 113, 227, 0.06);
+        --note-fg: #0a5aa8;
+        --err-bg: rgba(255, 59, 48, 0.06);
+        --err-fg: #a5251c;
+    """
+
+    private static let csvDarkVars = """
+        --bg: #1e1e1e;
+        --bg-secondary: #26262a;
+        --bg-alt: #232326;
+        --bg-hover: #2a313d;
+        --text: #f5f5f7;
+        --text-dim: #98989d;
+        --border: #38383a;
+        --border-strong: #48484a;
+        --num: #7ab8ff;
+        --badge-bg: #2c2c2e;
+        --badge-text: #aeaeb2;
+        --note-bg: rgba(10, 132, 255, 0.12);
+        --note-fg: #7ab8ff;
+        --err-bg: rgba(255, 69, 58, 0.10);
+        --err-fg: #ff8a80;
+    """
+
     public static func generateCSS(settings: LoupeSettings) -> String {
         generateJSONCSS(settings: settings)
     }
@@ -501,6 +537,224 @@ public enum CSSGenerator {
             margin-bottom: 24px;
             font-size: 0.9em;
             color: var(--text-primary);
+        }
+        """
+    }
+
+    public static func generateCSVCSS(settings: LoupeSettings) -> String {
+        let size = settings.textSize.baseFontSizePx
+        let rootBlock: String
+        switch settings.appearance {
+        case .light:
+            rootBlock = ":root {\n\(csvLightVars)\n}"
+        case .dark:
+            rootBlock = ":root {\n\(csvDarkVars)\n}"
+        case .system:
+            rootBlock = """
+            :root {
+            \(csvLightVars)
+            }
+            @media (prefers-color-scheme: dark) {
+                :root {
+                \(csvDarkVars)
+                }
+            }
+            """
+        }
+
+        return """
+        \(rootBlock)
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif;
+            font-size: \(size)px;
+            line-height: 1.45;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            padding: 14px 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lp-csv-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 0;
+            gap: 10px;
+        }
+
+        .lp-csv-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            color: var(--text-dim);
+            flex-shrink: 0;
+        }
+
+        .lp-csv-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 7px;
+            border-radius: 4px;
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+            font-weight: 500;
+        }
+
+        .lp-csv-table-wrapper {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: auto;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background-color: var(--bg);
+        }
+
+        .lp-csv-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            min-width: 100%;
+            font-size: \(size)px;
+        }
+
+        .lp-csv-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .lp-csv-table th {
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-secondary);
+            color: var(--text);
+            font-weight: 600;
+            padding: 7px 12px;
+            text-align: left;
+            border-bottom: 2px solid var(--border-strong);
+            border-right: 1px solid var(--border);
+            white-space: nowrap;
+            user-select: none;
+            z-index: 10;
+        }
+
+        .lp-csv-table th:last-child {
+            border-right: none;
+        }
+
+        .lp-csv-table td {
+            padding: 6px 12px;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            text-align: left;
+            vertical-align: top;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-width: 420px;
+        }
+
+        .lp-csv-table td:last-child {
+            border-right: none;
+        }
+
+        .lp-csv-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .lp-csv-table tbody tr:nth-child(even) {
+            background-color: var(--bg-alt);
+        }
+
+        .lp-csv-table tbody tr:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .lp-csv-table th.lp-csv-row-num {
+            position: sticky;
+            top: 0;
+            left: 0;
+            z-index: 20;
+            width: 1%;
+            white-space: nowrap;
+            text-align: right;
+            color: var(--text-dim);
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+            font-size: 11px;
+            padding-left: 10px;
+            padding-right: 10px;
+            user-select: none;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-strong);
+        }
+
+        .lp-csv-table td.lp-csv-row-num {
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            width: 1%;
+            white-space: nowrap;
+            text-align: right;
+            color: var(--text-dim);
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+            font-size: 11px;
+            padding-left: 10px;
+            padding-right: 10px;
+            user-select: none;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-strong);
+        }
+
+        .lp-csv-table tbody tr:nth-child(even) td.lp-csv-row-num {
+            background-color: var(--bg-secondary);
+        }
+
+        .lp-csv-table tbody tr:hover td.lp-csv-row-num {
+            background-color: var(--bg-secondary);
+        }
+
+        .lp-csv-table th.lp-csv-num,
+        .lp-csv-table td.lp-csv-num {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+
+        .lp-csv-table td.lp-csv-num {
+            color: var(--num);
+        }
+
+        .lp-banner {
+            border-radius: 6px;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            white-space: normal;
+            font-size: 12.5px;
+            flex-shrink: 0;
+        }
+        .lp-banner-error  { background: var(--err-bg);  color: var(--err-fg); }
+        .lp-banner-notice { background: var(--note-bg); color: var(--note-fg); }
+
+        .lp-csv-empty {
+            padding: 36px 20px;
+            text-align: center;
+            color: var(--text-dim);
+            font-style: italic;
         }
         """
     }

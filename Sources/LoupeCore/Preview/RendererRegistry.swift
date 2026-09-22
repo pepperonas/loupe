@@ -5,7 +5,8 @@ import UniformTypeIdentifiers
 public enum RendererRegistry {
     private static let all: [any PreviewRenderer] = [
         JSONPreviewRenderer(),
-        MarkdownPreviewRenderer()
+        MarkdownPreviewRenderer(),
+        CSVPreviewRenderer()
     ]
 
     public static func renderer(for type: UTType) -> (any PreviewRenderer)? {

@@ -47,6 +47,34 @@ public enum CSSGeneratorTests {
                 let css = CSSGenerator.generateCSS(settings: LoupeSettings())
                 try assertTrue(css.contains("ui-monospace") || css.contains("SFMono"))
             }
+
+            runner.runTest(name: "testCSVSystemAppearanceEmitsBothThemes") {
+                var s = LoupeSettings(); s.appearance = .system
+                let css = CSSGenerator.generateCSVCSS(settings: s)
+                try assertTrue(css.contains("prefers-color-scheme: dark"))
+            }
+
+            runner.runTest(name: "testCSVFixedAppearanceDark") {
+                var s = LoupeSettings(); s.appearance = .dark
+                let css = CSSGenerator.generateCSVCSS(settings: s)
+                try assertFalse(css.contains("prefers-color-scheme"))
+                try assertTrue(css.contains("--bg: #1e1e1e"))
+            }
+
+            runner.runTest(name: "testCSVClassesArePresent") {
+                let css = CSSGenerator.generateCSVCSS(settings: LoupeSettings())
+                for cls in [".lp-csv-container", ".lp-csv-toolbar", ".lp-csv-badge",
+                            ".lp-csv-table-wrapper", ".lp-csv-table", ".lp-csv-row-num",
+                            ".lp-csv-num", ".lp-banner", ".lp-csv-empty"] {
+                    try assertTrue(css.contains(cls), "fehlt in CSV CSS: \(cls)")
+                }
+            }
+
+            runner.runTest(name: "testCSVNoJavaScript") {
+                let css = CSSGenerator.generateCSVCSS(settings: LoupeSettings())
+                try assertFalse(css.lowercased().contains("<script"))
+                try assertFalse(css.lowercased().contains("javascript:"))
+            }
         }
     }
 }
