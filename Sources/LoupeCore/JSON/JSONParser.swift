@@ -74,6 +74,14 @@ public struct JSONParser {
                 // Direkt nach einem vollstaendigen Wert kommt noch Inhalt --
                 // der klassische JSON-Lines-Fall. Das ist eine hilfreichere
                 // Meldung als "unerwartetes Zeichen".
+                //
+                // Absichtlich OHNE Ruecksicht auf wasTruncatedByReader: dieser
+                // Zweig wird nur erreicht, wenn bereits ein VOLLSTAENDIGER
+                // Wert gelesen wurde und danach noch mehr folgt -- die Bytes
+                // sind damit kein einzelnes JSON-Dokument, unabhaengig davon,
+                // ob WIR zusaetzlich gekuerzt haben. Eine Kuerzung wuerde das
+                // nicht "reparieren"; sie koennte den zweiten Wert genauso gut
+                // erst mittendrin abschneiden.
                 diagnostics.append(Diagnostic(
                     severity: .error,
                     message: "Inhalt nach dem Ende des Dokuments — möglicherweise JSON Lines?",
@@ -170,18 +178,35 @@ extension JSONParser {
                                  position: colon.position,
                                  partial: .object(members: members, omitted: 0))
             }
-            // Der Bruch kann auch INNERHALB des Werts liegen (parseValue wirft
-            // dort ohne partial, s. dessen eigener throw), nicht nur an einer
-            // der obigen Stellen. Nur wenn noch niemand tiefer ein partial
-            // gesetzt hat, ist diese Ebene die naechstbeste Stelle dafuer.
+            // Der Bruch kann auch INNERHALB des Werts liegen -- entweder ein
+            // ParseError ohne partial (parseValue wirft dort ohne partial,
+            // s. dessen eigener throw), oder ein LexError, der gar kein
+            // partial-Feld kennt (unfertiger String, kaputtes \u-Escape,
+            // fuehrende Null, ...). Letzteres ist sogar der HAEUFIGERE Fall:
+            // ein abgeschnittener Bytestrom bricht fast immer MITTEN in einem
+            // Token, nicht sauber zwischen zwei Tokens -- genau das Szenario,
+            // fuer das wasTruncatedByReader/maxBytes existieren. Ein LexError
+            // wird deshalb hier in einen ParseError mit dieser Ebene als
+            // partial gewandelt. Traegt der Fehler schon ein partial (eine
+            // tiefere Ebene hat bereits eines gesetzt), wird es NICHT einfach
+            // verworfen, sondern unter dem aktuellen Schluessel eingehaengt --
+            // sonst waeren alle bereits gelesenen Geschwister dieser Ebene
+            // verloren, sobald irgendeine tiefere Ebene zuerst ein partial
+            // setzt.
             let value: JSONValue
             do {
                 value = try parseValue(depth: depth)
             } catch var e as ParseError {
-                if e.partial == nil {
+                if let deeper = e.partial {
+                    e.partial = .object(members: members + [Member(key: key, value: deeper)],
+                                        omitted: 0)
+                } else {
                     e.partial = .object(members: members, omitted: 0)
                 }
                 throw e
+            } catch let e as LexError {
+                throw ParseError(message: e.message, position: e.position,
+                                 partial: .object(members: members, omitted: 0))
             }
             members.append(Member(key: key, value: value))
 
@@ -211,15 +236,24 @@ extension JSONParser {
         }
         while true {
             // Gleiche Begruendung wie in parseObject: der Bruch kann innerhalb
-            // des Werts liegen, wo parseValue ohne partial wirft.
+            // des Werts liegen -- als ParseError ohne partial ODER als
+            // LexError (kein partial-Feld, und mit Abstand der haeufigere
+            // Fall bei einer Byte-Kuerzung). Ein bereits vorhandenes partial
+            // wird unter dem aktuellen Index eingehaengt statt verworfen,
+            // sonst gingen bereits gelesene Geschwister-Elemente verloren.
             let value: JSONValue
             do {
                 value = try parseValue(depth: depth)
             } catch var e as ParseError {
-                if e.partial == nil {
+                if let deeper = e.partial {
+                    e.partial = .array(items: items + [deeper], omitted: 0)
+                } else {
                     e.partial = .array(items: items, omitted: 0)
                 }
                 throw e
+            } catch let e as LexError {
+                throw ParseError(message: e.message, position: e.position,
+                                 partial: .array(items: items, omitted: 0))
             }
             items.append(value)
             let sep = try advance()

@@ -95,6 +95,49 @@ public enum JSONParserTests {
                 try assertTrue(text.contains("JSON Lines"),
                                "Hinweis auf JSON Lines fehlt: \(text)")
             }
+
+            runner.runTest(name: "testLexErrorPreservesPartialTree") {
+                // Ein Fehler auf Lexer-Ebene (kaputtes \u-Escape) darf den
+                // bereits gelesenen Teilbaum nicht mitreissen. Das ist sogar
+                // der HAEUFIGERE Fall als ein ParseError: ein abgeschnittener
+                // Bytestrom bricht fast immer MITTEN in einem Token
+                // (String/Zahl), nie sauber zwischen zwei Token.
+                let r = parse(#"{"good":1,"bad":"\uZZZZ"}"#)
+                guard case .failed = r.outcome else {
+                    throw TestFailure(message: "haette fehlschlagen muessen", file: #file, line: #line)
+                }
+                try assertTrue(r.root != nil, "Teilbaum muss auch bei einem LexError erhalten bleiben")
+                try assertTrue(try keys(r.root).contains("good"))
+            }
+
+            runner.runTest(name: "testAncestorSiblingsSurviveNestedFailure") {
+                // Ein Bruch zwei Ebenen tief darf nicht nur den innersten
+                // Teilbaum zeigen -- alle bereits gelesenen Geschwister auf
+                // dem Weg zur Wurzel muessen erhalten bleiben, nicht nur die
+                // des Containers, in dem der Bruch selbst liegt.
+                let r = parse(#"{"first":1,"second":{"nested":"good","broken":},"third":3}"#)
+                guard case .failed = r.outcome else {
+                    throw TestFailure(message: "haette fehlschlagen muessen", file: #file, line: #line)
+                }
+                try assertTrue(try keys(r.root).contains("first"),
+                               "Geschwister vor dem verschachtelten Bruch muss erhalten bleiben")
+            }
+
+            runner.runTest(name: "testTruncatedMidTokenReportsTruncationNotFailure") {
+                // Der Fall, um den es bei wasTruncatedByReader/maxBytes
+                // eigentlich geht: eine Kuerzung reisst fast immer MITTEN in
+                // einem Token ab (hier: eine nicht geschlossene
+                // Zeichenkette) -- ein LexError, kein ParseError. Mit
+                // truncated:true darf das NICHT als Dateifehler erscheinen.
+                let r = parse(#"{"a":"unterminat"#, truncated: true)
+                guard case .truncatedByLimit(let kind) = r.outcome else {
+                    throw TestFailure(message: "haette als truncatedByLimit erscheinen muessen, war \(r.outcome)",
+                                       file: #file, line: #line)
+                }
+                try assertEqual(kind, .bytes)
+                try assertTrue(!r.diagnostics.contains { $0.severity == .error },
+                               "kein .error-Diagnostic bei einer Kuerzung")
+            }
         }
     }
 }
