@@ -117,24 +117,11 @@ public struct JSONParser {
     }
 
     private mutating func failure(message: String, at position: Position) -> ParseResult {
-        if let kind = hitLimit {
-            // Der Bruch ist Folge UNSERER Kuerzung (Tiefe/Knoten/Kinder/
-            // Stringlaenge), nicht eines Dateifehlers. skipValue() nach einer
-            // gegriffenen Grenze hinterlaesst haeufig eine syntaktisch nicht
-            // mehr schliessbare Restdatei (Paradebeispiel: eine Tiefenbombe
-            // ganz ohne schliessende Klammern) -- der Lexer laeuft beim
-            // Wiederaufsetzen der wartenden aeusseren Ebenen dann in
-            // .endOfInput, was ohne diese Pruefung faelschlich als
-            // .failed(at:) durchgereicht wuerde. Wie beim
-            // wasTruncatedByReader-Zweig unten: kein .error-Diagnostic,
-            // sonst erscheint eine von UNS gekuerzte, aber sonst gueltige
-            // Datei als kaputt (Spec §8) -- symmetrisch dazu haengt auch
-            // finalOutcome() bei hitLimit keinen Diagnostic an.
-            return ParseResult(root: partialRoot, outcome: .truncatedByLimit(kind),
-                               diagnostics: diagnostics)
-        }
         if wasTruncatedByReader {
-            // Der Bruch ist Folge UNSERER Kuerzung, nicht eines Dateifehlers.
+            // Der Bruch ist Folge UNSERER byteweisen Kuerzung, nicht eines
+            // Dateifehlers -- die Bytes selbst sind unvollstaendig, weil WIR
+            // sie abgeschnitten haben, nicht weil die Datei kaputt waere.
+            // Das gewinnt weiterhin gegen jeden Wurf.
             diagnostics.append(Diagnostic(
                 severity: .notice,
                 message: "Datei bei \(limits.maxBytes / (1024 * 1024)) MB abgeschnitten — der Rest wurde nicht gelesen.",
@@ -142,7 +129,27 @@ public struct JSONParser {
             return ParseResult(root: partialRoot, outcome: .truncatedByLimit(.bytes),
                                diagnostics: diagnostics)
         }
+        // Ruling (Task 5, Review-Runde 2): ein ECHTER Wurf gewinnt IMMER
+        // gegen eine gegriffene Grenze -- die Kehrseite von Spec §8. Eine
+        // GUELTIGE, von uns gekuerzte Datei darf nie kaputt erscheinen;
+        // genauso darf eine KAPUTTE Datei nie als bloss gekuerzt erscheinen.
+        // Ein Syntaxfehler ist umsetzbar (die Nutzerin kann ihn beheben),
+        // eine Kuerzungs-Notiz ist nur informativ und fuer eine grosse Datei
+        // ohnehin zu erwarten -- darum gewinnt der Fehler. Vorher hatte
+        // `hitLimit` hier Vorrang, was bei einer Datei, die BEIDES ist
+        // (z. B. eine ueberlange Zeichenkette UND ein spaeterer echter
+        // Syntaxfehler), den `.error`-Diagnostic komplett verschwinden liess
+        // -- `diagnostics` war dann LEER, die Nutzerin saehe nur "gekuerzt".
         diagnostics.append(Diagnostic(severity: .error, message: message, position: position))
+        if let kind = hitLimit {
+            // Die Grenze geht dabei NICHT verloren -- sie steht als
+            // zusaetzliche Notiz daneben, damit nichts stillschweigend
+            // unter den Tisch faellt.
+            diagnostics.append(Diagnostic(
+                severity: .notice,
+                message: "Zusätzlich wurde beim Lesen eine Grenze erreicht (\(kind)) — ein Teil der Datei wurde nicht vollständig verarbeitet.",
+                position: position))
+        }
         return ParseResult(root: partialRoot, outcome: .failed(at: position),
                            diagnostics: diagnostics)
     }

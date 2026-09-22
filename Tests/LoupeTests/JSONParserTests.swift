@@ -187,10 +187,32 @@ public enum JSONParserTests {
             runner.runTest(name: "testDepthBombDoesNotCrash") {
                 // 100.000 Ebenen sind ~100 KB. Ohne Bremse stirbt der Prozess
                 // am Stapelueberlauf -- der Test wuerde nicht rot, sondern
-                // die ganze Suite abbrechen.
+                // die ganze Suite abbrechen. DAS ist die eigentliche
+                // Zusicherung und aendert sich nicht: der Prozess muss
+                // durchlaufen, unabhaengig vom konkreten outcome-Wert.
+                //
+                // Ruling (Runde 2, Kollateralfund): 100.000 "[" ohne einen
+                // einzigen Wert und ohne eine einzige schliessende Klammer
+                // sind AUCH bei unbegrenzter Tiefe kein gueltiges JSON --
+                // die Datei ist nicht bloss gross, sie ist unvollstaendig.
+                // Die Tiefenbremse verhindert den Absturz, aendert aber
+                // nichts daran, dass danach ein echter Syntaxfehler auftritt
+                // (fehlendes ',' bzw. ']', weil skipValue() den Lexer bis
+                // .endOfInput leerraeumt). Nach der Ruling-Korrektur in
+                // failure() gewinnt dieser echte Fehler gegen die Grenze --
+                // outcome ist .failed, nicht mehr .truncatedByLimit(.depth);
+                // die Tiefengrenze bleibt als zusaetzliche .notice sichtbar,
+                // damit nichts verloren geht.
                 let deep = String(repeating: "[", count: 100_000)
                 let r = parse(deep)
-                try assertEqual(r.outcome, .truncatedByLimit(.depth))
+                guard case .failed = r.outcome else {
+                    throw TestFailure(message: "haette als .failed erscheinen muessen, war \(r.outcome)",
+                                      file: #file, line: #line)
+                }
+                try assertTrue(r.diagnostics.contains { $0.severity == .error },
+                               ".error-Diagnostic muss vorhanden sein")
+                try assertTrue(r.diagnostics.contains { $0.severity == .notice },
+                               ".notice zur gegriffenen Tiefengrenze darf nicht verloren gehen")
             }
 
             runner.runTest(name: "testDepthLimitIsExactlySixtyFour") {
@@ -242,15 +264,29 @@ public enum JSONParserTests {
                 }
                 try assertEqual(items.count, 1000)
                 try assertEqual(omitted, 1)
-                // `noteLimit(.children)` fires as part of handling THIS throw,
-                // so failure() reports the limit rather than .failed even
-                // though ".y":} is a genuine syntax error -- see task-5-fix-report.md
-                // "Finding 1 / a tension surfaced, not asked for" for why this
-                // is pinned as the observed behavior rather than silently
-                // changed: it's a real design question (which fact wins when
-                // both are true of the same file), not something this fix
-                // round asked me to resolve.
-                try assertEqual(r.outcome, .truncatedByLimit(.children))
+                // Ruling (Task 5, Review-Runde 2): dieser Fund war eine Datei,
+                // die BEIDES ist -- an der Kinder-Grenze UND genuin kaputt
+                // ("y":} hat keinen Wert). Ein echter Fehler gewinnt jetzt
+                // IMMER gegen eine gegriffene Grenze: das ist die Kehrseite
+                // von Spec §8 -- eine GUELTIGE, von uns gekuerzte Datei darf
+                // nie kaputt erscheinen, aber genauso darf eine KAPUTTE Datei
+                // nie als bloss gekuerzt erscheinen. Ein Syntaxfehler ist
+                // umsetzbar (die Nutzerin kann ihn beheben), eine
+                // Kuerzungs-Notiz ist nur informativ -- darum gewinnt der
+                // Fehler. Vorher hatte `hitLimit` in failure() Vorrang, was
+                // den `.error`-Diagnostic komplett verschwinden liess
+                // (diagnostics war LEER); jetzt steht der echte Fehler UND
+                // die Grenze (als zusaetzliche .notice) im Ergebnis.
+                guard case .failed = r.outcome else {
+                    throw TestFailure(message: "haette als .failed erscheinen muessen, war \(r.outcome)",
+                                      file: #file, line: #line)
+                }
+                guard let errorDiag = r.diagnostics.first(where: { $0.severity == .error }) else {
+                    throw TestFailure(message: ".error-Diagnostic fehlt", file: #file, line: #line)
+                }
+                try assertEqual(errorDiag.message, "Wert erwartet")
+                try assertTrue(r.diagnostics.contains { $0.severity == .notice },
+                               ".notice zur gegriffenen Kinder-Grenze darf nicht verloren gehen")
             }
 
             runner.runTest(name: "testChildrenLimitAppliesOnFailurePathForObject") {
@@ -265,7 +301,19 @@ public enum JSONParserTests {
                 }
                 try assertEqual(members.count, 1000)
                 try assertEqual(omitted, 1)
-                try assertEqual(r.outcome, .truncatedByLimit(.children))
+                // Ruling (Task 5, Review-Runde 2) -- Objekt-Gegenstueck zur
+                // Begruendung in testChildrenLimitAppliesOnFailurePathForArray:
+                // ein echter Fehler gewinnt jetzt immer gegen eine Grenze.
+                guard case .failed = r.outcome else {
+                    throw TestFailure(message: "haette als .failed erscheinen muessen, war \(r.outcome)",
+                                      file: #file, line: #line)
+                }
+                guard let errorDiag = r.diagnostics.first(where: { $0.severity == .error }) else {
+                    throw TestFailure(message: ".error-Diagnostic fehlt", file: #file, line: #line)
+                }
+                try assertEqual(errorDiag.message, "Wert erwartet")
+                try assertTrue(r.diagnostics.contains { $0.severity == .notice },
+                               ".notice zur gegriffenen Kinder-Grenze darf nicht verloren gehen")
             }
 
             runner.runTest(name: "testNodeLimitStopsBuilding") {
