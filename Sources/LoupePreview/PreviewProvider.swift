@@ -2,6 +2,9 @@ import Foundation
 import QuickLookUI
 import UniformTypeIdentifiers
 import LoupeCore
+import os
+
+private let logger = Logger(subsystem: "io.celox.loupe.preview", category: "Preview")
 
 @objc(PreviewProvider)
 public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
@@ -15,6 +18,15 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
         completionHandler: @escaping (QLPreviewReply?, (any Error)?) -> Void
     ) {
         let url = request.fileURL
+        let accessed = url.startAccessingSecurityScopedResource()
+        defer {
+            if accessed {
+                url.stopAccessingSecurityScopedResource()
+            }
+        }
+
+        logger.notice("providePreview START: url=\(url.path, privacy: .public) (securityScoped=\(accessed))")
+
         let settings = LoupeSettings.load()
 
         do {
@@ -24,8 +36,6 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
             let data: Data
             let truncated: Bool
             if size > Self.maxBytes {
-                // Nur den Anfang lesen -- und dem Parser SAGEN, dass wir
-                // gekuerzt haben, sonst meldet er die Datei als kaputt.
                 let handle = try FileHandle(forReadingFrom: url)
                 defer { try? handle.close() }
                 data = handle.readData(ofLength: Self.maxBytes)
@@ -39,12 +49,18 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
                 ?? ((try? url.resourceValues(forKeys: [.contentTypeKey]).contentType).flatMap { RendererRegistry.renderer(for: $0) })
                 ?? RendererRegistry.renderer(for: .json)
             guard let renderer else {
+                logger.error("No renderer found for url: \(url.path, privacy: .public)")
                 completionHandler(nil, CocoaError(.fileReadUnsupportedScheme))
                 return
             }
 
+            let rendererName = String(describing: type(of: renderer))
+            logger.notice("Renderer selected: \(rendererName, privacy: .public) for file: \(url.lastPathComponent, privacy: .public)")
+
             let input = PreviewInput(data: data, url: url, wasTruncatedByReader: truncated)
             let html = renderer.renderHTML(input: input, settings: settings)
+
+            logger.notice("Rendered HTML (\(html.utf8.count) bytes) for \(url.lastPathComponent, privacy: .public)")
 
             let reply = QLPreviewReply(dataOfContentType: .html,
                                        contentSize: CGSize(width: 840, height: 640)) { _ in
@@ -53,6 +69,7 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
             reply.title = url.lastPathComponent
             completionHandler(reply, nil)
         } catch {
+            logger.error("providePreview ERROR: \(error.localizedDescription, privacy: .public)")
             let body = """
             <div class="lp-banner lp-banner-error">Die Datei konnte nicht gelesen werden: \
             \(HTMLEscape.escape(error.localizedDescription))</div>

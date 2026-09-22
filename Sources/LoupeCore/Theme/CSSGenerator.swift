@@ -141,17 +141,19 @@ public enum CSSGenerator {
         let vars: String
         switch settings.appearance {
         case .light:
-            vars = ":root {\n\(lightVars)\n}"
+            vars = ":root {\n    color-scheme: light;\n\(lightVars)\n}"
         case .dark:
-            vars = ":root {\n\(darkVars)\n}"
+            vars = ":root {\n    color-scheme: dark;\n\(darkVars)\n}"
         case .system:
             // Nur im System-Modus darf die OS-Einstellung mitreden.
             vars = """
             :root {
+                color-scheme: light dark;
             \(lightVars)
             }
             @media (prefers-color-scheme: dark) {
                 :root {
+                    color-scheme: dark;
                 \(darkVars)
                 }
             }
@@ -249,16 +251,18 @@ public enum CSSGenerator {
         let rootBlock: String
         switch settings.appearance {
         case .light:
-            rootBlock = ":root { \(mdLightVars) }"
+            rootBlock = ":root { color-scheme: light; \(mdLightVars) }"
         case .dark:
-            rootBlock = ":root { \(mdDarkVars) }"
+            rootBlock = ":root { color-scheme: dark; \(mdDarkVars) }"
         case .system:
             rootBlock = """
             :root {
+                color-scheme: light dark;
                 \(mdLightVars)
             }
             @media (prefers-color-scheme: dark) {
                 :root {
+                    color-scheme: dark;
                     \(mdDarkVars)
                 }
             }
@@ -546,16 +550,18 @@ public enum CSSGenerator {
         let rootBlock: String
         switch settings.appearance {
         case .light:
-            rootBlock = ":root {\n\(csvLightVars)\n}"
+            rootBlock = ":root {\n    color-scheme: light;\n\(csvLightVars)\n}"
         case .dark:
-            rootBlock = ":root {\n\(csvDarkVars)\n}"
+            rootBlock = ":root {\n    color-scheme: dark;\n\(csvDarkVars)\n}"
         case .system:
             rootBlock = """
             :root {
+                color-scheme: light dark;
             \(csvLightVars)
             }
             @media (prefers-color-scheme: dark) {
                 :root {
+                    color-scheme: dark;
                 \(csvDarkVars)
                 }
             }
