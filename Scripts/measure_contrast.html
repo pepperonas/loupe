@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Contrast Measurement</title></head>
+<body>
+<canvas id="c" width="10" height="10"></canvas>
+<pre id="output"></pre>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+function rasterize(color, baseColor = null) {
+    ctx.clearRect(0, 0, 10, 10);
+    if (baseColor) {
+        ctx.fillStyle = baseColor;
+        ctx.fillRect(0, 0, 10, 10);
+    }
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, 10, 10);
+    const pixel = ctx.getImageData(5, 5, 1, 1).data;
+    return [pixel[0], pixel[1], pixel[2]];
+}
+
+function srgbToLin(c) {
+    const v = c / 255;
+    return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+}
+
+function relLuminance(rgb) {
+    return 0.2126 * srgbToLin(rgb[0]) + 0.7152 * srgbToLin(rgb[1]) + 0.0722 * srgbToLin(rgb[2]);
+}
+
+function contrastRatio(rgb1, rgb2) {
+    const l1 = relLuminance(rgb1);
+    const l2 = relLuminance(rgb2);
+    const lighter = Math.max(l1, l2);
+    const darker = Math.min(l1, l2);
+    return (lighter + 0.05) / (darker + 0.05);
+}
+
+const lightTheme = {
+    bg: '#ffffff',
+    roles: [
+        { name: '--text', fg: '#1d1d1f' },
+        { name: '--text-dim', fg: '#5b5e69' },
+        { name: '--key', fg: '#0b5fb0' },
+        { name: '--str', fg: '#b3261e' },
+        { name: '--num', fg: '#1c00cf' },
+        { name: '--bool', fg: '#7a3ea3' },
+        { name: '--null', fg: '#5b5e69' },
+        { name: '--count', fg: '#5b5e69' },
+        { name: '--err-fg', fg: '#a5251c', bg: 'rgba(255, 59, 48, 0.06)' },
+        { name: '--note-fg', fg: '#0a5aa8', bg: 'rgba(0, 113, 227, 0.06)' },
+        { name: 'summary:hover text', fg: '#1d1d1f', bg: '#f6f8fa' },
+        { name: 'excerpt text', fg: '#1d1d1f', bg: '#f6f8fa' },
+    ]
+};
+
+const darkTheme = {
+    bg: '#1e1e1e',
+    roles: [
+        { name: '--text', fg: '#f5f5f7' },
+        { name: '--text-dim', fg: '#a1a1a6' },
+        { name: '--key', fg: '#7ab8ff' },
+        { name: '--str', fg: '#ff8170' },
+        { name: '--num', fg: '#dabaff' },
+        { name: '--bool', fg: '#d8a0ff' },
+        { name: '--null', fg: '#a1a1a6' },
+        { name: '--count', fg: '#a1a1a6' },
+        { name: '--err-fg', fg: '#ff8a80', bg: 'rgba(255, 69, 58, 0.10)' },
+        { name: '--note-fg', fg: '#7ab8ff', bg: 'rgba(10, 132, 255, 0.12)' },
+        { name: 'summary:hover text', fg: '#f5f5f7', bg: '#28282b' },
+        { name: 'excerpt text', fg: '#f5f5f7', bg: '#28282b' },
+    ]
+};
+
+// Gegenprobe (deliberately failing pale color)
+const probe = {
+    name: 'GEGENPROBE: intentionally pale #cccccc on white',
+    fg: '#cccccc',
+    bg: '#ffffff'
+};
+
+let lines = [];
+lines.push("=== KONTRASTMESSUNG (Canvas-Rasterung) ===");
+
+function measure(themeName, theme) {
+    lines.push(`\n--- Theme: ${themeName} (Basis: ${theme.bg}) ---`);
+    for (const role of theme.roles) {
+        let actualBgRgb;
+        if (role.bg) {
+            actualBgRgb = rasterize(role.bg, theme.bg);
+        } else {
+            actualBgRgb = rasterize(theme.bg);
+        }
+        const actualFgRgb = rasterize(role.fg);
+        const ratio = contrastRatio(actualFgRgb, actualBgRgb);
+        const ok = ratio >= 4.5 ? "PASS" : "FAIL";
+        lines.push(`${role.name.padEnd(20)}: ${role.fg.padEnd(8)} -> ${ratio.toFixed(2)}:1 [${ok}] (min 4.5:1)`);
+    }
+}
+
+measure("Light", lightTheme);
+measure("Dark", darkTheme);
+
+lines.push("\n--- GEGENPROBE ---");
+const probeBg = rasterize(probe.bg);
+const probeFg = rasterize(probe.fg);
+const probeRatio = contrastRatio(probeFg, probeBg);
+const probeOk = probeRatio >= 4.5 ? "UNEXPECTED PASS" : "EXPECTED FAIL";
+lines.push(`${probe.name}: ${probeRatio.toFixed(2)}:1 [${probeOk}]`);
+
+document.getElementById('output').textContent = lines.join('\n');
+console.log(lines.join('\n'));
+</script>
+</body>
+</html>

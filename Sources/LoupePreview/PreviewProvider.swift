@@ -6,6 +6,8 @@ import LoupeCore
 @objc(PreviewProvider)
 public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
 
+    private static let maxBytes = ParseLimits().maxBytes
+
     public override init() { super.init() }
 
     public func providePreview(
@@ -13,26 +15,54 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
         completionHandler: @escaping (QLPreviewReply?, (any Error)?) -> Void
     ) {
         let url = request.fileURL
-        let size = (try? FileManager.default.attributesOfItem(atPath: url.path)[.size] as? Int) ?? 0
-        let html = """
-        <!DOCTYPE html>
-        <html lang="de"><head><meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'none'">
-        <style>
-          body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 32px; }
-          code { font-family: ui-monospace, SFMono-Regular, monospace; }
-          @media (prefers-color-scheme: dark) { body { background: #1e1e1e; color: #f5f5f7; } }
-        </style></head>
-        <body>
-          <h1>Loupe</h1>
-          <p>R1-Nachweis: Diese Vorschau stammt von Loupe, nicht von der System-Textvorschau.</p>
-          <p><code>\(HTMLEscape.escape(url.lastPathComponent))</code> — \(size) Bytes</p>
-        </body></html>
-        """
-        let reply = QLPreviewReply(dataOfContentType: .html, contentSize: CGSize(width: 840, height: 640)) { _ in
-            html.data(using: .utf8) ?? Data()
+        let settings = LoupeSettings.load()
+
+        do {
+            let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+            let size = (attributes[.size] as? Int) ?? 0
+
+            let data: Data
+            let truncated: Bool
+            if size > Self.maxBytes {
+                // Nur den Anfang lesen -- und dem Parser SAGEN, dass wir
+                // gekuerzt haben, sonst meldet er die Datei als kaputt.
+                let handle = try FileHandle(forReadingFrom: url)
+                defer { try? handle.close() }
+                data = handle.readData(ofLength: Self.maxBytes)
+                truncated = true
+            } else {
+                data = try Data(contentsOf: url)
+                truncated = false
+            }
+
+            let type = (try? url.resourceValues(forKeys: [.contentTypeKey]).contentType) ?? .json
+            guard let renderer = RendererRegistry.renderer(for: type) else {
+                completionHandler(nil, CocoaError(.fileReadUnsupportedScheme))
+                return
+            }
+
+            let input = PreviewInput(data: data, url: url, wasTruncatedByReader: truncated)
+            let html = renderer.renderHTML(input: input, settings: settings)
+
+            let reply = QLPreviewReply(dataOfContentType: .html,
+                                       contentSize: CGSize(width: 840, height: 640)) { _ in
+                html.data(using: .utf8) ?? Data()
+            }
+            reply.title = url.lastPathComponent
+            completionHandler(reply, nil)
+        } catch {
+            let body = """
+            <div class="lp-banner lp-banner-error">Die Datei konnte nicht gelesen werden: \
+            \(HTMLEscape.escape(error.localizedDescription))</div>
+            """
+            let html = HTMLDocument.wrap(body: body,
+                                         title: url.lastPathComponent,
+                                         css: CSSGenerator.generateCSS(settings: settings))
+            let reply = QLPreviewReply(dataOfContentType: .html,
+                                       contentSize: CGSize(width: 520, height: 300)) { _ in
+                html.data(using: .utf8) ?? Data()
+            }
+            completionHandler(reply, nil)
         }
-        reply.title = url.lastPathComponent
-        completionHandler(reply, nil)
     }
 }

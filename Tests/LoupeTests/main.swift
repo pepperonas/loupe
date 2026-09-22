@@ -12,6 +12,7 @@ SettingsTests.run()
 CSSGeneratorTests.run()
 JSONTreeRendererTests.run()
 ExpansionPolicyTests.run()
+RegistryTests.run()
 
 let totalTime = (CFAbsoluteTimeGetCurrent() - start) * 1000
 print(String(format: "Total Test Suite Time: %.2f ms", totalTime))

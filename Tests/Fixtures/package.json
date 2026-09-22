@@ -1,0 +1,8 @@
+{
+  "name": "loupe",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": { "build": "swift build", "test": "swift run LoupeTests" },
+  "keywords": ["quicklook", "json", "macos"],
+  "nested": { "a": { "b": { "c": [1, 2, 3] } } }
+}

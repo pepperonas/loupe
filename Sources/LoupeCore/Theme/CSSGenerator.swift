@@ -5,37 +5,37 @@ public enum CSSGenerator {
     private static let lightVars = """
         --bg: #ffffff;
         --bg-alt: #f6f8fa;
-        --text: #1d1d1f;
-        --text-dim: #5b5e69;
+        --text: #1d1d1f; /* 16.83:1 */
+        --text-dim: #5b5e69; /* 6.46:1 */
         --border: #e5e5ea;
-        --key:  #0b5fb0;
-        --str:  #b3261e;
-        --num:  #1c00cf;
-        --bool: #7a3ea3;
-        --null: #5b5e69;
-        --count: #5b5e69;
+        --key:  #0b5fb0; /* 6.41:1 */
+        --str:  #b3261e; /* 6.54:1 */
+        --num:  #1c00cf; /* 10.77:1 */
+        --bool: #7a3ea3; /* 6.90:1 */
+        --null: #5b5e69; /* 6.46:1 */
+        --count: #5b5e69; /* 6.46:1 */
         --err-bg: rgba(255, 59, 48, 0.06);
-        --err-fg: #a5251c;
+        --err-fg: #a5251c; /* 6.72:1 */
         --note-bg: rgba(0, 113, 227, 0.06);
-        --note-fg: #0a5aa8;
+        --note-fg: #0a5aa8; /* 6.39:1 */
     """
 
     private static let darkVars = """
         --bg: #1e1e1e;
         --bg-alt: #28282b;
-        --text: #f5f5f7;
-        --text-dim: #a1a1a6;
+        --text: #f5f5f7; /* 15.31:1 */
+        --text-dim: #a1a1a6; /* 6.48:1 */
         --border: #38383a;
-        --key:  #7ab8ff;
-        --str:  #ff8170;
-        --num:  #dabaff;
-        --bool: #d8a0ff;
-        --null: #a1a1a6;
-        --count: #a1a1a6;
+        --key:  #7ab8ff; /* 8.04:1 */
+        --str:  #ff8170; /* 6.85:1 */
+        --num:  #dabaff; /* 9.88:1 */
+        --bool: #d8a0ff; /* 8.25:1 */
+        --null: #a1a1a6; /* 6.48:1 */
+        --count: #a1a1a6; /* 6.48:1 */
         --err-bg: rgba(255, 69, 58, 0.10);
-        --err-fg: #ff8a80;
+        --err-fg: #ff8a80; /* 6.64:1 */
         --note-bg: rgba(10, 132, 255, 0.12);
-        --note-fg: #7ab8ff;
+        --note-fg: #7ab8ff; /* 7.05:1 */
     """
 
     public static func generateCSS(settings: LoupeSettings) -> String {
