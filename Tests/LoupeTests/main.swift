@@ -7,6 +7,8 @@ JSONValueTests.run()
 JSONLexerTests.run()
 JSONParserTests.run()
 SourceExcerptTests.run()
+HTMLEscapeTests.run()
+SettingsTests.run()
 
 let totalTime = (CFAbsoluteTimeGetCurrent() - start) * 1000
 print(String(format: "Total Test Suite Time: %.2f ms", totalTime))
