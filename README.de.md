@@ -68,13 +68,9 @@ Entwickelt streng nach Apples Human Interface Guidelines fügt sich Loupe optisc
 
 Diese Vorschauen werden direkt von Loupes Finder-Quick-Look-Erweiterung im Dunkelmodus gerendert – ohne JavaScript und ohne externen Dienst.
 
-<p align="center">
-  <img src="docs/screenshots/json-preview.png" alt="Loupe JSON-Quick-Look-Vorschau" width="31%">
-  <img src="docs/screenshots/markdown-preview.png" alt="Loupe Markdown-Quick-Look-Vorschau" width="31%">
-  <img src="docs/screenshots/source-code-preview.png" alt="Loupe Quellcode-Quick-Look-Vorschau" width="31%">
-</p>
-
-<p align="center"><sub>JSON-Baum · Markdown-Dokument · Swift-Quellcode</sub></p>
+| Showcase & JSON-Baum | Syntaxhervorhebung | GFM-Aufgabenlisten & Tabellen |
+| --- | --- | --- |
+| <img src="docs/screenshots/json-preview.png" alt="Loupe JSON-Quick-Look-Vorschau" width="100%"> | <img src="docs/screenshots/source-code-preview.png" alt="Loupe Quellcode-Quick-Look-Vorschau" width="100%"> | <img src="docs/screenshots/markdown-preview.png" alt="Loupe Markdown-GFM-Vorschau mit Aufgabenlisten und Tabellen" width="100%"> |
 
 ---
 

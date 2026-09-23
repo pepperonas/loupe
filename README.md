@@ -68,13 +68,9 @@ Designed strictly according to Apple's Human Interface Guidelines, Loupe looks, 
 
 These previews are rendered directly by Loupe's Finder Quick Look extension in Dark Mode — no JavaScript or external service is involved.
 
-<p align="center">
-  <img src="docs/screenshots/json-preview.png" alt="Loupe JSON Quick Look preview" width="31%">
-  <img src="docs/screenshots/markdown-preview.png" alt="Loupe Markdown Quick Look preview" width="31%">
-  <img src="docs/screenshots/source-code-preview.png" alt="Loupe source-code Quick Look preview" width="31%">
-</p>
-
-<p align="center"><sub>JSON tree · Markdown document · Swift source code</sub></p>
+| Visual Showcase & JSON Tree | Syntax Highlighting | GFM Task Lists & Tables |
+| --- | --- | --- |
+| <img src="docs/screenshots/json-preview.png" alt="Loupe JSON Quick Look preview" width="100%"> | <img src="docs/screenshots/source-code-preview.png" alt="Loupe source-code Quick Look preview" width="100%"> | <img src="docs/screenshots/markdown-preview.png" alt="Loupe Markdown GFM preview with task lists and tables" width="100%"> |
 
 ---
 
