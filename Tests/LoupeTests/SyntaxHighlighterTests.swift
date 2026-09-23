@@ -14,6 +14,14 @@ public enum SyntaxHighlighterTests {
                 try assertTrue(highlighted.contains("hl-type"))
                 try assertTrue(highlighted.contains("String"))
             }
+
+            runner.runTest(name: "testSwiftSourceWithManyPrefixChecksCompletes") {
+                let line = "public let value: Dictionary<String, Int> = [:]\n"
+                let code = String(repeating: line, count: 100)
+                let highlighted = SyntaxHighlighter.shared.highlight(code: code, languageIdentifier: "swift")
+                try assertTrue(highlighted.contains("hl-kw"))
+                try assertTrue(highlighted.contains("Dictionary"))
+            }
             
             runner.runTest(name: "testRustHighlighting") {
                 let code = "pub fn add(a: i32, b: i32) -> i32 { a + b }"

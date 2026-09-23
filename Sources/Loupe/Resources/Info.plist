@@ -87,6 +87,72 @@
                 <string>public.delimited-values-text</string>
             </array>
         </dict>
+        <dict>
+            <key>CFBundleTypeName</key><string>Source Code Document</string>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>Alternate</string>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                <string>swift</string>
+                <string>rs</string>
+                <string>py</string>
+                <string>pyw</string>
+                <string>js</string>
+                <string>mjs</string>
+                <string>cjs</string>
+                <string>ts</string>
+                <string>tsx</string>
+                <string>jsx</string>
+                <string>go</string>
+                <string>c</string>
+                <string>h</string>
+                <string>cpp</string>
+                <string>cc</string>
+                <string>cxx</string>
+                <string>hpp</string>
+                <string>hxx</string>
+                <string>java</string>
+                <string>kt</string>
+                <string>kts</string>
+                <string>sh</string>
+                <string>bash</string>
+                <string>zsh</string>
+                <string>sql</string>
+                <string>yaml</string>
+                <string>yml</string>
+                <string>css</string>
+                <string>scss</string>
+                <string>sass</string>
+                <string>less</string>
+                <string>xml</string>
+                <string>php</string>
+                <string>rb</string>
+                <string>toml</string>
+            </array>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>public.source-code</string>
+                <string>public.script</string>
+                <string>public.swift-source</string>
+                <string>public.c-source</string>
+                <string>public.c-header</string>
+                <string>public.c-plus-plus-source</string>
+                <string>public.c-plus-plus-header</string>
+                <string>public.python-script</string>
+                <string>public.shell-script</string>
+                <string>com.netscape.javascript-source</string>
+                <string>org.rust-lang.rust-script</string>
+                <string>org.golang.go-script</string>
+                <string>com.sun.java-source</string>
+                <string>org.kotlinlang.source</string>
+                <string>org.iso.sql</string>
+                <string>public.yaml</string>
+                <string>public.css</string>
+                <string>public.xml</string>
+                <string>public.php-script</string>
+                <string>public.ruby-script</string>
+            </array>
+        </dict>
     </array>
     <key>UTImportedTypeDeclarations</key>
     <array>

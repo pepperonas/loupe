@@ -2,7 +2,7 @@ import Foundation
 
 public final class SyntaxHighlighter: Sendable {
     public static let shared = SyntaxHighlighter()
-    
+
     private let swiftKeywords: Set<String> = [
         "actor", "any", "as", "associatedtype", "async", "await", "break", "case", "catch",
         "class", "continue", "default", "defer", "deinit", "do", "else", "enum", "extension",
@@ -12,7 +12,7 @@ public final class SyntaxHighlighter: Sendable {
         "return", "self", "Self", "some", "static", "struct", "subscript", "super", "switch",
         "throws", "true", "try", "typealias", "var", "where", "while", "yield"
     ]
-    
+
     private let rustKeywords: Set<String> = [
         "as", "async", "await", "break", "const", "continue", "crate", "dyn", "else", "enum",
         "extern", "false", "fn", "for", "if", "impl", "in", "let", "loop", "match", "mod",
@@ -61,6 +61,42 @@ public final class SyntaxHighlighter: Sendable {
         "readonly", "echo", "cd", "pwd", "source", "alias", "set", "unset"
     ]
     
+    private let cCppKeywords: Set<String> = [
+        "auto", "break", "case", "char", "const", "continue", "default", "do", "double",
+        "else", "enum", "extern", "float", "for", "goto", "if", "inline", "int", "long",
+        "register", "restrict", "return", "short", "signed", "sizeof", "static", "struct",
+        "switch", "typedef", "union", "unsigned", "void", "volatile", "while",
+        "class", "namespace", "template", "typename", "this", "friend", "virtual",
+        "public", "protected", "private", "operator", "try", "catch", "throw",
+        "new", "delete", "nullptr", "true", "false", "constexpr", "override", "final",
+        "using", "decltype", "noexcept", "static_assert"
+    ]
+
+    private let goKeywords: Set<String> = [
+        "break", "case", "chan", "const", "continue", "default", "defer", "else",
+        "fallthrough", "for", "func", "go", "goto", "if", "import", "interface",
+        "map", "package", "range", "return", "select", "struct", "switch", "type", "var",
+        "nil", "true", "false", "iota"
+    ]
+
+    private let phpKeywords: Set<String> = [
+        "abstract", "and", "array", "as", "break", "callable", "case", "catch", "class",
+        "clone", "const", "continue", "declare", "default", "die", "do", "echo", "else",
+        "elseif", "empty", "endfor", "endforeach", "endif", "endswitch", "endwhile", "eval",
+        "exit", "extends", "final", "finally", "fn", "for", "foreach", "function", "global",
+        "goto", "if", "implements", "include", "include_once", "instanceof", "insteadof",
+        "interface", "isset", "list", "match", "namespace", "new", "or", "print", "private",
+        "protected", "public", "readonly", "require", "require_once", "return", "static",
+        "switch", "throw", "trait", "try", "unset", "use", "var", "while", "xor", "yield"
+    ]
+
+    private let rubyKeywords: Set<String> = [
+        "alias", "and", "begin", "break", "case", "class", "def", "defined?", "do",
+        "else", "elsif", "end", "ensure", "false", "for", "if", "in", "module",
+        "next", "nil", "not", "or", "redo", "rescue", "retry", "return", "self",
+        "super", "then", "true", "undef", "unless", "until", "when", "while", "yield"
+    ]
+
     public init() {}
     
     public func highlight(code: String, languageIdentifier: String?) -> String {
@@ -80,6 +116,18 @@ public final class SyntaxHighlighter: Sendable {
             return tokenizeGeneral(code: code, keywords: jsTsKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
         case .java, .kotlin:
             return tokenizeGeneral(code: code, keywords: javaKotlinKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
+        case .c, .cpp:
+            return tokenizeGeneral(code: code, keywords: cCppKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
+        case .go:
+            return tokenizeGeneral(code: code, keywords: goKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
+        case .php:
+            return tokenizeGeneral(code: code, keywords: phpKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
+        case .ruby:
+            return tokenizeGeneral(code: code, keywords: rubyKeywords, lineComment: "#", blockCommentStart: "=begin", blockCommentEnd: "=end")
+        case .yaml, .toml:
+            return tokenizeGeneral(code: code, keywords: ["true", "false", "yes", "no", "null"], lineComment: "#", blockCommentStart: nil, blockCommentEnd: nil)
+        case .docker:
+            return tokenizeGeneral(code: code, keywords: ["FROM", "RUN", "CMD", "LABEL", "EXPOSE", "ENV", "ADD", "COPY", "ENTRYPOINT", "VOLUME", "USER", "WORKDIR", "ARG", "ONBUILD", "STOPSIGNAL", "HEALTHCHECK", "SHELL"], lineComment: "#", blockCommentStart: nil, blockCommentEnd: nil)
         case .sql:
             return tokenizeSQL(code: code)
         case .bash:
@@ -96,23 +144,32 @@ public final class SyntaxHighlighter: Sendable {
         }
     }
     
+    private func cssClass(for type: TokenType) -> String? {
+        switch type {
+        case .plain: return nil
+        case .keyword: return "hl-kw"
+        case .typeName: return "hl-type"
+        case .string: return "hl-str"
+        case .number: return "hl-num"
+        case .comment: return "hl-com"
+        case .attribute: return "hl-attr"
+        case .functionName: return "hl-fn"
+        case .property: return "hl-prop"
+        case .operatorChar: return "hl-op"
+        case .punctuation: return "hl-punct"
+        case .tag: return "hl-tag"
+        case .tagAttribute: return "hl-attr"
+        }
+    }
+
     private func wrapToken(_ text: String, _ type: TokenType) -> String {
         let escaped = HTMLSanitizer.escapeHTML(text)
-        switch type {
-        case .plain: return escaped
-        case .keyword: return "<span class=\"hl-kw\">\(escaped)</span>"
-        case .typeName: return "<span class=\"hl-type\">\(escaped)</span>"
-        case .string: return "<span class=\"hl-str\">\(escaped)</span>"
-        case .number: return "<span class=\"hl-num\">\(escaped)</span>"
-        case .comment: return "<span class=\"hl-com\">\(escaped)</span>"
-        case .attribute: return "<span class=\"hl-attr\">\(escaped)</span>"
-        case .functionName: return "<span class=\"hl-fn\">\(escaped)</span>"
-        case .property: return "<span class=\"hl-prop\">\(escaped)</span>"
-        case .operatorChar: return "<span class=\"hl-op\">\(escaped)</span>"
-        case .punctuation: return "<span class=\"hl-punct\">\(escaped)</span>"
-        case .tag: return "<span class=\"hl-tag\">\(escaped)</span>"
-        case .tagAttribute: return "<span class=\"hl-attr\">\(escaped)</span>"
+        guard let cls = cssClass(for: type) else { return escaped }
+        if escaped.contains("\n") {
+            let parts = escaped.components(separatedBy: "\n")
+            return parts.map { "<span class=\"\(cls)\">\($0)</span>" }.joined(separator: "\n")
         }
+        return "<span class=\"\(cls)\">\(escaped)</span>"
     }
     
     private func tokenizeGeneral(
@@ -127,29 +184,33 @@ public final class SyntaxHighlighter: Sendable {
         let chars = Array(code)
         var i = 0
         let count = chars.count
+        let lineCommentChars = Array(lineComment)
+        let blockCommentStartChars = blockCommentStart.map(Array.init)
+        let blockCommentEndChars = blockCommentEnd.map(Array.init)
         
         while i < count {
             let c = chars[i]
             
             // Block comment
-            if let start = blockCommentStart, let end = blockCommentEnd,
-               matchPrefix(chars, i, start) {
-                var comment = start
-                i += start.count
-                while i < count && !matchPrefix(chars, i, end) {
+            if let startChars = blockCommentStartChars,
+               let endChars = blockCommentEndChars,
+               matchPrefix(chars, i, startChars) {
+                var comment = String(startChars)
+                i += startChars.count
+                while i < count && !matchPrefix(chars, i, endChars) {
                     comment.append(chars[i])
                     i += 1
                 }
-                if i < count && matchPrefix(chars, i, end) {
-                    comment.append(end)
-                    i += end.count
+                if i < count && matchPrefix(chars, i, endChars) {
+                    comment.append(contentsOf: endChars)
+                    i += endChars.count
                 }
                 output.append(wrapToken(comment, .comment))
                 continue
             }
             
             // Line comment
-            if matchPrefix(chars, i, lineComment) {
+            if matchPrefix(chars, i, lineCommentChars) {
                 var comment = ""
                 while i < count && chars[i] != "\n" {
                     comment.append(chars[i])
@@ -570,7 +631,10 @@ public final class SyntaxHighlighter: Sendable {
     }
     
     private func matchPrefix(_ chars: [Character], _ index: Int, _ prefix: String) -> Bool {
-        let prefixChars = Array(prefix)
+        matchPrefix(chars, index, Array(prefix))
+    }
+
+    private func matchPrefix(_ chars: [Character], _ index: Int, _ prefixChars: [Character]) -> Bool {
         if index + prefixChars.count > chars.count { return false }
         for j in 0..<prefixChars.count {
             if chars[index + j] != prefixChars[j] { return false }

@@ -15,6 +15,8 @@ fi
 
 TARGET_APP="${DEST_DIR}/Loupe.app"
 EXT_BUNDLE="${TARGET_APP}/Contents/PlugIns/LoupePreview.appex"
+BUILD_APP="${ROOT_DIR}/build/Loupe.app"
+BUILD_EXT="${BUILD_APP}/Contents/PlugIns/LoupePreview.appex"
 
 echo "==> Installing Loupe to ${TARGET_APP}..."
 rm -rf "${TARGET_APP}"
@@ -29,6 +31,11 @@ codesign --force --sign - \
     --timestamp=none "${TARGET_APP}"
 
 echo "==> Registering with LaunchServices & pluginkit..."
+# build_app.sh registers the development bundle for local testing. Remove that
+# registration before registering the installed copy, otherwise Finder may pick
+# either bundle (and can keep serving a stale extension after an update).
+pluginkit -r "${BUILD_EXT}" || true
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -u "${BUILD_APP}" || true
 /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "${TARGET_APP}"
 pluginkit -a "${EXT_BUNDLE}"
 pluginkit -e use -i io.celox.loupe.preview

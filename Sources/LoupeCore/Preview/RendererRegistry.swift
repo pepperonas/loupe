@@ -6,7 +6,8 @@ public enum RendererRegistry {
     private static let all: [any PreviewRenderer] = [
         JSONPreviewRenderer(),
         MarkdownPreviewRenderer(),
-        CSVPreviewRenderer()
+        CSVPreviewRenderer(),
+        SourceCodePreviewRenderer()
     ]
 
     public static func renderer(for type: UTType) -> (any PreviewRenderer)? {
@@ -21,6 +22,12 @@ public enum RendererRegistry {
     }
 
     public static func renderer(for url: URL) -> (any PreviewRenderer)? {
+        let ext = url.pathExtension.lowercased()
+        let filename = url.lastPathComponent.lowercased()
+        if SourceCodePreviewRenderer.supportedExtensions.contains(ext) ||
+           SourceCodePreviewRenderer.supportedExtensions.contains(filename) {
+            return SourceCodePreviewRenderer()
+        }
         if let type = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType,
            let r = renderer(for: type) {
             return r

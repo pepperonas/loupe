@@ -6,7 +6,6 @@ import os
 
 private let logger = Logger(subsystem: "io.celox.loupe.preview", category: "Preview")
 
-@objc(PreviewProvider)
 public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
 
     private static let maxBytes = ParseLimits().maxBytes

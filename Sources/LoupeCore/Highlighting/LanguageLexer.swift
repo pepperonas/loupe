@@ -46,6 +46,10 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
     case c
     case cpp = "cpp"
     case go
+    case php
+    case ruby = "rb"
+    case docker = "dockerfile"
+    case toml
     case unknown
     
     public static func from(identifier: String?) -> SupportedLanguage {
@@ -55,22 +59,26 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         switch id {
         case "swift": return .swift
         case "rust", "rs": return .rust
-        case "python", "py": return .python
+        case "python", "py", "pyw": return .python
         case "javascript", "js", "mjs", "cjs": return .javascript
         case "typescript", "ts", "tsx", "jsx": return .typescript
         case "json", "jsonc": return .json
         case "yaml", "yml": return .yaml
-        case "html", "xhtml": return .html
+        case "html", "htm", "xhtml": return .html
         case "xml", "plist", "svg": return .xml
         case "css", "scss", "sass", "less": return .css
         case "sql": return .sql
-        case "bash", "sh", "zsh", "shell": return .bash
+        case "bash", "sh", "zsh", "shell", "makefile", "make": return .bash
         case "java": return .java
         case "kotlin", "kt", "kts": return .kotlin
-        case "markdown", "md", "mdown": return .markdown
-        case "c": return .c
-        case "cpp", "c++", "cc", "cxx", "hpp": return .cpp
+        case "markdown", "md", "mdown", "mkd": return .markdown
+        case "c", "h": return .c
+        case "cpp", "c++", "cc", "cxx", "hpp", "hxx", "h++": return .cpp
         case "go", "golang": return .go
+        case "php": return .php
+        case "ruby", "rb": return .ruby
+        case "dockerfile", "docker": return .docker
+        case "toml", "ini", "conf", "env": return .toml
         default: return .unknown
         }
     }
@@ -95,6 +103,10 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         case .c: return "C"
         case .cpp: return "C++"
         case .go: return "Go"
+        case .php: return "PHP"
+        case .ruby: return "Ruby"
+        case .docker: return "Dockerfile"
+        case .toml: return "TOML"
         case .unknown: return ""
         }
     }

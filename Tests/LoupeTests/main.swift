@@ -20,6 +20,7 @@ MarkdownRendererTests.run()
 CSVParserTests.run()
 CSVTableRendererTests.run()
 RegistryTests.run()
+SourceCodePreviewRendererTests.run()
 ExtensionStatusTests.run()
 PerformanceTests.run()
 

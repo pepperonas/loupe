@@ -75,6 +75,33 @@ public enum CSSGeneratorTests {
                 try assertFalse(css.lowercased().contains("<script"))
                 try assertFalse(css.lowercased().contains("javascript:"))
             }
+
+            runner.runTest(name: "testCodeSystemAppearanceEmitsBothThemes") {
+                var s = LoupeSettings(); s.appearance = .system
+                let css = CSSGenerator.generateCodeCSS(settings: s)
+                try assertTrue(css.contains("prefers-color-scheme: dark"))
+            }
+
+            runner.runTest(name: "testCodeFixedAppearanceDark") {
+                var s = LoupeSettings(); s.appearance = .dark
+                let css = CSSGenerator.generateCodeCSS(settings: s)
+                try assertFalse(css.contains("prefers-color-scheme"))
+            }
+
+            runner.runTest(name: "testCodeClassesArePresent") {
+                let css = CSSGenerator.generateCodeCSS(settings: LoupeSettings())
+                for cls in [".lp-code-container", ".lp-toolbar", ".lp-filename", ".lp-badge",
+                            ".lp-code-scroll", ".lp-code-table", ".lp-line-no", ".lp-line-code",
+                            ".hl-kw", ".hl-type", ".hl-str", ".hl-num", ".hl-com"] {
+                    try assertTrue(css.contains(cls), "fehlt in Code CSS: \(cls)")
+                }
+            }
+
+            runner.runTest(name: "testCodeNoJavaScript") {
+                let css = CSSGenerator.generateCodeCSS(settings: LoupeSettings())
+                try assertFalse(css.lowercased().contains("<script"))
+                try assertFalse(css.lowercased().contains("javascript:"))
+            }
         }
     }
 }

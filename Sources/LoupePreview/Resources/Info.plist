@@ -26,11 +26,34 @@
                 <string>public.comma-separated-values-text</string>
                 <string>public.tab-separated-values-text</string>
                 <string>public.delimited-values-text</string>
+                <string>public.source-code</string>
+                <string>public.script</string>
+                <string>public.swift-source</string>
+                <string>public.c-source</string>
+                <string>public.c-header</string>
+                <string>public.c-plus-plus-source</string>
+                <string>public.c-plus-plus-header</string>
+                <string>public.python-script</string>
+                <string>public.shell-script</string>
+                <string>public.bash-script</string>
+                <string>public.zsh-script</string>
+                <string>com.netscape.javascript-source</string>
+                <string>org.rust-lang.rust-script</string>
+                <string>org.golang.go-script</string>
+                <string>com.sun.java-source</string>
+                <string>org.kotlinlang.source</string>
+                <string>org.iso.sql</string>
+                <string>public.yaml</string>
+                <string>public.css</string>
+                <string>public.xml</string>
+                <string>public.php-script</string>
+                <string>public.ruby-script</string>
+                <string>public.perl-script</string>
             </array>
             <key>QLSupportsSearchableItems</key><false/>
         </dict>
         <key>NSExtensionPointIdentifier</key><string>com.apple.quicklook.preview</string>
-        <key>NSExtensionPrincipalClass</key><string>PreviewProvider</string>
+        <key>NSExtensionPrincipalClass</key><string>LoupePreview.PreviewProvider</string>
     </dict>
 </dict>
 </plist>

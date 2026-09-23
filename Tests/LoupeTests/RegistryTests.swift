@@ -114,6 +114,20 @@ public enum RegistryTests {
                 try assertTrue(html.contains("lp-banner lp-banner-notice"))
                 try assertTrue(html.contains("Datei abgeschnitten"))
             }
+
+            runner.runTest(name: "testSourceCodeTypeResolvesToSourceCodeRenderer") {
+                try assertTrue(RendererRegistry.renderer(for: .sourceCode) != nil)
+                try assertTrue(RendererRegistry.renderer(for: .swiftSource) != nil)
+                try assertTrue(RendererRegistry.renderer(for: .cSource) != nil)
+                try assertTrue(RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/main.swift")) != nil)
+                try assertTrue(RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/script.py")) != nil)
+                try assertTrue(RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/lib.rs")) != nil)
+                try assertTrue(RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/app.ts")) != nil)
+                try assertTrue(RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/run.sh")) != nil)
+                try assertTrue(RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/main.go")) != nil)
+                try assertTrue(RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/query.sql")) != nil)
+                try assertTrue(RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/config.yaml")) != nil)
+            }
         }
     }
 }

@@ -758,4 +758,176 @@ public enum CSSGenerator {
         }
         """
     }
+
+    public static func generateCodeCSS(settings: LoupeSettings) -> String {
+        let size = settings.textSize.baseFontSizePx
+        let codeFontSize = max(11, size - 1)
+        let rootBlock: String
+        switch settings.appearance {
+        case .light:
+            rootBlock = ":root {\n    color-scheme: light;\n\(mdLightVars)\n}"
+        case .dark:
+            rootBlock = ":root {\n    color-scheme: dark;\n\(mdDarkVars)\n}"
+        case .system:
+            rootBlock = """
+            :root {
+                color-scheme: light dark;
+            \(mdLightVars)
+            }
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    color-scheme: dark;
+                \(mdDarkVars)
+                }
+            }
+            """
+        }
+
+        return """
+        \(rootBlock)
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif;
+            font-size: \(size)px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            margin: 0;
+            padding: 16px 20px 32px 20px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .lp-code-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .lp-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--bg-code-header);
+            border: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-subtle);
+            border-radius: 8px 8px 0 0;
+            padding: 8px 14px;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .lp-toolbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lp-filename {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+            font-size: 12px;
+        }
+
+        .lp-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 7px;
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .lp-toolbar-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .lp-code-scroll {
+            overflow-x: auto;
+            background-color: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 10px 0;
+        }
+
+        .lp-code-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+            font-size: \(codeFontSize)px;
+            line-height: 1.55;
+            tab-size: 4;
+        }
+
+        .lp-line-no {
+            user-select: none;
+            -webkit-user-select: none;
+            text-align: right;
+            padding: 0 14px 0 12px;
+            color: var(--text-muted);
+            vertical-align: top;
+            white-space: nowrap;
+            width: 1%;
+            border-right: 1px solid var(--border-subtle);
+        }
+
+        .lp-line-code {
+            padding: 0 16px 0 14px;
+            white-space: pre;
+            vertical-align: top;
+            color: var(--text-primary);
+        }
+
+        /* Syntax highlighting tokens */
+        .hl-kw { color: var(--hl-kw); font-weight: 500; }
+        .hl-type { color: var(--hl-type); }
+        .hl-str { color: var(--hl-str); }
+        .hl-num { color: var(--hl-num); }
+        .hl-com { color: var(--hl-com); font-style: italic; }
+        .hl-attr { color: var(--hl-attr); }
+        .hl-fn { color: var(--hl-fn); }
+        .hl-prop { color: var(--hl-prop); }
+        .hl-op { color: var(--hl-op); }
+        .hl-punct { color: var(--text-muted); }
+        .hl-tag { color: var(--hl-tag); font-weight: 500; }
+
+        /* Banners */
+        .lp-banner {
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            margin-bottom: 12px;
+        }
+
+        .lp-banner-notice {
+            background-color: rgba(255, 149, 0, 0.12);
+            border-left: 4px solid #ff9500;
+            color: var(--text-primary);
+        }
+
+        .lp-banner-error {
+            background-color: rgba(255, 59, 48, 0.12);
+            border-left: 4px solid #ff3b30;
+            color: var(--text-primary);
+        }
+        """
+    }
 }
