@@ -12,7 +12,7 @@
 
   <br><br>
 
-[![Release](https://img.shields.io/badge/Release-v0.3.0-007AFF?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/releases)
+[![Release](https://img.shields.io/badge/Release-v0.3.2-007AFF?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/releases)
 [![Build](https://img.shields.io/badge/Build-Bestanden-brightgreen?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/Tests-183%20Unit--Tests%20bestanden-brightgreen?logo=apple&logoColor=white)](Tests/LoupeTests/)
 [![Zeilen Code](https://img.shields.io/badge/LoC-4.021%20Zeilen%20Swift-blue?logo=swift&logoColor=white)](Sources/)

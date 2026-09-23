@@ -5,6 +5,14 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+## [0.3.2] - 2026-09-23
+
+### Behoben
+- Finder-/Quick-Look-Vorschauen für Quellcodedateien und weitere registrierte Formate wiederhergestellt.
+- Quick-Look-Erweiterung korrekt mit ihrem Swift-Modulnamen registriert.
+- Syntaxhervorhebung für größere Quelldateien beschleunigt, damit Vorschauen nicht beim Laden hängen bleiben.
+- Veraltete doppelte Quick-Look-Registrierungen bei der Installation entfernt.
+
 ## [0.3.0] - 2026-09-22
 
 ### Hinzugefügt
