@@ -24,8 +24,14 @@
 [![Zero JS](https://img.shields.io/badge/JavaScript-0%20Bytes%20%E2%9C%93-success)](https://github.com/pepperonas/loupe)
 [![Offline](https://img.shields.io/badge/Funktioniert-100%25%20Offline-blue?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe)
 [![Keine Telemetrie](https://img.shields.io/badge/Telemetrie-Keine%20%E2%9C%93-success)](https://github.com/pepperonas/loupe)
+[![GitHub-Sterne](https://img.shields.io/github/stars/pepperonas/loupe?style=flat&logo=github)](https://github.com/pepperonas/loupe/stargazers)
+[![GitHub-Forks](https://img.shields.io/github/forks/pepperonas/loupe?style=flat&logo=github)](https://github.com/pepperonas/loupe/network/members)
+[![GitHub-Issues](https://img.shields.io/github/issues/pepperonas/loupe?style=flat&logo=github)](https://github.com/pepperonas/loupe/issues)
+[![Downloads](https://img.shields.io/github/downloads/pepperonas/loupe/total?style=flat&logo=github)](https://github.com/pepperonas/loupe/releases)
 [![SemVer](https://img.shields.io/badge/SemVer-2.0.0-3F4551)](https://semver.org)
 [![Changelog](https://img.shields.io/badge/Changelog-Keep%20a%20Changelog-E05735?logo=keepachangelog&logoColor=white)](CHANGELOG.md)
+<br><br>
+<img src="docs/social-preview.png" alt="Loupe — native macOS Quick-Look-Vorschauen für JSON, Markdown und Quellcode" width="100%">
 <br><br>
 <a href="https://www.paypal.com/donate/?business=martin.pfeffer%40celox.io&item_name=Loupe&currency_code=EUR">
   <img src="https://img.shields.io/badge/☕_Entwickler_einen_Kaffee_ausgeben-Spende_via_PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white" height="42" alt="Spende via PayPal" />
