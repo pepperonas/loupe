@@ -14,7 +14,7 @@
 
 [![Release](https://img.shields.io/badge/Release-v0.3.2-007AFF?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/releases)
 [![Build](https://img.shields.io/badge/Build-Passing-brightgreen?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/Tests-183%20Unit--Tests%20passed-brightgreen?logo=apple&logoColor=white)](Tests/LoupeTests/)
+[![Tests](https://img.shields.io/badge/Tests-197%20Unit--Tests%20passed-brightgreen?logo=apple&logoColor=white)](Tests/LoupeTests/)
 [![Lines of Code](https://img.shields.io/badge/LoC-4%2C021%20Lines%20of%20Swift-blue?logo=swift&logoColor=white)](Sources/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 <br>
@@ -52,10 +52,23 @@ Loupe provides first-class, hardened support for developer files including:
 - **JSON** (`public.json`): Collapsible tree with source-order preservation, type badges, member counts, syntax color roles, and smart breadth-first expansion.
 - **Markdown** (`net.daringfireball.markdown`): Full CommonMark and GitHub Flavored Markdown (GFM) rendering with pure-Swift syntax highlighting for 17+ languages, formatted tables, task lists, and safe relative images.
 - **CSV & TSV** (`public.comma-separated-values-text`, `public.tab-separated-values-text`, `public.delimited-values-text`): Clean, theme-aware tabular preview that fixes the macOS default preview's blinding white background in Dark Mode. Features automatic delimiter detection (`,`, `;`, `\t`), sticky headers, sticky row numbers, and numeric right-alignment.
+- **Source code**: Native syntax-highlighted previews for Swift, Rust, Python, JavaScript/TypeScript, Go, Java/Kotlin, C/C++, HTML/XML, CSS, YAML, TOML, SQL, Shell, PHP, Ruby, and more.
 
 Pressing **Space** on any supported file instantly renders a gorgeous preview — **without a single byte of JavaScript**, without Electron, and without background daemons.
 
 Designed strictly according to Apple's Human Interface Guidelines, Loupe looks, behaves, and feels like a native macOS system component.
+
+## Screenshots
+
+These previews are rendered directly by Loupe's Finder Quick Look extension in Dark Mode — no JavaScript or external service is involved.
+
+<p align="center">
+  <img src="docs/screenshots/json-preview.png" alt="Loupe JSON Quick Look preview" width="31%">
+  <img src="docs/screenshots/markdown-preview.png" alt="Loupe Markdown Quick Look preview" width="31%">
+  <img src="docs/screenshots/source-code-preview.png" alt="Loupe source-code Quick Look preview" width="31%">
+</p>
+
+<p align="center"><sub>JSON tree · Markdown document · Swift source code</sub></p>
 
 ---
 
@@ -65,6 +78,7 @@ Designed strictly according to Apple's Human Interface Guidelines, Loupe looks, 
 - 🌳 **Zero-JavaScript Collapsible Tree**: Interactive JSON tree powered purely by HTML5 `<details>` and `<summary>` elements. Absolutely no script execution, no client-side evaluation, no event listener overhead.
 - 📝 **Rich CommonMark & GFM Markdown**: Headings (H1–H6 with auto-slug anchors), bold, italic, strikethrough, blockquotes, ordered/unordered lists, task lists with checkboxes, and styled tables.
 - 🌈 **Pure-Swift Syntax Highlighting**: In-process tokenization for 17+ programming languages (Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C/C++, HTML, CSS, JSON, YAML, XML, SQL, Shell/Bash, Markdown) without client-side JavaScript execution.
+- 💻 **First-Class Source-Code Previews**: Finder previews for common source formats with readable monospace layout, language-aware token colors, and safe handling of unknown extensions.
 - 📐 **Order-Preserving & Exact AST**: Preserves exact source key order, retains duplicate keys, and keeps original number spellings (e.g. `1.000` vs `1e3`).
 - 🧭 **Smart Breadth-First Expansion (BFS)**: Instead of arbitrary fixed-depth unfolding, Loupe uses a line-budget algorithm (default: 300 visible rows). A standard `package.json` opens completely, while massive arrays stay safely collapsed at root.
 - 🩹 **Resilient Error Recovery & Source Excerpts**: If a JSON file contains syntax errors, Loupe renders the valid partial tree parsed up to the error, accompanied by an error banner showing line, column, context window, and an exact caret pointer (`^`) with UTF-8 character and tab alignment.
@@ -173,11 +187,11 @@ All color roles are measured on an HTML5 canvas composited over background layer
 Loupe
 ├── Loupe.app (Host Companion Application)
 │   ├── Contents/MacOS/Loupe (AppKit host binary)
-│   ├── Contents/Info.plist (Bundle metadata & registered UTTypes: JSON, Markdown & CSV)
+│   ├── Contents/Info.plist (Bundle metadata & registered UTTypes: JSON, Markdown, CSV & source code)
 │   └── Contents/PlugIns/
 │       └── LoupePreview.appex (Quick Look App Extension)
 │           ├── Contents/MacOS/LoupePreview (QLPreviewProvider extension binary)
-│           └── Contents/Info.plist (QLSupportedContentTypes: public.json, net.daringfireball.markdown, CSV/TSV)
+│           └── Contents/Info.plist (QLSupportedContentTypes: JSON, Markdown, CSV/TSV & source-code UTIs)
 │
 ├── LoupeCore (Shared Swift Package Library Target)
 │   ├── JSON/

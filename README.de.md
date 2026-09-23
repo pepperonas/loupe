@@ -14,7 +14,7 @@
 
 [![Release](https://img.shields.io/badge/Release-v0.3.2-007AFF?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/releases)
 [![Build](https://img.shields.io/badge/Build-Bestanden-brightgreen?logo=apple&logoColor=white)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/Tests-183%20Unit--Tests%20bestanden-brightgreen?logo=apple&logoColor=white)](Tests/LoupeTests/)
+[![Tests](https://img.shields.io/badge/Tests-197%20Unit--Tests%20bestanden-brightgreen?logo=apple&logoColor=white)](Tests/LoupeTests/)
 [![Zeilen Code](https://img.shields.io/badge/LoC-4.021%20Zeilen%20Swift-blue?logo=swift&logoColor=white)](Sources/)
 [![Lizenz: MIT](https://img.shields.io/badge/Lizenz-MIT-yellow.svg)](LICENSE)
 <br>
@@ -52,10 +52,23 @@ Loupe bietet erstklassige, gehärtete Unterstützung für Entwicklerdateien eins
 - **JSON** (`public.json`): Aufklappbarer Baum mit erhaltener Schlüsselreihenfolge, Typ-Badges, Elementzählern, Syntax-Farbrollen und intelligenter Breitensuche-Voraufklappung.
 - **Markdown** (`net.daringfireball.markdown`): Vollständiges CommonMark- und GitHub Flavored Markdown (GFM)-Rendering mit reiner Swift-Syntaxhervorhebung für 17+ Programmiersprachen, formatierten Tabellen, Aufgabenlisten und sicheren relativen Bildern.
 - **CSV & TSV** (`public.comma-separated-values-text`, `public.tab-separated-values-text`, `public.delimited-values-text`): Nativer Tabellen-Renderer mit vollständiger Dark-Mode-Unterstützung (keine grell-weiße Blendung wie bei macOS Quick Look). Mit automatischer Trennzeichenerkennung (`,`, `;`, `\t`), fixierter Kopfzeile, Zeilennummern `#` und Zahlenausrichtung.
+- **Quellcode**: Native, syntax-hervorgehobene Vorschauen für Swift, Rust, Python, JavaScript/TypeScript, Go, Java/Kotlin, C/C++, HTML/XML, CSS, YAML, TOML, SQL, Shell, PHP, Ruby und weitere Formate.
 
 Ein Druck auf die **Leertaste** bei einer beliebigen unterstützten Datei öffnet unmittelbar eine elegante Vorschau – **ohne ein einziges Byte JavaScript**, ohne Electron und ohne ressourcenhungrige Hintergrunddienste.
 
 Entwickelt streng nach Apples Human Interface Guidelines fügt sich Loupe optisch, funktional und ergonomisch wie eine offizielle macOS-Systemkomponente ein.
+
+## Screenshots
+
+Diese Vorschauen werden direkt von Loupes Finder-Quick-Look-Erweiterung im Dunkelmodus gerendert – ohne JavaScript und ohne externen Dienst.
+
+<p align="center">
+  <img src="docs/screenshots/json-preview.png" alt="Loupe JSON-Quick-Look-Vorschau" width="31%">
+  <img src="docs/screenshots/markdown-preview.png" alt="Loupe Markdown-Quick-Look-Vorschau" width="31%">
+  <img src="docs/screenshots/source-code-preview.png" alt="Loupe Quellcode-Quick-Look-Vorschau" width="31%">
+</p>
+
+<p align="center"><sub>JSON-Baum · Markdown-Dokument · Swift-Quellcode</sub></p>
 
 ---
 
@@ -65,6 +78,7 @@ Entwickelt streng nach Apples Human Interface Guidelines fügt sich Loupe optisc
 - 🌳 **Aufklappbarer Baum ohne JavaScript**: 100% interaktiver JSON-Baum, ausschließlich realisiert über HTML5 `<details>`- und `<summary>`-Elemente. Keinerlei Skriptausführung, kein DOM-Scripting, keine Event-Listener-Last.
 - 📝 **Umfassendes CommonMark- & GFM-Markdown**: Überschriften (H1–H6 mit Auto-Slug-Ankern), Fett, Kursiv, Durchgestrichen, Blockzitate, geordnete/ungeordnete Listen, Aufgabenlisten mit Checkboxen sowie gestaltete Tabellen.
 - 🌈 **Syntaxhervorhebung in reinem Swift**: Hostseitige Tokenisierung für 17+ Programmiersprachen (Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, HTML, XML, CSS, JSON, YAML, SQL, Shell/Bash, Markdown) ganz ohne JavaScript-Engine im Vorschaufenster.
+- 💻 **Quellcode als First-Class-Format**: Finder-Vorschauen für gängige Quelltextformate mit gut lesbarer Monospace-Darstellung, sprachabhängigen Token-Farben und sicherem Fallback für unbekannte Endungen.
 - 📐 **Ordnungserhaltender & exakter AST**: Bewahrt die originale Schlüsselreihenfolge der Datei, behält doppelte Schlüssel und erhält die exakte Quelltext-Schreibweise von Zahlen (z. B. `1.000` vs `1e3`).
 - 🧭 **Intelligente Vor-Aufklappung (BFS-Budget)**: Statt starrer Tiefengrenzen nutzt Loupe einen Breitensuche-Algorithmus mit Zeilenbudget (Standard: 300 sichtbare Zeilen). Eine typische `package.json` liegt vollständig offen, während riesige Arrays an der Wurzel zugeklappt bleiben.
 - 🩹 **Tolerante Fehleranzeige & Quelltext-Ausschnitt**: Bei Syntaxfehlern bricht Loupe nicht mit einer leeren Seite ab. Der bis zum Fehler gültig geparste Teilbaum bleibt sichtbar, begleitet von einem roten Fehlerbanner mit Zeile, Spalte, Quelltext-Kontext und exaktem Zeiger (`^`) unter Berücksichtigung von UTF-8-Multibyte-Zeichen und Tabulator-Breite.
@@ -173,11 +187,11 @@ Alle Farbwerte wurden auf einem HTML5-Canvas über den Hintergrundschichten gera
 Loupe
 ├── Loupe.app (Host-Begleit-Anwendung)
 │   ├── Contents/MacOS/Loupe (AppKit Host-Binary)
-│   ├── Contents/Info.plist (Bundle-Metadaten & registrierte Formate: JSON, Markdown & CSV)
+│   ├── Contents/Info.plist (Bundle-Metadaten & registrierte Formate: JSON, Markdown, CSV & Quellcode)
 │   └── Contents/PlugIns/
 │       └── LoupePreview.appex (Quick Look App Extension)
 │           ├── Contents/MacOS/LoupePreview (QLPreviewProvider Binary)
-│           └── Contents/Info.plist (QLSupportedContentTypes: public.json, net.daringfireball.markdown, CSV/TSV)
+│           └── Contents/Info.plist (QLSupportedContentTypes: JSON, Markdown, CSV/TSV & Quellcode-UTIs)
 │
 ├── LoupeCore (Gemeinsame Swift-Bibliothek)
 │   ├── JSON/
