@@ -288,7 +288,7 @@ What matters is not what Loupe *can* render, but what **Quick Look actually hand
 | CSS | `.css` | `public.css` | ✅ |
 <!-- filetypes:end -->
 
-**Highlighted, but not reachable from Finder** — macOS gives these either a *dynamic* type or one that belongs to something else, so Quick Look never asks Loupe:
+**Highlighted, but not reachable from Finder by default** — on a stock macOS these get either a *dynamic* type or one that belongs to something else, so Quick Look doesn't ask Loupe. If another installed app (Xcode, for example) declares a source-code type for one of them, Quick Look hands it to Loupe after all:
 
 <!-- unreachable:start -->
 - `.ts` — macOS types it as an **MPEG-2 transport stream** (video). Claiming it would turn real video files into text.

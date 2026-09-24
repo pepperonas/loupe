@@ -288,7 +288,7 @@ Entscheidend ist nicht, was Loupe rendern *kann*, sondern was **Quick Look tats�
 | CSS | `.css` | `public.css` | ✅ |
 <!-- filetypes:end -->
 
-**Hervorgehoben, aber aus dem Finder nicht erreichbar** — macOS vergibt dafür entweder einen *dynamischen* Typ oder einen, der etwas anderem gehört, deshalb fragt Quick Look Loupe nie:
+**Hervorgehoben, aber aus dem Finder standardmäßig nicht erreichbar** — auf einem normalen macOS bekommen diese Endungen einen *dynamischen* Typ oder einen, der etwas anderem gehört, deshalb fragt Quick Look Loupe nicht. Deklariert ein anderes installiertes Programm (etwa Xcode) einen Quellcode-Typ dafür, gibt Quick Look die Datei doch an Loupe:
 
 <!-- unreachable:start -->
 - `.ts` — macOS führt das als **MPEG-2-Transportstrom** (Video). Den Typ zu beanspruchen würde echte Videodateien als Text anzeigen.

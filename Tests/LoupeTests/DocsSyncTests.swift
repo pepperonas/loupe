@@ -119,9 +119,16 @@ public enum DocsSyncTests {
                     try assertTrue(reachable(e) != false,
                                    "README verspricht .\(e) im Finder, aber QLSupportedContentTypes deckt den Typ nicht ab")
                 }
+                // Ob eine "unerreichbare" Endung doch ankommt, haengt von den installierten
+                // Programmen ab (auf CI-Runnern mit Xcode bekommt .tsx einen Quellcode-Typ).
+                // Stabil pruefbar ist nur: LOUPE SELBST beansprucht sie nicht.
                 for e in try markedExtensions("unreachable", in: md) {
-                    try assertTrue(reachable(e) != true,
-                                   ".\(e) steht als 'nicht im Finder', erreicht Quick Look aber -- README aktualisieren")
+                    try assertTrue(imported[e] == nil,
+                                   ".\(e) steht als 'nicht im Finder', Loupe deklariert aber selbst einen Typ dafuer")
+                    if let t = UTType(filenameExtension: e), !t.isDynamic {
+                        try assertFalse(supportedIDs.contains(t.identifier),
+                                        ".\(e) steht als 'nicht im Finder', ihr Typ \(t.identifier) ist aber angemeldet")
+                    }
                 }
             }
 
