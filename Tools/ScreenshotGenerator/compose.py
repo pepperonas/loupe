@@ -76,14 +76,19 @@ iframe { border: 0; flex: 1; width: 100%%; background: %(window)s; }
 """
 
 
-def window(src_name: str, title: str, button: str, theme: str, box: tuple) -> str:
+def window(src_name: str, title: str, button: str, theme: str, box: tuple, zoom: float = 1.0) -> str:
+    """zoom < 1 verkleinert nur den INHALT (mehr Zeilen/Spalten im selben Fenster)."""
     x, y, w, h = box
     doc = (HTML_DIR / f"{src_name}-{theme}.html").read_text(encoding="utf-8")
+    frame_style = ""
+    if zoom != 1.0:
+        frame_style = (f' style="flex:none;width:{100 / zoom:.3f}%;height:{(h - 44) / zoom:.1f}px;'
+                       f'transform:scale({zoom});transform-origin:0 0"')
     return (f'<div class="win" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px">'
             f'<div class="bar"><div class="lights"><i></i><i></i><i></i></div>'
             f'<div class="title">{html.escape(title)}</div>'
             f'<div class="open">{html.escape(button)}</div></div>'
-            f'<iframe srcdoc="{html.escape(doc, quote=True)}"></iframe></div>')
+            f'<iframe{frame_style} srcdoc="{html.escape(doc, quote=True)}"></iframe></div>')
 
 
 def page(theme: str, size: tuple, windows: list) -> str:
@@ -105,6 +110,32 @@ for theme in THEMES:
     body = [window(src, title, button, theme, box) for (src, title, button), box in zip(HERO, boxes)]
     (PAGE_DIR / f"hero-{theme}.html").write_text(page(theme, size, body), encoding="utf-8")
     sizes.append((f"hero-{theme}", *size))
+
+# Social-Preview fuer GitHub (1280x640, dunkel): Titel links, echte Vorschauen rechts.
+SOCIAL_CSS = """
+.brand { position: absolute; left: 64px; top: 0; bottom: 0; width: 470px; display: flex;
+         flex-direction: column; justify-content: center; color: #f5f5f7; }
+.brand h1 { font-size: 76px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 14px; }
+.brand h1 span { background: linear-gradient(90deg, #8fb8ff, #c7a6ff); -webkit-background-clip: text;
+                 background-clip: text; color: transparent; }
+.brand p { font-size: 25px; line-height: 1.35; color: #c9c9d1; margin-bottom: 26px; }
+.chips { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 26px; }
+.chips i { font-style: normal; font-size: 16px; font-weight: 600; color: #e5e5ea; padding: 6px 12px;
+           border-radius: 999px; background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.14); }
+.brand small { font-size: 16px; color: #9d9da3; letter-spacing: 0.01em; }
+"""
+social_body = [
+    window("package.json", "package.json", "Open with Xcode", "dark", (560, 46, 640, 400), zoom=0.72),
+    window("server.log", "server.log", "Open with Console", "dark", (600, 176, 650, 420), zoom=0.62),
+    '<div class="brand"><h1>🔍 <span>Loupe</span></h1>'
+    '<p>Native Quick Look previews<br>for developer files.</p>'
+    '<div class="chips"><i>JSON</i><i>Markdown</i><i>Logs</i><i>XML</i><i>PowerShell</i>'
+    '<i>Batch</i><i>TSV</i><i>23 languages</i></div>'
+    '<small>macOS 14+ · zero JavaScript · offline</small></div>',
+]
+social = page("dark", (1280, 640), social_body).replace("</style>", SOCIAL_CSS + "</style>")
+(PAGE_DIR / "social-preview.html").write_text(social, encoding="utf-8")
+sizes.append(("social-preview", 1280, 640))
 
 (PAGE_DIR / "sizes.txt").write_text("".join(f"{i} {w} {h}\n" for i, w, h in sizes), encoding="utf-8")
 print(f"{len(sizes)} Seiten in {PAGE_DIR}")

@@ -44,7 +44,7 @@ while read -r ident width height; do
     # Eigenes Profil: sonst haengt sich Headless-Chrome an eine laufende Chrome-Instanz.
     "${CHROME}" --headless=new --disable-gpu --hide-scrollbars \
         --user-data-dir="${WORK}/chrome-profile" --no-first-run --no-default-browser-check \
-        --force-device-scale-factor="${SCALE}" \
+        --force-device-scale-factor="$( [ "${ident}" = social-preview ] && echo 1 || echo "${SCALE}" )" \
         --window-size="${width},${height}" \
         --screenshot="${target}" \
         "file://${WORK}/pages/${ident}.html" >/dev/null 2>&1 &
@@ -70,5 +70,8 @@ if command -v pngquant >/dev/null; then
         pngquant --force --skip-if-larger --quality 80-95 --ext .png "${OUT}/${ident}.png" || true
     done < "${WORK}/pages/sizes.txt"
 fi
+
+# Die Social-Preview gehoert nach docs/ (GitHub: Settings -> Social preview, max. 1 MB).
+mv "${OUT}/social-preview.png" "${ROOT}/docs/social-preview.png"
 
 du -sh "${OUT}"
