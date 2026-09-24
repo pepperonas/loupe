@@ -1,0 +1,33 @@
+{
+  "name": "@acme/storefront",
+  "version": "4.12.0",
+  "private": true,
+  "description": "Headless storefront with server-side rendering",
+  "type": "module",
+  "engines": { "node": ">=20.11", "pnpm": ">=9" },
+  "scripts": {
+    "dev": "vite --port 5173",
+    "build": "tsc -b && vite build",
+    "test": "vitest run --coverage",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "@tanstack/react-query": "^5.59.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "typescript": "~5.6.2",
+    "vite": "^6.0.1",
+    "vitest": "^2.1.4"
+  },
+  "config": {
+    "port": 5173,
+    "cdn": "https://cdn.acme.example",
+    "featureFlags": { "checkoutV2": true, "darkMode": true, "betaSearch": false },
+    "retry": { "attempts": 3, "backoffMs": 250.5, "jitter": null }
+  },
+  "locales": ["de-DE", "en-US", "fr-FR", "ja-JP", "es-ES", "it-IT", "nl-NL", "pl-PL", "sv-SE", "da-DK", "pt-BR", "zh-CN"],
+  "browserslist": ["last 2 Safari versions", "last 2 Chrome versions"]
+}

@@ -1,0 +1,10 @@
+{
+  "service": "billing-api",
+  "replicas": 3,
+  "limits": { "cpu": "500m", "memory": "512Mi" },
+  "env": {
+    "DATABASE_URL": "postgres://db.internal:5432/billing",
+    "LOG_LEVEL": "info"
+    "FEATURE_INVOICES_V2": true
+  }
+}

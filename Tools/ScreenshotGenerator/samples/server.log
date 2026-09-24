@@ -1,0 +1,25 @@
+2026-09-24 08:00:00.001 INFO  [main] Starting OrderService v2.14.3 on api-1 (pid=4711, profile="production")
+2026-09-24 08:00:00.389 DEBUG [pool] Opened 10 connections to postgres://db.internal:5432/orders in 173ms
+2026-09-24 08:00:01.002 INFO  [http] Listening on :8080 with context path /api
+2026-09-24 08:03:17.551 INFO  [http] POST /api/orders 201 in 48ms from 203.0.113.7 user=anna@example.com
+2026-09-24 08:03:18.004 WARN  [cache] Redis latency 820ms exceeds threshold 250ms (redis://cache.internal:6379)
+2026-09-24 08:03:21.771 ERROR [payment] Charge failed for order 7f3c2a10-1b2c-4d5e-8f90-a1b2c3d4e5f6
+com.acme.payment.PaymentException: upstream returned 502 Bad Gateway
+	at com.acme.payment.GatewayClient.charge(GatewayClient.java:118)
+	at com.acme.orders.OrderController.checkout(OrderController.java:201)
+Caused by: java.net.SocketTimeoutException: Read timed out after 30000ms
+2026-09-24 08:03:21.790 INFO  [payment] Retrying charge attempt=2 backoff=1.5s
+2026-09-24 08:03:23.402 INFO  [payment] Charge succeeded amount=49.90 currency=EUR
+{"time":"2026-09-24T08:05:00Z","level":"warn","msg":"slow request","route":"/api/reports/monthly","duration_ms":2140}
+time="2026-09-24T08:06:00Z" level=info msg="export finished" job=nightly rows=18230 duration=3.2s
+198.51.100.23 - - [24/Sep/2026:08:07:09 +0200] "POST /api/login HTTP/2.0" 401 87 "-" "curl/8.4.0"
+10.0.0.5 - - [24/Sep/2026:08:07:10 +0200] "GET /health HTTP/1.1" 503 0 "-" "kube-probe/1.30"
+Sep 24 08:07:11 api-1 sshd[1234]: Accepted publickey for deploy from 192.168.178.20 port 51234
+2026-09-24 08:12:44.918 NOTICE [admin] Feature flag "checkout-v2" enabled by martin
+2026-09-24 08:15:02.337 FATAL [db] Connection pool exhausted (active=10, idle=0, waiting=57) — shutting down
+2026-09-24 08:16:10.004 INFO  [main] Restarting after fatal error (attempt=1)
+2026-09-24 08:16:11.220 INFO  [pool] Opened 10 connections to postgres://db.internal:5432/orders in 96ms
+2026-09-24 08:16:11.871 DEBUG [cache] Warmed 1204 keys in 312ms
+2026-09-24 08:16:12.002 INFO  [http] Listening on :8080 with context path /api
+2026-09-24 08:16:40.519 INFO  [http] GET /api/orders/1234 200 in 9ms from 203.0.113.7
+2026-09-24 08:17:02.117 WARN  [auth] 5 failed logins for admin from 45.83.12.9 within 60s

@@ -27,6 +27,7 @@ LogParserTests.run()
 LogPreviewRendererTests.run()
 ExtensionStatusTests.run()
 PerformanceTests.run()
+DocsSyncTests.run()   // muss zuletzt laufen (vergleicht die Gesamtzahl)
 
 let totalTime = (CFAbsoluteTimeGetCurrent() - start) * 1000
 print(String(format: "Total Test Suite Time: %.2f ms", totalTime))
