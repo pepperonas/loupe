@@ -7,7 +7,7 @@ public enum LogHighlighter {
 
     // Reihenfolge = Vorrang. URL vor Pfad (sonst wird "//host/x" zum Pfad),
     // UUID vor Zahl, IP vor Zahl.
-    private nonisolated(unsafe) static let tokenRe = try! NSRegularExpression(pattern: [
+    private static let tokenRe = try! NSRegularExpression(pattern: [
         #"(?<url>\b[A-Za-z][A-Za-z0-9+.\-]*://[^\s"'<>]+)"#,
         #"(?<str>"(?:[^"\\\n]|\\.)*")"#,
         #"(?<uuid>\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b)"#,

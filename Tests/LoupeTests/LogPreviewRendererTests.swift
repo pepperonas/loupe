@@ -273,7 +273,7 @@ public enum LogPreviewRendererTests {
 
     // MARK: Kontrast-Helfer
 
-    private static func cssVariables(_ css: String) -> [String: String] {
+    nonisolated private static func cssVariables(_ css: String) -> [String: String] {
         var out: [String: String] = [:]
         // Nur der erste :root-Block zaehlt (bei fester Erscheinung gibt es genau einen).
         for line in css.split(separator: "\n") {
@@ -286,12 +286,12 @@ public enum LogPreviewRendererTests {
         return out
     }
 
-    private static func hexRGB(_ s: String) -> (Double, Double, Double)? {
+    nonisolated private static func hexRGB(_ s: String) -> (Double, Double, Double)? {
         guard s.hasPrefix("#"), s.count == 7, let v = Int(s.dropFirst(), radix: 16) else { return nil }
         return (Double((v >> 16) & 0xff) / 255, Double((v >> 8) & 0xff) / 255, Double(v & 0xff) / 255)
     }
 
-    private static func rgba(_ s: String) -> (Double, Double, Double, Double)? {
+    nonisolated private static func rgba(_ s: String) -> (Double, Double, Double, Double)? {
         guard s.hasPrefix("rgba("), s.hasSuffix(")") else { return nil }
         let parts = s.dropFirst(5).dropLast().split(separator: ",").compactMap {
             Double($0.trimmingCharacters(in: .whitespaces))
@@ -300,13 +300,13 @@ public enum LogPreviewRendererTests {
         return (parts[0] / 255, parts[1] / 255, parts[2] / 255, parts[3])
     }
 
-    private static func blend(_ top: (Double, Double, Double, Double),
+    nonisolated private static func blend(_ top: (Double, Double, Double, Double),
                               over bottom: (Double, Double, Double)) -> (Double, Double, Double) {
         let a = top.3
         return (top.0 * a + bottom.0 * (1 - a), top.1 * a + bottom.1 * (1 - a), top.2 * a + bottom.2 * (1 - a))
     }
 
-    private static func contrast(_ a: (Double, Double, Double), _ b: (Double, Double, Double)) -> Double {
+    nonisolated private static func contrast(_ a: (Double, Double, Double), _ b: (Double, Double, Double)) -> Double {
         func lin(_ c: Double) -> Double { c <= 0.03928 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4) }
         func lum(_ c: (Double, Double, Double)) -> Double { 0.2126 * lin(c.0) + 0.7152 * lin(c.1) + 0.0722 * lin(c.2) }
         let (l1, l2) = (lum(a), lum(b))

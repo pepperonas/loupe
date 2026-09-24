@@ -95,7 +95,7 @@ public enum LogParser {
 
     // MARK: - Access-Log (Common/Combined)
 
-    private nonisolated(unsafe) static let accessRe = rx(
+    private static let accessRe = rx(
         #"^(\S+) \S+ \S+ \[([^\]]+)\] "((?:[^"\\]|\\.)*)" (\d{3}) (\S+)(?: "((?:[^"\\]|\\.)*)" "((?:[^"\\]|\\.)*)")?"#)
 
     static func parseAccess(_ line: String, _ n: Int) -> LogEntry? {
@@ -126,7 +126,7 @@ public enum LogParser {
 
     // MARK: - macOS unified log (`log show`)
 
-    private nonisolated(unsafe) static let unifiedRe = rx(
+    private static let unifiedRe = rx(
         #"^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d+[+-]\d{4})\s+0x[0-9a-f]+\s+(Default|Info|Debug|Error|Fault|Activity|Signpost|State)\s+0x[0-9a-f]+\s+(\d+)\s+\d+\s+([^:]+?): ?(.*)$"#)
 
     static func parseUnified(_ line: String, _ n: Int) -> LogEntry? {
@@ -146,7 +146,7 @@ public enum LogParser {
 
     // MARK: - syslog / journalctl
 
-    private nonisolated(unsafe) static let syslogRe = rx(
+    private static let syslogRe = rx(
         #"^([A-Z][a-z]{2} [ \d]\d \d{2}:\d{2}:\d{2}(?:\.\d+)?|\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}(?::?\d{2})?)?) ([A-Za-z0-9][\w.-]*) ([^\s:\[]+(?:\[\d+\])?): ?(.*)$"#)
 
     static func parseSyslog(_ line: String, _ n: Int) -> LogEntry? {
@@ -163,9 +163,9 @@ public enum LogParser {
 
     // MARK: - logcat
 
-    private nonisolated(unsafe) static let logcatThreadtimeRe = rx(
+    private static let logcatThreadtimeRe = rx(
         #"^(\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3})\s+\d+\s+\d+\s+([VDIWEFA])\s+(.*?)\s*: (.*)$"#)
-    private nonisolated(unsafe) static let logcatBriefRe = rx(#"^([VDIWEFA])/(.+?)\(\s*\d+\): (.*)$"#)
+    private static let logcatBriefRe = rx(#"^([VDIWEFA])/(.+?)\(\s*\d+\): (.*)$"#)
 
     static func parseLogcat(_ line: String, _ n: Int) -> LogEntry? {
         if let g = match(logcatThreadtimeRe, line), let letter = g[2]?.first {
@@ -236,7 +236,7 @@ public enum LogParser {
         return out + "\""
     }
 
-    private nonisolated(unsafe) static let epochFormatterMillis: DateFormatter = {
+    private static let epochFormatterMillis: DateFormatter = {
         let f = DateFormatter()
         f.locale = Locale(identifier: "en_US_POSIX")
         f.timeZone = TimeZone(identifier: "UTC")
@@ -244,7 +244,7 @@ public enum LogParser {
         return f
     }()
 
-    private nonisolated(unsafe) static let epochFormatterSeconds: DateFormatter = {
+    private static let epochFormatterSeconds: DateFormatter = {
         let f = DateFormatter()
         f.locale = Locale(identifier: "en_US_POSIX")
         f.timeZone = TimeZone(identifier: "UTC")
@@ -265,7 +265,7 @@ public enum LogParser {
 
     // MARK: - logfmt
 
-    private nonisolated(unsafe) static let logfmtPairRe = rx(#"([A-Za-z_@][\w.@-]*)=("(?:[^"\\]|\\.)*"|\S*)"#)
+    private static let logfmtPairRe = rx(#"([A-Za-z_@][\w.@-]*)=("(?:[^"\\]|\\.)*"|\S*)"#)
 
     static func parseLogfmt(_ line: String, _ n: Int) -> LogEntry? {
         guard let first = line.first, first.isLetter || first == "_" || first == "@",
@@ -327,15 +327,15 @@ public enum LogParser {
 
     // MARK: - Generisch: [Zeit] [Level] [Quelle] Nachricht
 
-    private nonisolated(unsafe) static let timestampRe = rx(
+    private static let timestampRe = rx(
         #"^(?:\[([^\]]{5,40})\]|(\d{4}[-/]\d{2}[-/]\d{2}[T ]\d{2}:\d{2}(?::\d{2})?(?:[.,]\d+)?(?:Z|[+-]\d{2}(?::?\d{2})?)?|\d{2}:\d{2}:\d{2}(?:[.,]\d+)?))"#)
-    private nonisolated(unsafe) static let timestampShapeRe = rx(#"\d{1,4}[-/:.]\d{2}"#)
-    private nonisolated(unsafe) static let bracketLevelRe = rx(#"^\[\s*([A-Za-z]+)\s*\]"#)
-    private nonisolated(unsafe) static let assignLevelRe = rx(#"^(?:level|lvl)=([A-Za-z]+)"#)
-    private nonisolated(unsafe) static let channelLevelRe = rx(#"^([\w-]+)\.([A-Za-z]+):"#)
-    private nonisolated(unsafe) static let wordLevelRe = rx(#"^([A-Za-z]+)(?=[\s:|\]]|$)"#)
-    private nonisolated(unsafe) static let pythonSourceRe = rx(#"^:([\w.]+):"#)
-    private nonisolated(unsafe) static let bracketSourceRe = rx(#"^\[([^\]]{1,60})\]"#)
+    private static let timestampShapeRe = rx(#"\d{1,4}[-/:.]\d{2}"#)
+    private static let bracketLevelRe = rx(#"^\[\s*([A-Za-z]+)\s*\]"#)
+    private static let assignLevelRe = rx(#"^(?:level|lvl)=([A-Za-z]+)"#)
+    private static let channelLevelRe = rx(#"^([\w-]+)\.([A-Za-z]+):"#)
+    private static let wordLevelRe = rx(#"^([A-Za-z]+)(?=[\s:|\]]|$)"#)
+    private static let pythonSourceRe = rx(#"^:([\w.]+):"#)
+    private static let bracketSourceRe = rx(#"^\[([^\]]{1,60})\]"#)
 
     static func parseGeneric(_ line: String, _ n: Int) -> LogEntry? {
         var rest = Substring(line)
