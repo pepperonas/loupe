@@ -19,11 +19,15 @@ public struct SourceCodePreviewRenderer: PreviewRenderer, Sendable {
         "yaml", "yml",
         "css", "scss", "sass", "less",
         "xml",
+        "xsd", "xsl", "xslt", "xaml", "csproj", "vbproj", "fsproj", "vcxproj",
+        "props", "targets", "resx", "wsdl", "nuspec",
         "php",
         "rb",
         "dockerfile", "docker",
         "makefile", "make",
-        "toml", "ini"
+        "toml", "ini",
+        "ps1", "psm1", "psd1",
+        "bat", "cmd"
     ]
 
     public static var supportedTypes: [UTType] {
@@ -47,7 +51,12 @@ public struct SourceCodePreviewRenderer: PreviewRenderer, Sendable {
             "org.kotlinlang.source",
             "org.iso.sql",
             "public.yaml",
-            "public.css"
+            "public.css",
+            "public.toml",
+            "com.microsoft.ini",
+            "com.microsoft.powershell-script",
+            "com.microsoft.batch-file",
+            "io.celox.loupe.xml-document"
         ]
         for uti in customUTIs {
             if let t = UTType(uti), !types.contains(t) {
@@ -115,7 +124,12 @@ public struct SourceCodePreviewRenderer: PreviewRenderer, Sendable {
 
         // Split into lines
         // Note: wrapToken ensures no open spans cross \n!
-        let lines = highlighted.components(separatedBy: "\n")
+        var lines = highlighted.components(separatedBy: "\n")
+        // Ein abschliessender Umbruch BEENDET die letzte Zeile, er beginnt keine neue --
+        // sonst zeigte jede normale Datei eine leere Phantomzeile (und "n+1 Zeilen").
+        if lines.count > 1, lines.last?.isEmpty == true {
+            lines.removeLast()
+        }
         let lineCount = lines.count
 
         let sizeFormatted = formatFileSize(totalBytes)

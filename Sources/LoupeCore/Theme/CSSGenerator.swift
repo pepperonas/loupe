@@ -930,4 +930,167 @@ public enum CSSGenerator {
         }
         """
     }
+
+    // MARK: - Log
+
+    private static let logLightVars = """
+        --lg-trace: #6a6a70;
+        --lg-debug: #55555b;
+        --lg-info: #0a5fc2;
+        --lg-notice: #0c6974;
+        --lg-warning: #8a4d00;
+        --lg-error: #b8150f;
+        --lg-fatal: #a10d5c;
+        --lg-ts: #63636a;
+        --lg-src: #5a2bb5;
+        --lg-dim: #5c5c62;
+        --lg-st-2xx: #1b6e30;
+        --lg-st-3xx: #0a5fc2;
+        --lg-st-4xx: #8a4d00;
+        --lg-st-5xx: #b8150f;
+        --lg-error-row: rgba(255, 59, 48, 0.07);
+    """
+
+    private static let logDarkVars = """
+        --lg-trace: #8e8e93;
+        --lg-debug: #a1a1a6;
+        --lg-info: #64b5ff;
+        --lg-notice: #66c2cd;
+        --lg-warning: #ffb340;
+        --lg-error: #ff7a70;
+        --lg-fatal: #ff85c0;
+        --lg-ts: #9d9da3;
+        --lg-src: #c9a7ff;
+        --lg-dim: #a8a8ad;
+        --lg-st-2xx: #6ad782;
+        --lg-st-3xx: #64b5ff;
+        --lg-st-4xx: #ffb340;
+        --lg-st-5xx: #ff7a70;
+        --lg-error-row: rgba(255, 69, 58, 0.12);
+    """
+
+    /// Code-Grundgeruest plus Log-Rollen (Level, Zeit, Quelle, Status).
+    public static func generateLogCSS(settings: LoupeSettings) -> String {
+        let logRoot: String
+        switch settings.appearance {
+        case .light:
+            logRoot = ":root {\n\(logLightVars)\n}"
+        case .dark:
+            logRoot = ":root {\n\(logDarkVars)\n}"
+        case .system:
+            logRoot = """
+            :root {
+            \(logLightVars)
+            }
+            @media (prefers-color-scheme: dark) {
+                :root {
+                \(logDarkVars)
+                }
+            }
+            """
+        }
+
+        return """
+        \(generateCodeCSS(settings: settings))
+
+        \(logRoot)
+
+        .lg-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+            font-size: \(max(11, settings.textSize.baseFontSizePx - 1))px;
+            line-height: 1.55;
+            tab-size: 4;
+        }
+
+        .lg-table td { vertical-align: top; }
+
+        .lg-ts {
+            color: var(--lg-ts);
+            white-space: nowrap;
+            padding: 0 12px 0 14px;
+            font-variant-numeric: tabular-nums;
+            width: 1%;
+        }
+
+        .lg-lvl {
+            white-space: nowrap;
+            padding: 0 10px 0 0;
+            width: 1%;
+        }
+
+        .lg-src {
+            color: var(--lg-src);
+            white-space: nowrap;
+            padding: 0 12px 0 0;
+            width: 1%;
+        }
+
+        .lg-msg {
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            padding: 0 16px 0 0;
+        }
+
+        .lg-table tr > td:first-child.lg-msg,
+        .lg-table tr > td.lp-line-no + td.lg-msg { padding-left: 14px; }
+
+        .lg-badge {
+            display: inline-block;
+            min-width: 5.2em;
+            padding: 0 6px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            text-align: center;
+            color: var(--text-secondary);
+            background-color: color-mix(in srgb, currentColor 13%, transparent);
+        }
+
+        .lg-lvl-trace .lg-badge, .lg-count.lg-lvl-trace { color: var(--lg-trace); }
+        .lg-lvl-debug .lg-badge, .lg-count.lg-lvl-debug { color: var(--lg-debug); }
+        .lg-lvl-info .lg-badge, .lg-count.lg-lvl-info { color: var(--lg-info); }
+        .lg-lvl-notice .lg-badge, .lg-count.lg-lvl-notice { color: var(--lg-notice); }
+        .lg-lvl-warning .lg-badge, .lg-count.lg-lvl-warning { color: var(--lg-warning); }
+        .lg-lvl-error .lg-badge, .lg-count.lg-lvl-error { color: var(--lg-error); }
+        .lg-lvl-fatal .lg-badge, .lg-count.lg-lvl-fatal { color: var(--lg-fatal); }
+
+        .lg-badge.lg-st-2xx { color: var(--lg-st-2xx); }
+        .lg-badge.lg-st-3xx { color: var(--lg-st-3xx); }
+        .lg-badge.lg-st-4xx { color: var(--lg-st-4xx); }
+        .lg-badge.lg-st-5xx { color: var(--lg-st-5xx); }
+        .lg-badge.lg-status { min-width: 3.4em; }
+
+        /* Fehlerzeilen samt Stacktrace leicht getoent */
+        .lg-lvl-error > td, .lg-lvl-fatal > td { background-color: var(--lg-error-row); }
+        .lg-lvl-fatal > .lg-msg, .lg-row.lg-lvl-error > .lg-msg { font-weight: 500; }
+
+        .lg-row.lg-lvl-trace > .lg-msg,
+        .lg-row.lg-lvl-debug > .lg-msg { color: var(--lg-dim); }
+
+        .lg-cont > .lg-msg { color: var(--lg-dim); padding-left: 3em; }
+
+        .lg-count {
+            font-weight: 700;
+            padding: 1px 7px;
+            border-radius: 4px;
+            background-color: color-mix(in srgb, currentColor 13%, transparent);
+        }
+
+        .lg-url { color: var(--hl-tag); }
+        .lg-str { color: var(--hl-str); }
+        .lg-num { color: var(--hl-num); }
+        .lg-ip { color: var(--hl-fn); }
+        .lg-uuid { color: var(--hl-type); }
+        .lg-key { color: var(--hl-prop); }
+        .lg-path { color: var(--hl-attr); }
+        .lg-method { color: var(--hl-kw); font-weight: 700; }
+        .lg-proto, .lg-bytes, .lg-ref, .lg-ua { color: var(--lg-dim); }
+
+        .lg-empty { padding: 12px 16px; color: var(--lg-dim); }
+        """
+    }
 }

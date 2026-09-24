@@ -59,6 +59,37 @@ public enum PerformanceTests {
                 // Die Knotengrenze muss greifen, sonst waere das HTML riesig.
                 try assertLessThan(html.utf8.count, 12 * 1024 * 1024)
             }
+
+            runner.runTest(name: "testFourMegabyteLogUnderOneSecond") {
+                // Genau die Menge, die der Log-Renderer vom Dateiende liest.
+                var lines: [String] = []
+                var bytes = 0
+                var i = 0
+                let levels = ["INFO", "DEBUG", "WARN", "ERROR"]
+                while bytes < LogPreviewRenderer.tailBytes {
+                    let line = "2026-09-24 17:01:\(String(format: "%02d", i % 60)).\(i % 1000) \(levels[i % 4]) [worker-\(i % 8)] request id=\(i) took \(i % 500)ms from 10.0.\(i % 256).7 path=/api/v1/items/\(i)"
+                    lines.append(line)
+                    bytes += line.utf8.count + 1
+                    i += 1
+                }
+                let input = PreviewInput(data: Data(lines.joined(separator: "\n").utf8),
+                                         url: URL(fileURLWithPath: "/tmp/big.log"),
+                                         wasTruncatedByReader: false,
+                                         skippedBytesAtStart: 1)
+                let start = CFAbsoluteTimeGetCurrent()
+                let html = LogPreviewRenderer().renderHTML(input: input, settings: LoupeSettings())
+                let ms = (CFAbsoluteTimeGetCurrent() - start) * 1000
+                #if DEBUG
+                // Debug ~1,2 s auf einem M1 Pro; geteilte CI-Runner sind deutlich langsamer.
+                // Gleicher Puffer (~3,7x) wie beim 5-MB-JSON-Test. Release bleibt bei 1 s.
+                let threshold = 4500.0
+                #else
+                let threshold = 1000.0
+                #endif
+                try assertLessThan(ms, threshold)
+                // Die Zeilengrenze muss greifen: 5000 Zeilen, nicht ~40.000.
+                try assertTrue(html.contains("5000 Zeilen"))
+            }
         }
     }
 }

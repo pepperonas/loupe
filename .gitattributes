@@ -1,0 +1,2 @@
+# Diese Testdatei MUSS Windows-Zeilenenden (CRLF) behalten.
+Tests/Fixtures/logs/11-windows-crlf.log -text

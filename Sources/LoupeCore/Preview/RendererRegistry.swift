@@ -7,6 +7,7 @@ public enum RendererRegistry {
         JSONPreviewRenderer(),
         MarkdownPreviewRenderer(),
         CSVPreviewRenderer(),
+        LogPreviewRenderer(),
         SourceCodePreviewRenderer()
     ]
 

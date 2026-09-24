@@ -31,3 +31,8 @@ xcuserdata/
 
 # Large test fixtures
 Tests/Fixtures/large.json
+
+# Log fixtures are test data, not logs -- but the large generated one stays out
+!Tests/Fixtures/logs/*.log
+!Tools/ScreenshotGenerator/samples/*.log
+Tests/Fixtures/logs/14-large-tail.log

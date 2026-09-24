@@ -134,10 +134,16 @@ public final class SyntaxHighlighter: Sendable {
             return tokenizeBash(code: code)
         case .json:
             return tokenizeJSON(code: code)
-        case .html, .xml:
-            return tokenizeXML(code: code)
+        case .html:
+            return tokenizeMarkup(code: code, isHTML: true)
+        case .xml:
+            return tokenizeMarkup(code: code, isHTML: false)
         case .css:
             return tokenizeCSS(code: code)
+        case .powershell:
+            return tokenizePowerShell(code: code)
+        case .batch:
+            return tokenizeBatch(code: code)
         default:
             // Fallback: tokenize general with common C-style comments and keywords
             return tokenizeGeneral(code: code, keywords: swiftKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
@@ -162,7 +168,7 @@ public final class SyntaxHighlighter: Sendable {
         }
     }
 
-    private func wrapToken(_ text: String, _ type: TokenType) -> String {
+    func wrapToken(_ text: String, _ type: TokenType) -> String {
         let escaped = HTMLSanitizer.escapeHTML(text)
         guard let cls = cssClass(for: type) else { return escaped }
         if escaped.contains("\n") {
@@ -286,7 +292,9 @@ public final class SyntaxHighlighter: Sendable {
             // Identifiers / Keywords / Types
             if c.isLetter || c == "_" || c == "$" {
                 var word = ""
-                while i < count && (chars[i].isLetter || chars[i].isNumber || chars[i] == "_") {
+                // "$" MUSS auch hier stehen: als Anfang erlaubt, aber nicht verbraucht,
+                // blieb i stehen -> Endlosschleife bei Swift-"$0" oder jQuery-"$".
+                while i < count && (chars[i].isLetter || chars[i].isNumber || chars[i] == "_" || chars[i] == "$") {
                     word.append(chars[i])
                     i += 1
                 }
@@ -547,50 +555,6 @@ public final class SyntaxHighlighter: Sendable {
             i += 1
         }
         
-        return output
-    }
-    
-    private func tokenizeXML(code: String) -> String {
-        var output = ""
-        output.reserveCapacity(code.count * 2)
-        let chars = Array(code)
-        var i = 0
-        let count = chars.count
-        
-        while i < count {
-            if matchPrefix(chars, i, "<!--") {
-                var com = "<!--"
-                i += 4
-                while i < count && !matchPrefix(chars, i, "-->") {
-                    com.append(chars[i])
-                    i += 1
-                }
-                if i < count {
-                    com.append("-->")
-                    i += 3
-                }
-                output.append(wrapToken(com, .comment))
-                continue
-            }
-            
-            if chars[i] == "<" {
-                var tagContent = "<"
-                i += 1
-                while i < count && chars[i] != ">" {
-                    tagContent.append(chars[i])
-                    i += 1
-                }
-                if i < count {
-                    tagContent.append(">")
-                    i += 1
-                }
-                output.append(wrapToken(tagContent, .tag))
-                continue
-            }
-            
-            output.append(HTMLSanitizer.escapeHTML(String(chars[i])))
-            i += 1
-        }
         return output
     }
     

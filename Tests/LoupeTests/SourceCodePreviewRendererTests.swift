@@ -30,6 +30,27 @@ public enum SourceCodePreviewRendererTests {
                 try assertTrue(html.contains("5 Zeilen"))
             }
 
+            runner.runTest(name: "testTrailingNewlineAddsNoPhantomLine") {
+                // Eine Datei mit abschliessendem Zeilenumbruch hat so viele Zeilen wie
+                // "wc -l" zaehlt -- nicht eine leere mehr.
+                func render(_ code: String) -> String {
+                    SourceCodePreviewRenderer().renderHTML(
+                        input: PreviewInput(data: Data(code.utf8), url: URL(fileURLWithPath: "/tmp/a.swift"),
+                                            wasTruncatedByReader: false),
+                        settings: LoupeSettings())
+                }
+                let lf = render("let a = 1\nlet b = 2\n")
+                try assertTrue(lf.contains("2 Zeilen"), "LF")
+                try assertFalse(lf.contains(#"<td class="lp-line-no">3</td>"#), "keine Phantomzeile 3")
+                let crlf = render("let a = 1\r\nlet b = 2\r\n")
+                try assertTrue(crlf.contains("2 Zeilen"), "CRLF")
+                let noEOL = render("let a = 1\nlet b = 2")
+                try assertTrue(noEOL.contains("2 Zeilen"), "ohne Umbruch am Ende")
+                let blankLast = render("let a = 1\n\n")
+                try assertTrue(blankLast.contains("2 Zeilen"), "eine echte Leerzeile am Ende bleibt")
+                try assertTrue(render("").contains("1 Zeile"), "leere Datei")
+            }
+
             runner.runTest(name: "testPythonRendering") {
                 let code = """
                 def calculate(x, y):

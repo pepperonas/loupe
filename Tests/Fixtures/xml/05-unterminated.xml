@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE configuration SYSTEM "config.dtd">
+<!-- Application configuration -->
+<configuration xmlns="urn:acme:config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.4">
+  <server host="api.example.com" port="8443" tls='true'>
+    <timeout unit="ms">30000</timeout>
+    <!-- attribute values may legally contain ">" -->
+    <rule when="load > 0.8 &amp;&amp; queue &lt; 100" action="scale-out"/>
+    <path>/var/lib/app &amp; data</path>
+  </server>
+  <script><![CDATA[
+    if (a < b && b > c) { alert("<not a tag>"); }
+  ]]></script>
+  <empty-element/>
+  <ns:item xmlns:ns="urn:x" ns:id="42">Grüße aus München 🚀</ns:item>
+</configuration>
+<unclosed attr="value
+<!-- never closed

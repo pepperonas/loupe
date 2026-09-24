@@ -1,0 +1,7 @@
+time="2026-09-24T12:00:00Z" level=info msg="starting exporter" version=1.8.0 port=9100
+time="2026-09-24T12:00:01Z" level=debug msg="collector registered" collector=cpu duration=0.4ms
+time="2026-09-24T12:00:15Z" level=warning msg="scrape slow" target=10.0.0.12:9100 duration=4.8s timeout=5s
+time="2026-09-24T12:00:30Z" level=error msg="scrape failed" target=10.0.0.13:9100 err="dial tcp 10.0.0.13:9100: connect: connection refused"
+ts=2026-09-24T12:01:00.123Z caller=main.go:142 level=info msg="config reloaded" file=/etc/prometheus/prometheus.yml
+ts=2026-09-24T12:01:05.456Z caller=rules.go:88 level=warn component="rule manager" msg="evaluation took longer than interval" group=alerts
+t=2026-09-24T12:02:00+0200 lvl=eror msg="Failed to send alert" logger=alerting.notifier receiver=slack error="context deadline exceeded"

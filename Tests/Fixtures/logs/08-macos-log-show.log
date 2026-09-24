@@ -1,0 +1,7 @@
+Timestamp                       Thread     Type        Activity             PID    TTL  
+2026-09-24 17:45:35.959564+0200 0x10529bc  Default     0x0                  85035  0    LoupePreview: [io.celox.loupe.preview:Preview] providePreview START: url=/tmp/t.json (securityScoped=false)
+2026-09-24 17:45:35.961487+0200 0x10529bc  Info        0x0                  85035  0    LoupePreview: [io.celox.loupe.preview:Preview] Renderer selected: JSONPreviewRenderer for file: t.json
+2026-09-24 17:45:35.961575+0200 0x10529bc  Debug       0x0                  85035  0    LoupePreview: [io.celox.loupe.preview:Preview] Rendered HTML (3739 bytes) for t.json
+2026-09-24 17:45:36.081469+0200 0x1052a25  Default     0x0                  85033  0    qlmanage: (ShareKit) [com.apple.sharekit:Framework] Discover extensions with attributes <private>
+2026-09-24 17:45:36.512001+0200 0x1052b01  Error       0x0                  85035  0    LoupePreview: [io.celox.loupe.preview:Preview] providePreview ERROR: The file couldn't be opened.
+2026-09-24 17:45:37.000123+0200 0x1052b01  Fault       0x0                  312    0    WindowServer: (SkyLight) [com.apple.SkyLight:default] CGXDisplayDidWakeNotification timed out

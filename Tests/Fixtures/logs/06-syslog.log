@@ -1,0 +1,12 @@
+Sep 24 06:25:01 raspi5 CRON[20114]: (root) CMD (test -x /usr/sbin/anacron || run-parts --report /etc/cron.daily)
+Sep 24 07:30:24 raspi5 systemd[1]: Starting homestack-backup-check.service - Check nightly backup...
+Sep 24 07:30:25 raspi5 homestack-backup-check.sh[20881]: OK raspi5=20260924/501MB vps=20260924/2.5GB frei=336G
+Sep 24 07:30:25 raspi5 systemd[1]: homestack-backup-check.service: Deactivated successfully.
+Sep  4 09:12:44 raspi5 kernel: usb 1-1.2: new high-speed USB device number 5 using xhci-hcd
+Sep  4 09:12:44 raspi5 kernel: usb 1-1.2: New USB device found, idVendor=2341, idProduct=1002
+Sep 24 10:41:03 raspi5 sshd[23011]: Accepted publickey for pi from 192.168.178.20 port 51234 ssh2: ED25519 SHA256:abc123
+Sep 24 10:44:59 raspi5 sshd[23188]: Failed password for invalid user admin from 45.83.12.9 port 40112 ssh2
+Sep 24 11:02:17 raspi5 nginx[812]: ERROR upstream timed out while reading response header from upstream
+Sep 24 11:02:18 raspi5 disco-controller[1402]: WARNING audio buffer underrun (frames=512)
+2026-09-24T12:00:00+0200 raspi5 systemd[1]: Started nginx.service - A high performance web server.
+2026-09-24T12:00:03+0200 raspi5 kernel: Under-voltage detected! (0x00050005)

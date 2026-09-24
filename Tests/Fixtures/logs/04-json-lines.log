@@ -1,0 +1,11 @@
+{"time":"2026-09-24T11:00:00.120Z","level":"info","msg":"server listening","addr":":3000","env":"production"}
+{"time":"2026-09-24T11:00:04.882Z","level":"debug","msg":"cache warm","keys":1204,"took_ms":312}
+{"level":30,"time":1790247605000,"pid":42,"hostname":"api-1","name":"http","msg":"request completed","req":{"method":"GET","url":"/api/users"},"res":{"statusCode":200},"responseTime":12}
+{"level":40,"time":1790247606120,"pid":42,"hostname":"api-1","name":"http","msg":"slow request","responseTime":2140,"url":"/api/reports/monthly"}
+{"level":50,"time":1790247607400,"pid":42,"hostname":"api-1","name":"db","msg":"query failed","err":{"type":"Error","message":"deadlock detected","code":"40P01"}}
+{"level":60,"time":1790247608001,"pid":42,"hostname":"api-1","msg":"uncaught exception, exiting"}
+{"@timestamp":"2026-09-24T11:00:10.000+02:00","severity":"WARNING","logger":"billing","message":"invoice total mismatch","invoice":"INV-2026-0912","expected":149.9,"actual":149.0,"retry":false,"tags":["billing","audit"]}
+{"ts":1790247611.25,"lvl":"error","event":"webhook delivery failed","url":"https://hooks.example.com/orders","attempt":5,"final":true}
+{"timestamp":"2026-09-24 11:00:12","level":"info","message":"Unicode ok: Grüße aus München 🍺 – «quotes» and \"escaped\" text","user":"jürgen"}
+{"level":"info","msg":"broken line follows"}
+{"level":"error","msg":"this line is cut off

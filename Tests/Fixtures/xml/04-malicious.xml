@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE lolz [<!ENTITY lol "lol"><!ENTITY lol2 "&lol;&lol;&lol;&lol;">]>
+<root>
+  <script>alert('xss')</script>
+  <img src="x" onerror="alert(1)"/>
+  <a href="javascript:alert(1)">click</a>
+  &lol2;
+</root>

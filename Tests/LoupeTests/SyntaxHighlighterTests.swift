@@ -111,10 +111,47 @@ public enum SyntaxHighlighterTests {
             runner.runTest(name: "testEscapesRawHTMLInCode") {
                 let code = "<script>alert('test')</script>"
                 let highlighted = SyntaxHighlighter.shared.highlight(code: code, languageIdentifier: "html")
+                // Eigenschaft statt Formatierung: kein rohes Markup, Text vollstaendig.
+                // (Seit dem XML-Tokenizer sind "<", "script" und ">" eigene Tokens.)
                 try assertFalse(highlighted.contains("<script>"))
-                try assertTrue(highlighted.contains("&lt;script&gt;"))
+                try assertFalse(highlighted.contains("<script"), "auch kein angefangenes Tag")
+                try assertTrue(highlighted.contains("&lt;"))
+                try assertEqual(visibleText(highlighted), code)
             }
             
+            runner.runTest(name: "testDollarIdentifiersDoNotHang") {
+                // Regression: "$" war als Bezeichner-Anfang erlaubt, wurde von der
+                // Bezeichner-Schleife aber nicht verbraucht -> Endlosschleife bei
+                // Swift-"$0", jQuery-"$(...)" und jedem anderen "$" im Code.
+                let cases: [(String, String)] = [
+                    ("swift", "items.filter { $0.isActive }.map { $1 }"),
+                    ("js", "const el = $('.card'); $el.hide()"),
+                    ("kotlin", "val t = \"x\"; println($t)"),
+                    ("swift", "$")
+                ]
+                for (lang, code) in cases {
+                    let html = SyntaxHighlighter.shared.highlight(code: code, languageIdentifier: lang)
+                    try assertEqual(visibleText(html), code, "\(lang): \(code)")
+                }
+            }
+
+            runner.runTest(name: "testEveryASCIICharacterTerminatesInEveryLanguage") {
+                // Schuetzt die ganze Fehlerklasse: ein Zeichen, das ein Token
+                // beginnt, aber nicht verbraucht wird, legt den Tokenizer lahm.
+                // Jedes druckbare Zeichen muss durchlaufen UND vollstaendig in der
+                // Ausgabe wieder auftauchen.
+                let printable = (0x20...0x7E).compactMap { UnicodeScalar($0).map(Character.init) }
+                let samples = printable.map { String($0) }
+                    + printable.map { "a\($0)b \($0)1 \($0)\($0)" }
+                    + ["\t", "\n", "é", "日本", "🚀", "½", "٣"]
+                for lang in SupportedLanguage.allCases {
+                    for code in samples {
+                        let html = SyntaxHighlighter.shared.highlight(code: code, languageIdentifier: lang.rawValue)
+                        try assertEqual(visibleText(html), code, "\(lang.rawValue) verliert/verdreht Text in \(code.debugDescription)")
+                    }
+                }
+            }
+
             runner.runTest(name: "testEmptyAndUnknownLanguageFallback") {
                 let empty = SyntaxHighlighter.shared.highlight(code: "", languageIdentifier: nil)
                 try assertEqual(empty, "")
@@ -125,4 +162,20 @@ public enum SyntaxHighlighterTests {
             }
         }
     }
+}
+
+/// Sichtbarer Text einer hervorgehobenen Ausgabe: Tags entfernt, Entities aufgeloest.
+func visibleText(_ html: String) -> String {
+    var out = ""
+    var inTag = false
+    for ch in html {
+        if ch == "<" { inTag = true; continue }
+        if ch == ">" && inTag { inTag = false; continue }
+        if !inTag { out.append(ch) }
+    }
+    return out.replacingOccurrences(of: "&lt;", with: "<")
+        .replacingOccurrences(of: "&gt;", with: ">")
+        .replacingOccurrences(of: "&quot;", with: "\"")
+        .replacingOccurrences(of: "&#39;", with: "'")
+        .replacingOccurrences(of: "&amp;", with: "&")
 }

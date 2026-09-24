@@ -44,11 +44,18 @@
                 <string>org.kotlinlang.source</string>
                 <string>org.iso.sql</string>
                 <string>public.yaml</string>
+                <string>public.toml</string>
+                <string>com.microsoft.ini</string>
                 <string>public.css</string>
                 <string>public.xml</string>
                 <string>public.php-script</string>
                 <string>public.ruby-script</string>
                 <string>public.perl-script</string>
+                <string>public.log</string>
+                <string>com.apple.log</string>
+                <string>com.microsoft.powershell-script</string>
+                <string>com.microsoft.batch-file</string>
+                <string>io.celox.loupe.xml-document</string>
             </array>
             <key>QLSupportsSearchableItems</key><false/>
         </dict>

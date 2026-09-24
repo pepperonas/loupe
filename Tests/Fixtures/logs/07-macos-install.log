@@ -1,0 +1,8 @@
+2026-09-24 08:14:02+02 MacBookPro softwareupdated[612]: SUAppStoreUpdateController: Checking for updates
+2026-09-24 08:14:05+02 MacBookPro softwareupdated[612]: Found 2 products: MSU_UPDATE_25A_patch, XProtectPlistConfigData
+2026-09-24 08:14:31+02 MacBookPro installd[98741]: PackageKit: Adding client PKInstallDaemonClient pid=98740
+2026-09-24 08:14:32+02 MacBookPro installd[98741]: PackageKit: ----- Begin install -----
+2026-09-24 08:14:40+02 MacBookPro installd[98741]: PackageKit: Extracting file:///Library/Updates/XProtectPlistConfigData.pkg (destination=/)
+2026-09-24 08:14:41+02 MacBookPro system_installd[98743]: PackageKit: Install sandbox purging reclaimed Zero KB
+2026-09-24 08:14:44+02 MacBookPro installd[98741]: PackageKit: ----- End install -----
+2026-09-24 08:14:44+02 MacBookPro installd[98741]: PackageKit: 12.3s elapsed install time

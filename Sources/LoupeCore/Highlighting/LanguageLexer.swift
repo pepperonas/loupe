@@ -50,6 +50,8 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
     case ruby = "rb"
     case docker = "dockerfile"
     case toml
+    case powershell = "ps1"
+    case batch = "bat"
     case unknown
     
     public static func from(identifier: String?) -> SupportedLanguage {
@@ -65,7 +67,9 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         case "json", "jsonc": return .json
         case "yaml", "yml": return .yaml
         case "html", "htm", "xhtml": return .html
-        case "xml", "plist", "svg": return .xml
+        case "xml", "plist", "svg",
+             "xsd", "xsl", "xslt", "xaml", "csproj", "vbproj", "fsproj", "vcxproj",
+             "props", "targets", "resx", "wsdl", "nuspec": return .xml
         case "css", "scss", "sass", "less": return .css
         case "sql": return .sql
         case "bash", "sh", "zsh", "shell", "makefile", "make": return .bash
@@ -79,6 +83,8 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         case "ruby", "rb": return .ruby
         case "dockerfile", "docker": return .docker
         case "toml", "ini", "conf", "env": return .toml
+        case "powershell", "pwsh", "ps1", "psm1", "psd1": return .powershell
+        case "batch", "bat", "cmd": return .batch
         default: return .unknown
         }
     }
@@ -107,6 +113,8 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         case .ruby: return "Ruby"
         case .docker: return "Dockerfile"
         case .toml: return "TOML"
+        case .powershell: return "PowerShell"
+        case .batch: return "Batch"
         case .unknown: return ""
         }
     }

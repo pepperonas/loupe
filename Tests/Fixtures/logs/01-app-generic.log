@@ -1,0 +1,20 @@
+2026-09-24 08:00:00.001 INFO  [main] Starting OrderService v2.14.3 on host api-1 (pid=4711)
+2026-09-24 08:00:00.214 DEBUG [config] Loaded 42 properties from /etc/orderservice/application.yml
+2026-09-24 08:00:00.389 INFO  [pool] HikariPool-1 - Start completed, 10 connections to postgres://db.internal:5432/orders in 173ms
+2026-09-24 08:00:01.002 INFO  [http] Tomcat started on port 8080 (http) with context path '/'
+2026-09-24 08:00:01.120 TRACE [scheduler] Registered job cleanupExpiredCarts every 300s
+2026-09-24 08:03:17.551 INFO  [http] POST /api/orders 201 in 48ms from 203.0.113.7 user=anna@example.com
+2026-09-24 08:03:18.004 WARN  [cache] Redis latency 820ms exceeds threshold 250ms (redis://cache.internal:6379)
+2026-09-24 08:03:21.771 ERROR [payment] Charge failed for order 7f3c2a10-1b2c-4d5e-8f90-a1b2c3d4e5f6
+com.example.payment.PaymentException: upstream returned 502 Bad Gateway
+	at com.example.payment.StripeClient.charge(StripeClient.java:118)
+	at com.example.payment.PaymentService.pay(PaymentService.java:64)
+	at com.example.orders.OrderController.checkout(OrderController.java:201)
+Caused by: java.net.SocketTimeoutException: Read timed out after 30000ms
+	at java.base/sun.nio.ch.NioSocketImpl.timedRead(NioSocketImpl.java:288)
+	... 47 more
+2026-09-24 08:03:21.790 INFO  [payment] Retrying charge (attempt=2, backoff=1.5s)
+2026-09-24 08:03:23.402 INFO  [payment] Charge succeeded amount=49.90 currency=EUR
+2026-09-24 08:10:00.000 INFO  [scheduler] cleanupExpiredCarts removed 318 carts in 2.4s
+2026-09-24 08:12:44.918 NOTICE [admin] Feature flag "checkout-v2" enabled by martin
+2026-09-24 08:15:02.337 FATAL [db] Connection pool exhausted (active=10, idle=0, waiting=57) - shutting down

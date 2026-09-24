@@ -1,0 +1,13 @@
+--------- beginning of main
+09-24 13:05:01.114  1834  1834 I ActivityManager: Start proc 22190:com.example.app/u0a312 for top-activity {com.example.app/.MainActivity}
+09-24 13:05:01.502 22190 22190 D OkHttp  : --> GET https://api.example.com/v1/feed?page=1
+09-24 13:05:02.017 22190 22210 D OkHttp  : <-- 200 https://api.example.com/v1/feed?page=1 (514ms, 18.2kB body)
+09-24 13:05:03.880 22190 22190 W Choreographer: Skipped 61 frames!  The application may be doing too much work on its main thread.
+09-24 13:05:04.401 22190 22190 E AndroidRuntime: FATAL EXCEPTION: main
+09-24 13:05:04.401 22190 22190 E AndroidRuntime: Process: com.example.app, PID: 22190
+09-24 13:05:04.401 22190 22190 E AndroidRuntime: java.lang.NullPointerException: Attempt to invoke virtual method 'int java.lang.String.length()' on a null object reference
+09-24 13:05:04.401 22190 22190 E AndroidRuntime: 	at com.example.app.FeedAdapter.onBindViewHolder(FeedAdapter.kt:57)
+09-24 13:05:04.520  1834  2011 I ActivityManager: Process com.example.app (pid 22190) has died: fg  TOP 
+V/Zygote  (  612): Forked child process 22190
+W/PackageManager( 1834): Unknown permission com.google.android.c2dm.permission.RECEIVE
+E/SQLiteLog(22190): (1) no such table: sessions

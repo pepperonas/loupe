@@ -1,0 +1,20 @@
+2026-09-24 14:00:00 INFO [security] <script>alert("xss")</script> must render as text, not run
+2026-09-24 14:00:01 WARN [<b>bold-source</b>] source and <img src=x onerror=alert(1)> are escaped too
+[2026-09-24 14:00:02 <i>odd</i>] INFO timestamp with markup
+2026-09-24 14:00:03 user clicked the error details button (no level: "error" only in the message)
+Info about the nightly job, lowercase level word without timestamp stays prose
+ERROR: level without timestamp, followed by a colon
+WARN level without timestamp, uppercase
+2026-09-24 14:00:04 | ERROR | pipe-separated columns
+2026-09-24 14:00:05 - WARN - dash-separated columns
+[2026-09-24 14:00:06] production.ERROR: Laravel/Monolog style channel level {"exception":"[object] (RuntimeException(code: 0): boom at /var/www/app/Http/Kernel.php:118)"}
+2026-09-24 14:00:07 INFO Unicode: Größe ≥ 5 µs, 東京, emoji 🚀👍🏽, RTL שלום
+2026-09-24 14:00:08 INFO	tab	separated	message	with	tabs
+2026-09-24 14:00:09 DEBUG very long line: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. id=7f3c2a10-1b2c-4d5e-8f90-a1b2c3d4e5f6 path=/var/lib/app/data/very/deep/directory/structure/file.bin url=https://example.com/a/very/long/path?with=query&and=more#fragment
+17:45:01.123 INFO time-only timestamp
+2026-09-24T14:00:10.123456789Z TRACE nanosecond precision timestamp
+2026-09-24 14:00:11+02 NOTICE hours-only timezone offset
+numbers: 35ms 1.5s 99% 12MB 4KiB -3 but not abc123 or v2 or x86_64
+ips: 192.168.178.105 and 10.0.0.1:8443 but not 1.2.3.4.5 or version 1.2.3
+
+2026-09-24 14:00:12 FATAL last entry after an empty line

@@ -29,21 +29,6 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
         let settings = LoupeSettings.load()
 
         do {
-            let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
-            let size = (attributes[.size] as? Int) ?? 0
-
-            let data: Data
-            let truncated: Bool
-            if size > Self.maxBytes {
-                let handle = try FileHandle(forReadingFrom: url)
-                defer { try? handle.close() }
-                data = handle.readData(ofLength: Self.maxBytes)
-                truncated = true
-            } else {
-                data = try Data(contentsOf: url)
-                truncated = false
-            }
-
             let renderer = RendererRegistry.renderer(for: url)
                 ?? ((try? url.resourceValues(forKeys: [.contentTypeKey]).contentType).flatMap { RendererRegistry.renderer(for: $0) })
                 ?? RendererRegistry.renderer(for: .json)
@@ -53,10 +38,19 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
                 return
             }
 
+            // Der Renderer bestimmt, welcher Teil gelesen wird: Logs brauchen das
+            // ENDE (dort steht das Neueste), alles andere den Anfang.
+            let read = try PreviewFileReader.read(url: url,
+                                                  strategy: type(of: renderer).readStrategy,
+                                                  headLimit: Self.maxBytes)
+
             let rendererName = String(describing: type(of: renderer))
             logger.notice("Renderer selected: \(rendererName, privacy: .public) for file: \(url.lastPathComponent, privacy: .public)")
 
-            let input = PreviewInput(data: data, url: url, wasTruncatedByReader: truncated)
+            let input = PreviewInput(data: read.data, url: url,
+                                     wasTruncatedByReader: read.truncatedAtEnd,
+                                     skippedBytesAtStart: read.skippedBytesAtStart,
+                                     skippedLineBreaks: read.skippedLineBreaks)
             let html = renderer.renderHTML(input: input, settings: settings)
 
             logger.notice("Rendered HTML (\(html.utf8.count) bytes) for \(url.lastPathComponent, privacy: .public)")

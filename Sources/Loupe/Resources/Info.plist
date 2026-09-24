@@ -88,6 +88,39 @@
             </array>
         </dict>
         <dict>
+            <key>CFBundleTypeName</key><string>Log File</string>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>Alternate</string>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                <string>log</string>
+            </array>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>public.log</string>
+                <string>com.apple.log</string>
+            </array>
+        </dict>
+        <dict>
+            <key>CFBundleTypeName</key><string>Windows Script</string>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>Alternate</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>com.microsoft.powershell-script</string>
+                <string>com.microsoft.batch-file</string>
+            </array>
+        </dict>
+        <dict>
+            <key>CFBundleTypeName</key><string>XML Document</string>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>Alternate</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>io.celox.loupe.xml-document</string>
+            </array>
+        </dict>
+        <dict>
             <key>CFBundleTypeName</key><string>Source Code Document</string>
             <key>CFBundleTypeRole</key><string>Viewer</string>
             <key>LSHandlerRank</key><string>Alternate</string>
@@ -154,8 +187,83 @@
             </array>
         </dict>
     </array>
+    <!-- XML-Dialekte, fuer die macOS nur dynamische Typen vergibt. Bewusst OHNE
+         .storyboard/.xib/.entitlements: diese Typen gehoeren Xcode. -->
+    <key>UTExportedTypeDeclarations</key>
+    <array>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.celox.loupe.xml-document</string>
+            <key>UTTypeDescription</key>
+            <string>XML Document</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.xml</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>xsd</string>
+                    <string>xsl</string>
+                    <string>xslt</string>
+                    <string>xaml</string>
+                    <string>csproj</string>
+                    <string>vbproj</string>
+                    <string>fsproj</string>
+                    <string>vcxproj</string>
+                    <string>props</string>
+                    <string>targets</string>
+                    <string>resx</string>
+                    <string>wsdl</string>
+                    <string>nuspec</string>
+                </array>
+            </dict>
+        </dict>
+    </array>
     <key>UTImportedTypeDeclarations</key>
     <array>
+        <!-- macOS vergibt fuer .ps1/.bat/.cmd nur dynamische Typen; ohne diese
+             Deklaration ruft Quick Look die Erweiterung fuer Windows-Skripte nie auf. -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>com.microsoft.powershell-script</string>
+            <key>UTTypeDescription</key>
+            <string>PowerShell Script</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.script</string>
+                <string>public.plain-text</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>ps1</string>
+                    <string>psm1</string>
+                    <string>psd1</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>com.microsoft.batch-file</string>
+            <key>UTTypeDescription</key>
+            <string>Windows Batch File</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.script</string>
+                <string>public.plain-text</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>bat</string>
+                    <string>cmd</string>
+                </array>
+            </dict>
+        </dict>
         <dict>
             <key>UTTypeIdentifier</key>
             <string>net.daringfireball.markdown</string>

@@ -1,0 +1,15 @@
+2026-09-24 09:14:01,120 INFO worker: job 8812 started (queue=exports)
+2026-09-24 09:14:01,387 DEBUG worker: fetched 18230 rows from warehouse.orders in 0.27s
+2026-09-24 09:14:02,004 WARNING worker: row 1571 has no customer_id, skipping
+2026-09-24 09:14:05,662 ERROR worker: export failed
+Traceback (most recent call last):
+  File "/srv/app/worker.py", line 88, in run
+    writer.write_rows(rows)
+  File "/srv/app/export/csv_writer.py", line 41, in write_rows
+    self._fh.write(self._format(row))
+OSError: [Errno 28] No space left on device: '/var/exports/orders-2026-09-24.csv'
+
+2026-09-24 09:14:05,700 CRITICAL worker: disk /var/exports at 100%, pausing queue
+WARNING:root:fallback logger in use (no handler configured)
+INFO:urllib3.connectionpool:Starting new HTTPS connection (1): api.example.com:443
+ERROR:app.mailer:SMTP auth failed for support@example.com
