@@ -2,6 +2,8 @@ import Foundation
 import UniformTypeIdentifiers
 
 public struct MarkdownPreviewRenderer: PreviewRenderer {
+    public static let category: PreviewCategory = .markdown
+
     public static var supportedTypes: [UTType] {
         var types: [UTType] = []
         if let md = UTType("net.daringfireball.markdown") { types.append(md) }

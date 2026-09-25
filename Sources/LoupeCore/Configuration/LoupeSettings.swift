@@ -87,8 +87,20 @@ public struct LoupeSettings: Codable, Equatable, Sendable {
     public var enableSyntaxHighlighting: Bool
     public var showLineNumbers: Bool
     public var maxFileSizeBytes: Int
+    /// Globaler Schalter: aus = Loupe liefert keine Vorschau, Quick Look nimmt seine eigene.
+    public var previewsEnabled: Bool
+    /// Abgeschaltete Rubriken. Gespeichert wird, was AUS ist -- so ist eine
+    /// Rubrik, die eine spaetere Version neu einfuehrt, automatisch an.
+    public var disabledCategories: Set<PreviewCategory>
 
-    public static let appGroupSuiteName = "group.io.celox.loupe"
+    /// Gemeinsame Praeferenz-Domain von App und Erweiterung. Beide sind
+    /// sandboxed; erreichbar ist sie ueber die Sandbox-Ausnahme `shared-preference`
+    /// (App: read-write, Erweiterung: read-only, siehe *.entitlements). Eine App
+    /// Group bräuchte eine Team-ID -- Loupe ist nur ad hoc signiert.
+    public static let sharedDomain = "io.celox.loupe.shared"
+    /// Bis 0.4.0 benutzt. Ohne App-Group-Entitlement landete diese Suite im
+    /// Container der APP und hat die Erweiterung nie erreicht.
+    public static let legacySuiteName = "group.io.celox.loupe"
     public static let settingsKey = "io.celox.loupe.settings"
 
     public init(
@@ -100,7 +112,9 @@ public struct LoupeSettings: Codable, Equatable, Sendable {
         allowRemoteImages: Bool = false,
         enableSyntaxHighlighting: Bool = true,
         showLineNumbers: Bool = false,
-        maxFileSizeBytes: Int = 5 * 1024 * 1024
+        maxFileSizeBytes: Int = 5 * 1024 * 1024,
+        previewsEnabled: Bool = true,
+        disabledCategories: Set<PreviewCategory> = []
     ) {
         self.appearance = appearance
         self.textSize = textSize
@@ -111,6 +125,8 @@ public struct LoupeSettings: Codable, Equatable, Sendable {
         self.enableSyntaxHighlighting = enableSyntaxHighlighting
         self.showLineNumbers = showLineNumbers
         self.maxFileSizeBytes = maxFileSizeBytes
+        self.previewsEnabled = previewsEnabled
+        self.disabledCategories = disabledCategories
     }
 
     public init(from decoder: Decoder) throws {
@@ -124,14 +140,27 @@ public struct LoupeSettings: Codable, Equatable, Sendable {
         self.enableSyntaxHighlighting = try container.decodeIfPresent(Bool.self, forKey: .enableSyntaxHighlighting) ?? true
         self.showLineNumbers = try container.decodeIfPresent(Bool.self, forKey: .showLineNumbers) ?? false
         self.maxFileSizeBytes = try container.decodeIfPresent(Int.self, forKey: .maxFileSizeBytes) ?? (5 * 1024 * 1024)
+        self.previewsEnabled = try container.decodeIfPresent(Bool.self, forKey: .previewsEnabled) ?? true
+        // Als Strings lesen: eine unbekannte Rubrik (aus einer neueren Version)
+        // darf nicht die ganzen Einstellungen unlesbar machen.
+        let raw = (try? container.decodeIfPresent([String].self, forKey: .disabledCategories)) ?? nil
+        self.disabledCategories = Set((raw ?? []).compactMap(PreviewCategory.init(rawValue:)))
+    }
+
+    /// Ob Loupe fuer diese Rubrik eine Vorschau liefert (globaler Schalter UND Rubrik).
+    public func isEnabled(_ category: PreviewCategory) -> Bool {
+        previewsEnabled && !disabledCategories.contains(category)
+    }
+
+    public mutating func setEnabled(_ enabled: Bool, for category: PreviewCategory) {
+        if enabled { disabledCategories.remove(category) } else { disabledCategories.insert(category) }
     }
 
     public static var sharedDefaults: UserDefaults {
-        UserDefaults(suiteName: appGroupSuiteName) ?? .standard
+        UserDefaults(suiteName: sharedDomain) ?? .standard
     }
 
-    public static func load() -> LoupeSettings {
-        let defaults = sharedDefaults
+    public static func load(from defaults: UserDefaults = sharedDefaults) -> LoupeSettings {
         if let data = defaults.data(forKey: settingsKey),
            let settings = try? JSONDecoder().decode(LoupeSettings.self, from: data) {
             return settings
@@ -139,9 +168,20 @@ public struct LoupeSettings: Codable, Equatable, Sendable {
         return LoupeSettings()
     }
 
-    public func save() {
+    public func save(to defaults: UserDefaults = sharedDefaults) {
         if let data = try? JSONEncoder().encode(self) {
-            Self.sharedDefaults.set(data, forKey: Self.settingsKey)
+            defaults.set(data, forKey: Self.settingsKey)
         }
+    }
+
+    /// Uebernimmt Einstellungen aus der alten Suite, solange die gemeinsame
+    /// Domain noch leer ist. Ueberschreibt nie etwas. Liefert, ob kopiert wurde.
+    @discardableResult
+    public static func migrateLegacy(from legacy: UserDefaults?, to shared: UserDefaults = sharedDefaults) -> Bool {
+        guard shared.data(forKey: settingsKey) == nil,
+              let old = legacy?.data(forKey: settingsKey),
+              (try? JSONDecoder().decode(LoupeSettings.self, from: old)) != nil else { return false }
+        shared.set(old, forKey: settingsKey)
+        return true
     }
 }

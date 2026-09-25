@@ -2,6 +2,8 @@ import Foundation
 import UniformTypeIdentifiers
 
 public struct CSVPreviewRenderer: PreviewRenderer {
+    public static let category: PreviewCategory = .table
+
     public static var supportedTypes: [UTType] {
         var types: [UTType] = [
             .commaSeparatedText,

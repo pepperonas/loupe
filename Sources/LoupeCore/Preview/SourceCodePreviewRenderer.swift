@@ -30,6 +30,8 @@ public struct SourceCodePreviewRenderer: PreviewRenderer, Sendable {
         "bat", "cmd"
     ]
 
+    public static let category: PreviewCategory = .code
+
     public static var supportedTypes: [UTType] {
         var types: [UTType] = [
             .sourceCode,

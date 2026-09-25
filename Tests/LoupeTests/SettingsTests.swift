@@ -26,7 +26,8 @@ public enum SettingsTests {
             }
 
             runner.runTest(name: "testAppGroupConstants") {
-                try assertEqual(LoupeSettings.appGroupSuiteName, "group.io.celox.loupe")
+                try assertEqual(LoupeSettings.sharedDomain, "io.celox.loupe.shared")
+                try assertEqual(LoupeSettings.legacySuiteName, "group.io.celox.loupe")
                 try assertEqual(LoupeSettings.settingsKey, "io.celox.loupe.settings")
             }
 

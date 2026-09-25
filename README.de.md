@@ -15,8 +15,8 @@
 [![Aktuelles Release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release-Build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-306%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
-[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-5.495-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-322%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
+[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-5.635-blue?logo=swift&logoColor=white)](Sources/)
 [![Lizenz](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Letzter Commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit-Aktivität](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -337,13 +337,30 @@ Danach im Finder eine Datei auswählen und die <kbd>Leertaste</kbd> drücken.
 
 ## ⚙️ Einstellungen
 
-Die Begleit-App (`Loupe.app`) zeigt den aktuellen Registrierungsstatus der Erweiterung, Hinweise zur Einrichtung und drei Einstellungen, die über eine App Group mit der Erweiterung geteilt werden:
+In der Begleit-App (`Loupe.app`) schalten Sie Loupe ein und aus und stellen das Aussehen der Vorschau ein. Änderungen gelten beim nächsten Druck auf die <kbd>Leertaste</kbd> – ohne Neustart.
+
+**Vorschauen an/aus**
+
+| Schalter | Umfasst |
+| :--- | :--- |
+| **Loupe-Vorschauen aktiv** (global) | Alle Rubriken darunter. Aus = Loupe hält sich komplett heraus. |
+| **Markdown** | `.md`, `.markdown` |
+| **JSON** | `.json` |
+| **Tabellen (TSV)** | `.tsv`, `.tab` |
+| **Log-Dateien** | `.log` |
+| **Code** | Alle Programmiersprachen, Skripte (PowerShell, Batch, Shell), XML und Konfigurationsdateien |
+
+Ist Loupe aus – global oder für eine Rubrik –, zeigt Quick Look wieder die Standard-Ansicht von macOS (meist eine Karte mit Symbol und Dateiinfos). Die Auswahl je Rubrik bleibt erhalten, solange der globale Schalter aus ist.
+
+**Aussehen**
 
 | Einstellung | Optionen | Gilt für |
 | :--- | :--- | :--- |
 | **Erscheinungsbild** | System · Hell · Dunkel | Alle Vorschauen |
 | **Textgröße** | Klein · Standard · Groß | Alle Vorschauen |
 | **Markdown-Breite** | Kompakt 680 px · Standard 840 px · Breit 1040 px · Volle Breite | Markdown |
+
+App und Erweiterung teilen diese Einstellungen über die Präferenz-Domain `io.celox.loupe.shared` (Sandbox-Ausnahme `shared-preference`: die App darf schreiben, die Erweiterung nur lesen). Bis 0.4.0 kamen die Einstellungen nie in der Erweiterung an – siehe [Changelog](CHANGELOG.md).
 
 > [!NOTE]
 > Die Oberfläche der App und der Vorschau-Rahmen (z. B. „12 Schlüssel“, „25 Zeilen“) sind derzeit **deutsch**. Dateiinhalte erscheinen natürlich so, wie sie sind.
@@ -444,7 +461,7 @@ Sources/
     ├── Preview/                  Renderer-Protokoll, Registry, Dateileser, ein Renderer je Format
     ├── Render/                   JSON-Baum, Aufklapp-Planung, HTML-Escaping
     ├── Theme/                    CSS-Generator (hell/dunkel, WCAG AA)
-    ├── Configuration/            Einstellungen, geteilt über die App Group
+    ├── Configuration/            Einstellungen, geteilt mit der Erweiterung
     └── Utilities/                Statusprüfung der Erweiterung (pluginkit)
 
 Tests/LoupeTests/                 Test-Suite (swift run LoupeTests)
@@ -473,8 +490,8 @@ swift run -c release LoupeTests   # Release (wie im Release-Workflow)
 | Hervorhebung | 63 | 23 Sprachen, XML/HTML mit Beachtung der Anführungszeichen, PowerShell & Batch, keine Phantom-Endzeile, **jedes druckbare Zeichen muss in jeder Sprache abbrechen und verlustfrei erhalten bleiben** |
 | Markdown & Sicherheit | 41 | GFM, Umgehungsversuche der Bereinigung, Pfad-Traversal, Blockieren entfernter Bilder |
 | TSV / CSV | 22 | RFC-4180-Anführungszeichen, Trennzeichenerkennung, Grenzen |
-| Erscheinungsbild & Einstellungen | 19 | Helles/dunkles CSS, Migration der Einstellungen |
-| Registry & App | 18 | Typ-Zuordnung, CSP, ungültiges UTF-8, leere Dateien, pluginkit-Auswertung |
+| Erscheinungsbild & Einstellungen | 34 | Helles/dunkles CSS, Migration der Einstellungen, Schalter je Rubrik, gemeinsame Präferenz-Domain + Entitlements |
+| Registry & App | 19 | Typ-Zuordnung, CSP, ungültiges UTF-8, leere Dateien, pluginkit-Auswertung inkl. Sandbox-Verweigerung |
 | Doku-Abgleich | 6 | Diese README gegen den Code: Versionen, Test-Badge, Bildpfade, Gleichstand EN/DE, Erreichbarkeit im Finder |
 | Leistung | 3 | Harte Zeitgrenzen für große Eingaben |
 
@@ -491,6 +508,7 @@ So bleiben die Tests ehrlich:
 | Symptom | Lösung |
 | :--- | :--- |
 | Finder zeigt weiter nur Text | Erweiterung aktivieren ([siehe oben](#erweiterung-aktivieren)), dann `qlmanage -r && qlmanage -r cache && killall Finder` |
+| Nur die Datei-Karte von macOS erscheint | Loupe ist womöglich abgeschaltet – `Loupe.app` öffnen und den globalen Schalter sowie die Rubrik prüfen |
 | Ist die Erweiterung registriert? | `pluginkit -m -v -i io.celox.loupe.preview` — ein führendes `+` bedeutet aktiviert |
 | Eine alte Version antwortet weiter | Alle Kopien auflisten: `pluginkit -m -A -v -p com.apple.quicklook.preview \| grep -i loupe`, veraltete entfernen, mit `./Scripts/install_app.sh` neu installieren |
 | Welchen Typ vergibt macOS für eine Datei? | `mdls -name kMDItemContentType <datei>` — `dyn.…` heißt: keine Erweiterung wird gefragt |

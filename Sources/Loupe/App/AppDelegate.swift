@@ -7,10 +7,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         setupMainMenu()
+        // Einstellungen aus <= 0.4.0 lagen in einer Suite, die nur die App sah.
+        LoupeSettings.migrateLegacy(from: UserDefaults(suiteName: LoupeSettings.legacySuiteName))
 
         let viewController = MainViewController()
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 560, height: 420),
+            contentRect: NSRect(x: 0, y: 0, width: 560, height: 640),
             styleMask: [.titled, .closable, .miniaturizable],
             backing: .buffered,
             defer: false

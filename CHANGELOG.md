@@ -5,6 +5,28 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+## [0.5.0] - 2026-09-26
+
+### Hinzugefügt
+- **Vorschauen ein- und ausschalten** in der Begleit-App: ein globaler Schalter „Loupe-Vorschauen aktiv“
+  und je ein Schalter für die Rubriken Markdown, JSON, Tabellen (TSV), Log-Dateien und Code (alle
+  Programmiersprachen, Skripte, XML). Abgeschaltet liefert Loupe keine Vorschau, Quick Look zeigt wieder
+  seine Standard-Ansicht. Die Wahl je Rubrik bleibt erhalten, solange global aus ist; eine Rubrik, die
+  eine spätere Version neu einführt, ist automatisch an (gespeichert wird, was AUS ist).
+
+### Behoben
+- **Einstellungen kamen nie in der Erweiterung an.** Erscheinungsbild, Textgröße und Markdown-Breite
+  wurden in eine App-Group-Suite geschrieben, ohne dass App oder Erweiterung das App-Group-Entitlement
+  trugen – die Suite landete im Sandbox-Container der App, die Erweiterung sah immer die Standardwerte.
+  Beide teilen sich jetzt die Präferenz-Domain `io.celox.loupe.shared` über die Sandbox-Ausnahme
+  `shared-preference` (App: lesen und schreiben, Erweiterung: nur lesen; funktioniert auch ohne
+  Team-ID). Bestehende Einstellungen übernimmt die App beim ersten Start.
+- Der Erweiterungsstatus in der App lautete immer „Nicht registriert“: aus der Sandbox verweigert
+  `pluginkit` die Abfrage (`unauthorized discovery flag`). Die App sagt jetzt ehrlich, dass sie den
+  Status nicht prüfen kann, statt einen Fehler zu behaupten.
+- Die Trennlinien der App zeigten die Beschriftung „Title“; die Einrichtungshinweise nennen den Pfad
+  für macOS 15 und neuer.
+
 ## [0.4.0] - 2026-09-24
 
 ### Hinzugefügt

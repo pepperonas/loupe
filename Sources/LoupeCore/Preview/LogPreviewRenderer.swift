@@ -10,6 +10,8 @@ public struct LogPreviewRenderer: PreviewRenderer {
 
     public static var readStrategy: PreviewReadStrategy { .tail(maxBytes: tailBytes) }
 
+    public static let category: PreviewCategory = .log
+
     public static var supportedTypes: [UTType] {
         var types: [UTType] = []
         for id in ["com.apple.log", "public.log"] {

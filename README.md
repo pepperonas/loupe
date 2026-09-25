@@ -15,8 +15,8 @@ Press <kbd>Space</kbd> in Finder. Get a readable, theme-aware preview. Zero Java
 [![Latest release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-306%20passing-brightgreen?logo=checkmarx&logoColor=white)](#-testing)
-[![Swift LoC](https://img.shields.io/badge/Swift%20LoC-5%2C495-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-322%20passing-brightgreen?logo=checkmarx&logoColor=white)](#-testing)
+[![Swift LoC](https://img.shields.io/badge/Swift%20LoC-5%2C635-blue?logo=swift&logoColor=white)](Sources/)
 [![License](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Last commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit activity](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -337,13 +337,30 @@ Then select a file in Finder and press <kbd>Space</kbd>.
 
 ## ⚙️ Settings
 
-The companion app (`Loupe.app`) shows the live registration status of the extension, setup hints, and three settings shared with the extension through an App Group:
+The companion app (`Loupe.app`) lets you switch Loupe on and off and tune how previews look. Changes apply the next time you press <kbd>Space</kbd> — no restart needed.
+
+**Previews on/off**
+
+| Switch | Covers |
+| :--- | :--- |
+| **Loupe-Vorschauen aktiv** (global) | Every preview below. Off = Loupe stays out of the way entirely. |
+| **Markdown** | `.md`, `.markdown` |
+| **JSON** | `.json` |
+| **Tabellen (TSV)** | `.tsv`, `.tab` |
+| **Log-Dateien** | `.log` |
+| **Code** | All source languages, scripts (PowerShell, Batch, shell), XML and config files |
+
+When Loupe is switched off — globally or for a category — Quick Look falls back to what macOS shows by default (usually a file card with icon and metadata). The per-category choices are kept while the global switch is off.
+
+**Appearance**
 
 | Setting | Options | Applies to |
 | :--- | :--- | :--- |
 | **Appearance** (Erscheinungsbild) | System · Light · Dark | All previews |
 | **Text size** (Textgröße) | Small · Standard · Large | All previews |
 | **Markdown width** (Markdown-Breite) | Compact 680 px · Standard 840 px · Wide 1040 px · Full width | Markdown |
+
+App and extension share these settings through the preference domain `io.celox.loupe.shared` (sandbox exception `shared-preference`: the app may write, the extension may only read). Up to 0.4.0 the settings never reached the extension — see the [changelog](CHANGELOG.md).
 
 > [!NOTE]
 > The user interface of the app and the preview chrome (e.g. "12 Schlüssel", "25 Zeilen") is currently **German**. File contents are of course shown as they are.
@@ -444,7 +461,7 @@ Sources/
     ├── Preview/                  Renderer protocol, registry, file reader, one renderer per format
     ├── Render/                   JSON tree, expansion planner, HTML escaping
     ├── Theme/                    CSS generator (light/dark, WCAG AA)
-    ├── Configuration/            Settings shared via App Group
+    ├── Configuration/            Settings shared with the extension
     └── Utilities/                Extension status checker (pluginkit)
 
 Tests/LoupeTests/                 Test suite (swift run LoupeTests)
@@ -473,8 +490,8 @@ swift run -c release LoupeTests   # release (as in the release workflow)
 | Highlighting | 63 | 23 languages, quote-aware XML/HTML, PowerShell & Batch, no phantom last line, **every printable character in every language must terminate and round-trip** |
 | Markdown & safety | 41 | GFM, sanitizer bypass attempts, path traversal, remote-image blocking |
 | TSV / CSV | 22 | RFC 4180 quoting, delimiter detection, limits |
-| Theming & settings | 19 | Light/dark CSS, settings migration |
-| Registry & app | 18 | Type routing, CSP, invalid UTF-8, empty files, pluginkit parsing |
+| Theming & settings | 34 | Light/dark CSS, settings migration, on/off switches per category, shared preference domain + entitlements |
+| Registry & app | 19 | Type routing, CSP, invalid UTF-8, empty files, pluginkit parsing incl. sandbox refusal |
 | Docs sync | 6 | This README against the code: versions, test badge, image paths, EN/DE parity, Finder reachability |
 | Performance | 3 | Hard time limits for large inputs |
 
@@ -491,6 +508,7 @@ How the tests are kept honest:
 | Symptom | Fix |
 | :--- | :--- |
 | Finder still shows plain text | Enable the extension ([see above](#enable-the-extension)), then `qlmanage -r && qlmanage -r cache && killall Finder` |
+| Only the macOS file card appears | Loupe may be switched off — open `Loupe.app` and check the global switch and the category |
 | Is the extension registered? | `pluginkit -m -v -i io.celox.loupe.preview` — a leading `+` means enabled |
 | Old version keeps answering | List all copies: `pluginkit -m -A -v -p com.apple.quicklook.preview \| grep -i loupe`, remove stale ones, reinstall with `./Scripts/install_app.sh` |
 | Which type does macOS assign a file? | `mdls -name kMDItemContentType <file>` — `dyn.…` means no extension will be asked |

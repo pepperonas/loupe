@@ -34,6 +34,8 @@ public enum PreviewReadStrategy: Equatable, Sendable {
 public protocol PreviewRenderer: Sendable {
     static var supportedTypes: [UTType] { get }
     static var readStrategy: PreviewReadStrategy { get }
+    /// Rubrik fuer die Schalter in der Companion-App. Bewusst ohne Default.
+    static var category: PreviewCategory { get }
     func renderHTML(input: PreviewInput, settings: LoupeSettings) -> String
 }
 

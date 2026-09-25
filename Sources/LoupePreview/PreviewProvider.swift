@@ -38,6 +38,15 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
                 return
             }
 
+            // In der Companion-App abgeschaltet (global oder diese Rubrik):
+            // keine Vorschau liefern, Quick Look faellt auf seine eigene zurueck.
+            let category = type(of: renderer).category
+            guard settings.isEnabled(category) else {
+                logger.notice("Preview disabled for category \(category.rawValue, privacy: .public): \(url.lastPathComponent, privacy: .public)")
+                completionHandler(nil, CocoaError(.featureUnsupported))
+                return
+            }
+
             // Der Renderer bestimmt, welcher Teil gelesen wird: Logs brauchen das
             // ENDE (dort steht das Neueste), alles andere den Anfang.
             let read = try PreviewFileReader.read(url: url,

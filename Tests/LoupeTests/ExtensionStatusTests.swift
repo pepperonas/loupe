@@ -34,6 +34,15 @@ public enum ExtensionStatusTests {
                     .installed)
                 try assertEqual(ExtensionStatusChecker.interpret(""), .notInstalled)
             }
+
+            runner.runTest(name: "testSandboxRefusalIsUnknownNotMissing") {
+                // So antwortet pluginkit, wenn die (sandboxed) App es aufruft --
+                // gemessen am 2026-09-26. Das heisst NICHT, dass die Erweiterung fehlt.
+                let refused = "match: unauthorized discovery flag (PKDiscoverAll)\n"
+                try assertEqual(ExtensionStatusChecker.interpret(refused), .unknown)
+                try assertFalse(ExtensionStatus.unknown.title.contains("Nicht registriert"))
+                try assertFalse(ExtensionStatus.unknown.isOperational)
+            }
         }
     }
 }

@@ -1,17 +1,18 @@
 import Foundation
 
 public enum ExtensionStatus: Equatable, Sendable {
-    case active, installed, notInstalled
+    case active, installed, notInstalled, unknown
 
     public var title: String {
         switch self {
         case .active:       return "Installiert und aktiv"
         case .installed:    return "Installiert, aber deaktiviert"
         case .notInstalled: return "Nicht registriert"
+        case .unknown:      return "Status aus der App nicht prüfbar – siehe Hinweise unten"
         }
     }
 
-    public var isOperational: Bool { self != .notInstalled }
+    public var isOperational: Bool { self == .active || self == .installed }
 }
 
 public enum ExtensionStatusChecker {
@@ -20,7 +21,11 @@ public enum ExtensionStatusChecker {
     /// Die Auswertung ist von der Prozessausfuehrung getrennt, damit sie
     /// ohne installierte Erweiterung pruefbar ist.
     public static func interpret(_ output: String) -> ExtensionStatus {
-        guard output.contains(extensionBundleId) else { return .notInstalled }
+        guard output.contains(extensionBundleId) else {
+            // Aus der Sandbox verweigert pluginkit die Abfrage. Das sagt nichts
+            // darueber, ob die Erweiterung registriert ist.
+            return output.contains("unauthorized") ? .unknown : .notInstalled
+        }
         return output.contains("!") ? .installed : .active
     }
 
@@ -37,7 +42,7 @@ public enum ExtensionStatusChecker {
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
             return interpret(String(data: data, encoding: .utf8) ?? "")
         } catch {
-            return .notInstalled
+            return .unknown
         }
     }
 }

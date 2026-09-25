@@ -2,6 +2,8 @@ import Foundation
 import UniformTypeIdentifiers
 
 public struct JSONPreviewRenderer: PreviewRenderer {
+    public static let category: PreviewCategory = .json
+
     public static var supportedTypes: [UTType] { [.json] }
 
     public init() {}
