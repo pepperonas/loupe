@@ -39,11 +39,21 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
             }
 
             // In der Companion-App abgeschaltet (global oder diese Rubrik):
-            // keine Vorschau liefern, Quick Look faellt auf seine eigene zurueck.
+            // Rohtext liefern, wie macOS ohne Loupe. Eine Absage (Fehler) liesse
+            // Quick Look NICHT auf seinen Text-Generator zurueckfallen, sondern
+            // nur die Datei-Karte zeigen.
             let category = type(of: renderer).category
             guard settings.isEnabled(category) else {
-                logger.notice("Preview disabled for category \(category.rawValue, privacy: .public): \(url.lastPathComponent, privacy: .public)")
-                completionHandler(nil, CocoaError(.featureUnsupported))
+                logger.notice("Preview disabled for category \(category.rawValue, privacy: .public), plain text: \(url.lastPathComponent, privacy: .public)")
+                let read = try PreviewFileReader.read(url: url, strategy: .head, headLimit: Self.maxBytes)
+                let text = PlainTextFallback.text(from: read.data)
+                let reply = QLPreviewReply(dataOfContentType: .plainText,
+                                           contentSize: CGSize(width: 840, height: 640)) { r in
+                    r.stringEncoding = .utf8
+                    return Data(text.utf8)
+                }
+                reply.title = url.lastPathComponent
+                completionHandler(reply, nil)
                 return
             }
 

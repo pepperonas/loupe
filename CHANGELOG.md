@@ -5,6 +5,16 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+## [0.5.1] - 2026-09-26
+
+### Behoben
+- **Abgeschaltet zeigte Quick Look nur eine Datei-Karte mit Bild statt des Rohtexts.** Eine Absage der
+  Erweiterung lässt Quick Look nicht auf den Text-Generator von macOS zurückfallen. Loupe reicht den
+  Inhalt jetzt als reinen Text durch, Quick Look stellt ihn selbst dar – nebeneinander verglichen mit
+  abgemeldetem Loupe identisch bei JSON, Markdown, TSV, Logs, XML und PowerShell. Kodierungen wie bei
+  macOS: UTF-8 (mit und ohne BOM), UTF-16 mit BOM, sonst Latin-1; ein am Leseende halb abgeschnittenes
+  UTF-8-Zeichen wird verworfen, ohne Latin-1-Text zu kürzen.
+
 ## [0.5.0] - 2026-09-26
 
 ### Hinzugefügt

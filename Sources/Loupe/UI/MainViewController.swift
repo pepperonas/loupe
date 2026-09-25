@@ -63,7 +63,7 @@ public final class MainViewController: NSViewController {
         stack.addArrangedSubview(categories)
 
         let hint = NSTextField(wrappingLabelWithString:
-            "Ausgeschaltet zeigt Quick Look wieder seine eigene Vorschau. Gilt beim nächsten Druck auf die Leertaste.")
+            "Ausgeschaltet zeigt Quick Look den Rohtext, wie ohne Loupe. Gilt beim nächsten Druck auf die Leertaste.")
         hint.textColor = .secondaryLabelColor
         hint.font = .systemFont(ofSize: 11)
         stack.addArrangedSubview(hint)

@@ -15,8 +15,8 @@ Press <kbd>Space</kbd> in Finder. Get a readable, theme-aware preview. Zero Java
 [![Latest release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-322%20passing-brightgreen?logo=checkmarx&logoColor=white)](#-testing)
-[![Swift LoC](https://img.shields.io/badge/Swift%20LoC-5%2C635-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-328%20passing-brightgreen?logo=checkmarx&logoColor=white)](#-testing)
+[![Swift LoC](https://img.shields.io/badge/Swift%20LoC-5%2C681-blue?logo=swift&logoColor=white)](Sources/)
 [![License](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Last commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit activity](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -350,7 +350,7 @@ The companion app (`Loupe.app`) lets you switch Loupe on and off and tune how pr
 | **Log-Dateien** | `.log` |
 | **Code** | All source languages, scripts (PowerShell, Batch, shell), XML and config files |
 
-When Loupe is switched off — globally or for a category — Quick Look falls back to what macOS shows by default (usually a file card with icon and metadata). The per-category choices are kept while the global switch is off.
+When Loupe is switched off — globally or for a category — you see the plain text, exactly as on a Mac without Loupe. The per-category choices are kept while the global switch is off.
 
 **Appearance**
 
@@ -490,7 +490,7 @@ swift run -c release LoupeTests   # release (as in the release workflow)
 | Highlighting | 63 | 23 languages, quote-aware XML/HTML, PowerShell & Batch, no phantom last line, **every printable character in every language must terminate and round-trip** |
 | Markdown & safety | 41 | GFM, sanitizer bypass attempts, path traversal, remote-image blocking |
 | TSV / CSV | 22 | RFC 4180 quoting, delimiter detection, limits |
-| Theming & settings | 34 | Light/dark CSS, settings migration, on/off switches per category, shared preference domain + entitlements |
+| Theming & settings | 40 | Light/dark CSS, settings migration, on/off switches per category, plain-text fallback encodings, shared preference domain + entitlements |
 | Registry & app | 19 | Type routing, CSP, invalid UTF-8, empty files, pluginkit parsing incl. sandbox refusal |
 | Docs sync | 6 | This README against the code: versions, test badge, image paths, EN/DE parity, Finder reachability |
 | Performance | 3 | Hard time limits for large inputs |
@@ -508,7 +508,7 @@ How the tests are kept honest:
 | Symptom | Fix |
 | :--- | :--- |
 | Finder still shows plain text | Enable the extension ([see above](#enable-the-extension)), then `qlmanage -r && qlmanage -r cache && killall Finder` |
-| Only the macOS file card appears | Loupe may be switched off — open `Loupe.app` and check the global switch and the category |
+| Only plain text appears | Loupe may be switched off — open `Loupe.app` and check the global switch and the category |
 | Is the extension registered? | `pluginkit -m -v -i io.celox.loupe.preview` — a leading `+` means enabled |
 | Old version keeps answering | List all copies: `pluginkit -m -A -v -p com.apple.quicklook.preview \| grep -i loupe`, remove stale ones, reinstall with `./Scripts/install_app.sh` |
 | Which type does macOS assign a file? | `mdls -name kMDItemContentType <file>` — `dyn.…` means no extension will be asked |

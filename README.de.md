@@ -15,8 +15,8 @@
 [![Aktuelles Release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release-Build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-322%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
-[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-5.635-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-328%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
+[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-5.681-blue?logo=swift&logoColor=white)](Sources/)
 [![Lizenz](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Letzter Commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit-Aktivität](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -350,7 +350,7 @@ In der Begleit-App (`Loupe.app`) schalten Sie Loupe ein und aus und stellen das 
 | **Log-Dateien** | `.log` |
 | **Code** | Alle Programmiersprachen, Skripte (PowerShell, Batch, Shell), XML und Konfigurationsdateien |
 
-Ist Loupe aus – global oder für eine Rubrik –, zeigt Quick Look wieder die Standard-Ansicht von macOS (meist eine Karte mit Symbol und Dateiinfos). Die Auswahl je Rubrik bleibt erhalten, solange der globale Schalter aus ist.
+Ist Loupe aus – global oder für eine Rubrik –, erscheint der Rohtext, genau wie auf einem Mac ohne Loupe. Die Auswahl je Rubrik bleibt erhalten, solange der globale Schalter aus ist.
 
 **Aussehen**
 
@@ -490,7 +490,7 @@ swift run -c release LoupeTests   # Release (wie im Release-Workflow)
 | Hervorhebung | 63 | 23 Sprachen, XML/HTML mit Beachtung der Anführungszeichen, PowerShell & Batch, keine Phantom-Endzeile, **jedes druckbare Zeichen muss in jeder Sprache abbrechen und verlustfrei erhalten bleiben** |
 | Markdown & Sicherheit | 41 | GFM, Umgehungsversuche der Bereinigung, Pfad-Traversal, Blockieren entfernter Bilder |
 | TSV / CSV | 22 | RFC-4180-Anführungszeichen, Trennzeichenerkennung, Grenzen |
-| Erscheinungsbild & Einstellungen | 34 | Helles/dunkles CSS, Migration der Einstellungen, Schalter je Rubrik, gemeinsame Präferenz-Domain + Entitlements |
+| Erscheinungsbild & Einstellungen | 40 | Helles/dunkles CSS, Migration der Einstellungen, Schalter je Rubrik, Kodierungen des Rohtexts, gemeinsame Präferenz-Domain + Entitlements |
 | Registry & App | 19 | Typ-Zuordnung, CSP, ungültiges UTF-8, leere Dateien, pluginkit-Auswertung inkl. Sandbox-Verweigerung |
 | Doku-Abgleich | 6 | Diese README gegen den Code: Versionen, Test-Badge, Bildpfade, Gleichstand EN/DE, Erreichbarkeit im Finder |
 | Leistung | 3 | Harte Zeitgrenzen für große Eingaben |
@@ -508,7 +508,7 @@ So bleiben die Tests ehrlich:
 | Symptom | Lösung |
 | :--- | :--- |
 | Finder zeigt weiter nur Text | Erweiterung aktivieren ([siehe oben](#erweiterung-aktivieren)), dann `qlmanage -r && qlmanage -r cache && killall Finder` |
-| Nur die Datei-Karte von macOS erscheint | Loupe ist womöglich abgeschaltet – `Loupe.app` öffnen und den globalen Schalter sowie die Rubrik prüfen |
+| Nur Rohtext erscheint | Loupe ist womöglich abgeschaltet – `Loupe.app` öffnen und den globalen Schalter sowie die Rubrik prüfen |
 | Ist die Erweiterung registriert? | `pluginkit -m -v -i io.celox.loupe.preview` — ein führendes `+` bedeutet aktiviert |
 | Eine alte Version antwortet weiter | Alle Kopien auflisten: `pluginkit -m -A -v -p com.apple.quicklook.preview \| grep -i loupe`, veraltete entfernen, mit `./Scripts/install_app.sh` neu installieren |
 | Welchen Typ vergibt macOS für eine Datei? | `mdls -name kMDItemContentType <datei>` — `dyn.…` heißt: keine Erweiterung wird gefragt |
