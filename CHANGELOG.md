@@ -12,7 +12,7 @@ Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
   Erweiterung lässt Quick Look nicht auf den Text-Generator von macOS zurückfallen. Loupe reicht den
   Inhalt jetzt als reinen Text durch, Quick Look stellt ihn selbst dar – nebeneinander verglichen mit
   abgemeldetem Loupe identisch bei JSON, Markdown, TSV, Logs, XML und PowerShell. Kodierungen wie bei
-  macOS: UTF-8 (mit und ohne BOM), UTF-16 mit BOM, sonst Latin-1; ein am Leseende halb abgeschnittenes
+  macOS: UTF-8 (BOM wird unabhängig von der macOS-Version entfernt), UTF-16 mit BOM, sonst Latin-1; ein am Leseende halb abgeschnittenes
   UTF-8-Zeichen wird verworfen, ohne Latin-1-Text zu kürzen.
 
 ## [0.5.0] - 2026-09-26

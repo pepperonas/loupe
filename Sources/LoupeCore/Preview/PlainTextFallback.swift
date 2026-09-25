@@ -7,8 +7,12 @@ import Foundation
 public enum PlainTextFallback {
     public static func text(from data: Data) -> String {
         if data.isEmpty { return "" }
-        // Ein UTF-8-BOM entfernt Foundation beim Dekodieren selbst.
-        let bytes = [UInt8](data.prefix(2))
+        let bytes = [UInt8](data.prefix(3))
+        // UTF-8-BOM selbst entfernen: ob Foundation das tut, haengt von der
+        // macOS-Version ab (neu: ja, macOS 14 auf der CI: nein).
+        if bytes.count >= 3, bytes[0] == 0xEF, bytes[1] == 0xBB, bytes[2] == 0xBF {
+            return text(from: data.dropFirst(3))
+        }
         if bytes.count >= 2, bytes[0] == 0xFF, bytes[1] == 0xFE {
             return String(data: data.dropFirst(2), encoding: .utf16LittleEndian) ?? ""
         }
