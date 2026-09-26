@@ -8,7 +8,7 @@
   var LANGS = ["en", "de"];
   var LANG_KEY = 'loupe-lang';
   // The only host download links may point at — the timer writes GitHub release URLs.
-  var ASSET_URL = /^https:\/\/github\.com\/pepperonas\/loupe\/releases\/download\//;
+  var ASSET_URL = /^https:\/\/(github\.com\/pepperonas\/loupe\/releases\/download\/|loupe\.celox\.io\/files\/)/;
 
   var EN = {}; // captured from the markup on first switch, so English lives in one place only
   var nodes = document.querySelectorAll('[data-i18n]');

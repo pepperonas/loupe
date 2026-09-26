@@ -6,7 +6,7 @@ Everything below is also available without JavaScript: the page's HTML carries t
 
 ## Get the app
 
-- [Newest release](https://loupe.celox.io/download): the file for your platform — 302 to the current GitHub release asset
+- [Newest release](https://loupe.celox.io/download): the file for your platform — 302 to the newest file, a verified copy served from this site (resumable)
 - [macOS](https://loupe.celox.io/download/macos): macOS 14+ · Apple silicon
 - [Newest release as JSON](https://loupe.celox.io/latest.json): `version`, `published`, `notes`, and `assets[]` with `target`, `name`, `url`, `size` (bytes), `sha256`; refreshed every 15 minutes
 - [All releases and notes](https://github.com/pepperonas/loupe/releases)
