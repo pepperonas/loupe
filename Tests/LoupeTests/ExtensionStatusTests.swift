@@ -8,9 +8,9 @@ public enum ExtensionStatusTests {
         runner.suite("ExtensionStatus") {
 
             runner.runTest(name: "testTitles") {
-                try assertEqual(ExtensionStatus.active.title, "Installiert und aktiv")
-                try assertEqual(ExtensionStatus.installed.title, "Installiert, aber deaktiviert")
-                try assertEqual(ExtensionStatus.notInstalled.title, "Nicht registriert")
+                try assertEqual(ExtensionStatus.active.title(.de), "Installiert und aktiv")
+                try assertEqual(ExtensionStatus.installed.title(.de), "Installiert, aber deaktiviert")
+                try assertEqual(ExtensionStatus.notInstalled.title(.de), "Nicht registriert")
             }
 
             runner.runTest(name: "testIsOperational") {
@@ -40,7 +40,7 @@ public enum ExtensionStatusTests {
                 // gemessen am 2026-09-26. Das heisst NICHT, dass die Erweiterung fehlt.
                 let refused = "match: unauthorized discovery flag (PKDiscoverAll)\n"
                 try assertEqual(ExtensionStatusChecker.interpret(refused), .unknown)
-                try assertFalse(ExtensionStatus.unknown.title.contains("Nicht registriert"))
+                try assertFalse(ExtensionStatus.unknown.title(.de).contains("Nicht registriert"))
                 try assertFalse(ExtensionStatus.unknown.isOperational)
             }
         }

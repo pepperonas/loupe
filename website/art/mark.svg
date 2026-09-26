@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Loupe">
+  <!-- Nur gefuellte Flaechen, keine Verlaeufe/Konturen/Clip-Pfade: das Kit rendert
+       das apple-touch-icon mit ImageMagick, dessen SVG-Renderer die nicht kann. -->
+  <rect width="512" height="512" rx="112" fill="#1a1f3d"/>
+  <circle cx="218" cy="218" r="103" fill="#1e1e1e"/>
+  <rect x="127" y="155" width="106" height="26" rx="13" fill="#7ab8ff"/>
+  <rect x="239" y="155" width="74" height="26" rx="13" fill="#ff8170"/>
+  <rect x="155" y="205" width="94" height="26" rx="13" fill="#7ab8ff"/>
+  <rect x="255" y="205" width="56" height="26" rx="13" fill="#dabaff"/>
+  <rect x="155" y="255" width="68" height="26" rx="13" fill="#7ab8ff"/>
+  <rect x="229" y="255" width="84" height="26" rx="13" fill="#d8a0ff"/>
+  <path fill="#a9b8ff" fill-rule="evenodd" d="M85 218 a133 133 0 1 0 266 0 a133 133 0 1 0 -266 0 Z M115 218 a103 103 0 1 0 206 0 a103 103 0 1 0 -206 0 Z"/>
+  <path fill="#a9b8ff" d="M301.7 334.3 L383.7 416.3 L416.3 383.7 L334.3 301.7 Z"/>
+  <circle cx="400" cy="400" r="23" fill="#a9b8ff"/>
+</svg>

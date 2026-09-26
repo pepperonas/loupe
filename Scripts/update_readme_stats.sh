@@ -1,5 +1,6 @@
 #!/bin/bash
-# Aktualisiert die Test- und Codezeilen-Badges in README.md und README.de.md.
+# Aktualisiert die Test- und Codezeilen-Badges in README.md und README.de.md
+# sowie .github/repo-stats.json (Zaehler der Produktseite).
 # Die Testzahl stammt aus einem echten Lauf der Suite -- der Docs-Sync-Test
 # (DocsSyncTests.testTestBadgeMatchesTheSuite) prüft, dass sie stimmt.
 set -euo pipefail
@@ -18,4 +19,9 @@ LOC_FMT_DE=$(echo "${LOC_FMT_EN}" | sed 's/,/./g')
 sed -i '' -E "s#badge/Tests-[0-9]+%20#badge/Tests-${TESTS}%20#" README.md README.de.md
 sed -i '' -E "s#badge/Swift%20LoC-[0-9.,%2C]+-#badge/Swift%20LoC-${LOC_FMT_EN//,/%2C}-#" README.md
 sed -i '' -E "s#badge/Swift%20LoC-[0-9.,%2C]+-#badge/Swift%20LoC-${LOC_FMT_DE}-#" README.de.md
+# Dieselben Zahlen fuer die Produktseite loupe.celox.io: ihr Release-Timer holt die
+# Datei von GitHub (repo_stats in website/site.json) -- nie von Hand pflegen.
+mkdir -p .github
+printf '{\n  "loc": %d,\n  "tests": %d\n}\n' "${LOC}" "${TESTS}" > .github/repo-stats.json
+
 echo "Tests: ${TESTS} · Swift LoC (ohne Leerzeilen): ${LOC}"

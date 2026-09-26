@@ -5,6 +5,12 @@
 **Native Quick-Look-Vorschauen für Entwicklerdateien — JSON, Markdown, Logs, Quellcode und Skripte.**<br>
 <kbd>Leertaste</kbd> im Finder drücken. Lesbare Vorschau im System-Erscheinungsbild. Null JavaScript, keine Telemetrie, komplett offline.
 
+<a href="https://loupe.celox.io"><img src="https://img.shields.io/badge/🌐_Website-loupe.celox.io-a9b8ff?style=for-the-badge&labelColor=1a1f3d" height="52" alt="Website: loupe.celox.io"></a>
+&nbsp;
+<a href="https://loupe.celox.io/download"><img src="https://img.shields.io/badge/⬇_Download-für_macOS-7b8cff?style=for-the-badge&labelColor=1a1f3d&logo=apple&logoColor=white" height="52" alt="Download für macOS"></a>
+
+### 👉 **[loupe.celox.io](https://loupe.celox.io)** — Bilder, Download, Prüfsummen und FAQ auf der Produktseite
+
 <a href="README.md"><img src="https://img.shields.io/badge/Language-English-555555?style=for-the-badge&logo=apple&logoColor=white" alt="English"></a>
 &nbsp;
 <a href="README.de.md"><img src="https://img.shields.io/badge/Sprache-Deutsch-007AFF?style=for-the-badge&logo=apple&logoColor=white" alt="Deutsch"></a>
@@ -15,8 +21,8 @@
 [![Aktuelles Release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release-Build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-328%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
-[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-5.681-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-342%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
+[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-5.912-blue?logo=swift&logoColor=white)](Sources/)
 [![Lizenz](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Letzter Commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit-Aktivität](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -303,7 +309,7 @@ Dasselbe gilt für `.out`, `.err` und rotierte Logs wie `app.log.1`: dynamische 
 
 ### Download (empfohlen)
 
-1. `Loupe-vX.Y.Z-macOS.zip` vom [aktuellen Release](https://github.com/pepperonas/loupe/releases/latest) laden — die Builds sind für **Apple Silicon (arm64)**. Jedes Release enthält eine `SHA256SUMS.txt`.
+1. `Loupe-vX.Y.Z-macOS.zip` von [loupe.celox.io](https://loupe.celox.io) oder vom [aktuellen Release](https://github.com/pepperonas/loupe/releases/latest) laden — die Builds sind für **Apple Silicon (arm64)**. Jedes Release enthält eine `SHA256SUMS.txt`.
 2. Entpacken und `Loupe.app` nach `/Applications` verschieben.
 3. Die App ist **ad hoc signiert**, nicht notarisiert. Beim ersten Start verweigert macOS das Öffnen — entweder Rechtsklick → **Öffnen**, über **Systemeinstellungen → Datenschutz & Sicherheit → Trotzdem öffnen**, oder per Terminal:
    ```bash
@@ -362,8 +368,17 @@ Ist Loupe aus – global oder für eine Rubrik –, erscheint der Rohtext, genau
 
 App und Erweiterung teilen diese Einstellungen über die Präferenz-Domain `io.celox.loupe.shared` (Sandbox-Ausnahme `shared-preference`: die App darf schreiben, die Erweiterung nur lesen). Bis 0.4.0 kamen die Einstellungen nie in der Erweiterung an – siehe [Changelog](CHANGELOG.md).
 
-> [!NOTE]
-> Die Oberfläche der App und der Vorschau-Rahmen (z. B. „12 Schlüssel“, „25 Zeilen“) sind derzeit **deutsch**. Dateiinhalte erscheinen natürlich so, wie sie sind.
+**Sprache**
+
+| Einstellung | Optionen | Gilt für |
+| :--- | :--- | :--- |
+| **Sprache** | System · English · Deutsch | Fenster und Menü der Begleit-App |
+
+*System* folgt macOS: Deutsch, wenn Deutsch in den bevorzugten Sprachen vorn steht, sonst Englisch. Ein Wechsel wirkt sofort. Die Quick-Look-Vorschau selbst wird **nicht übersetzt** – ihre Beschriftungen („12 Schlüssel“, „25 Zeilen“) bleiben in jeder Spracheinstellung, wie sie sind.
+
+**Über Loupe**
+
+Unten in der App stehen Version, Entwickler (Martin Pfeffer, [celox.io](https://celox.io)), Knöpfe für den [Quellcode auf GitHub](https://github.com/pepperonas/loupe), die [Website](https://loupe.celox.io) und eine [PayPal-Spende](https://www.paypal.com/donate/?business=martin.pfeffer%40celox.io&item_name=Loupe&currency_code=EUR) sowie die [MIT-Lizenz](LICENSE).
 
 ---
 
@@ -491,6 +506,7 @@ swift run -c release LoupeTests   # Release (wie im Release-Workflow)
 | Markdown & Sicherheit | 41 | GFM, Umgehungsversuche der Bereinigung, Pfad-Traversal, Blockieren entfernter Bilder |
 | TSV / CSV | 22 | RFC-4180-Anführungszeichen, Trennzeichenerkennung, Grenzen |
 | Erscheinungsbild & Einstellungen | 40 | Helles/dunkles CSS, Migration der Einstellungen, Schalter je Rubrik, Kodierungen des Rohtexts, gemeinsame Präferenz-Domain + Entitlements |
+| Sprache & Über | 14 | App-Texte Englisch/Deutsch, Sprachauflösung, **Vorschau in jeder Sprache byte-gleich**, jeder „Über“-Link auf sein echtes Ziel festgenagelt |
 | Registry & App | 19 | Typ-Zuordnung, CSP, ungültiges UTF-8, leere Dateien, pluginkit-Auswertung inkl. Sandbox-Verweigerung |
 | Doku-Abgleich | 6 | Diese README gegen den Code: Versionen, Test-Badge, Bildpfade, Gleichstand EN/DE, Erreichbarkeit im Finder |
 | Leistung | 3 | Harte Zeitgrenzen für große Eingaben |

@@ -37,6 +37,15 @@ swift build -c release --package-path "${HERE}" >/dev/null
 echo "==> Composing window frames..."
 python3 "${HERE}/compose.py" "${WORK}/html" "${WORK}/pages"
 
+# Social-Preview und Galerie in exakter Pixelgroesse, das Heldenbild doppelt (2400 px).
+scale_for() {
+    case "$1" in
+        social-preview|gallery-*) echo 1 ;;
+        site-hero) echo 2 ;;
+        *) echo "${SCALE}" ;;
+    esac
+}
+
 echo "==> Capturing with headless Chrome (scale ${SCALE})..."
 while read -r ident width height; do
     target="${OUT}/${ident}.png"
@@ -44,7 +53,7 @@ while read -r ident width height; do
     # Eigenes Profil: sonst haengt sich Headless-Chrome an eine laufende Chrome-Instanz.
     "${CHROME}" --headless=new --disable-gpu --hide-scrollbars \
         --user-data-dir="${WORK}/chrome-profile" --no-first-run --no-default-browser-check \
-        --force-device-scale-factor="$( [ "${ident}" = social-preview ] && echo 1 || echo "${SCALE}" )" \
+        --force-device-scale-factor="$(scale_for "${ident}")" \
         --window-size="${width},${height}" \
         --screenshot="${target}" \
         "file://${WORK}/pages/${ident}.html" >/dev/null 2>&1 &
@@ -67,9 +76,21 @@ if command -v pngquant >/dev/null; then
     echo "==> Compressing with pngquant..."
     # Nur die eben erzeugten Bilder -- fremde PNGs im Ordner bleiben unangetastet.
     while read -r ident _ _; do
+        case "${ident}" in site-*|gallery-*) continue ;; esac   # werden unten zu WebP/JPEG
         pngquant --force --skip-if-larger --quality 80-95 --ext .png "${OUT}/${ident}.png" || true
     done < "${WORK}/pages/sizes.txt"
 fi
+
+# Bilder der Produktseite: Heldenbild als Quelle fuer build.py, Galerie direkt als WebP + JPEG.
+SITE_ART="${ROOT}/build/site-art"
+mkdir -p "${SITE_ART}" "${ROOT}/website/assets/gallery"
+mv "${OUT}/site-hero.png" "${SITE_ART}/hero.png"
+for f in "${OUT}"/gallery-*.png; do
+    id="$(basename "${f}" .png)"; id="${id#gallery-}"
+    cwebp -quiet -q 84 -m 6 "${f}" -o "${ROOT}/website/assets/gallery/${id}.webp"
+    magick "${f}" -quality 86 "${ROOT}/website/assets/gallery/${id}.jpg"
+    rm "${f}"
+done
 
 # Die Social-Preview gehoert nach docs/ (GitHub: Settings -> Social preview, max. 1 MB).
 mv "${OUT}/social-preview.png" "${ROOT}/docs/social-preview.png"

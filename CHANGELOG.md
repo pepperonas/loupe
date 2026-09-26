@@ -5,6 +5,21 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+## [0.6.0] - 2026-09-26
+
+### Hinzugefügt
+- **Begleit-App auf Englisch und Deutsch.** Neue Einstellung **Sprache**: *System* (Deutsch, wenn Deutsch
+  in den bevorzugten Sprachen von macOS vorn steht, sonst Englisch), *English* oder *Deutsch*; der Wechsel
+  baut Fenster und Menü sofort um. Die Quick-Look-Vorschau wird bewusst **nicht** übersetzt – ein Test
+  prüft, dass jede Vorschau in beiden Spracheinstellungen byte-gleich ist.
+- **„Über Loupe“** in der App: Version, Entwickler (Martin Pfeffer, celox.io), Knöpfe für den Quellcode auf
+  GitHub (mit GitHub-Zeichen), die Website und eine PayPal-Spende, Verweis auf die MIT-Lizenz. Alle Links
+  sind per Test auf ihr echtes Ziel festgenagelt.
+- **Produktseite [loupe.celox.io](https://loupe.celox.io)** (Englisch/Deutsch), Quelle unter `website/`:
+  Download immer des neuesten Releases, Prüfsumme, Galerie aus Loupes echter Ausgabe. Codezeilen und
+  Testzahl schreibt `Scripts/update_readme_stats.sh` nach `.github/repo-stats.json`; die Seite liest sie
+  von dort. README verlinkt die Seite ganz oben.
+
 ## [0.5.1] - 2026-09-26
 
 ### Behoben

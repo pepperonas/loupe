@@ -139,6 +139,13 @@ public enum DocsSyncTests {
                     let badge = matches(#"badge/Tests-(\d+)%20"#, in: try text(name)).first
                     try assertEqual(badge, String(total), "\(name): Test-Badge (Scripts/update_readme_stats.sh ausfuehren)")
                 }
+                // Die Zaehler der Produktseite kommen aus derselben Quelle wie die Badges.
+                let stats = try JSONSerialization.jsonObject(
+                    with: Data(contentsOf: root.appendingPathComponent(".github/repo-stats.json"))) as? [String: Int] ?? [:]
+                try assertEqual(stats["tests"], total, ".github/repo-stats.json: tests (Scripts/update_readme_stats.sh)")
+                let loc = matches(#"badge/Swift%20LoC-([0-9%2C]+)-"#, in: try text("README.md")).first?
+                    .replacingOccurrences(of: "%2C", with: "")
+                try assertEqual(stats["loc"].map(String.init), loc, ".github/repo-stats.json: loc passt nicht zum README-Badge")
             }
         }
     }

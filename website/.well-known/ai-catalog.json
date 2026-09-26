@@ -1,0 +1,30 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Loupe",
+    "identifier": "did:web:loupe.celox.io",
+    "documentationUrl": "https://loupe.celox.io/llms.txt"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:loupe.celox.io:skills:get-loupe",
+      "displayName": "Get Loupe",
+      "type": "text/markdown; profile=\"urn:air:agent-skills\"",
+      "url": "https://loupe.celox.io/skills/get-loupe/SKILL.md",
+      "description": "Loupe is a free, open-source Quick Look extension for macOS 14+. Press Space on a file in Finder and it shows JSON as a collapsible tree with exact error positions, renders Markdown, turns log files into a colour-coded table (newest lines first in view), lays out TSV as a table and highlights source code in 20+ languages, PowerShell, Batch and XML dialects included. It runs sandboxed, read-only and offline, and its previews contain no JavaScript. A companion app switches previews on or off per category and sets appearance, text size and language (English or German).",
+      "tags": [
+        "macOS",
+        "Quick Look",
+        "Finder",
+        "JSON",
+        "Markdown",
+        "developer tools"
+      ],
+      "representativeQueries": [
+        "How do I preview JSON files nicely with Quick Look on a Mac?",
+        "Is there a free Quick Look plugin for Markdown and log files on macOS?",
+        "How can I see syntax-highlighted code when I press Space in Finder?"
+      ]
+    }
+  ]
+}

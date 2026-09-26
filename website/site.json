@@ -1,0 +1,462 @@
+{
+ "$comment": "Loupe product page — built with templates/apps/product-page (build.py). Edit this file, then re-run build.py --force (see website/README.md).",
+ "name": "Loupe",
+ "slug": "loupe",
+ "aliases": [],
+ "repo": "pepperonas/loupe",
+ "branch": "main",
+ "tagline": "Press Space. See it properly.",
+ "license": "MIT",
+ "year": 2026,
+ "asset_version": 1,
+ "languages": [
+  "en",
+  "de"
+ ],
+ "theme_source": "Loupe's own palette: the mark (#a9b8ff ring on #1a1f3d) and the dark preview colours of CSSGenerator (key #7ab8ff, string #ff8170)",
+ "theme": {
+  "bg": "#0e1020",
+  "bg-lowest": "#0a0c18",
+  "surface-low": "#141729",
+  "surface": "#191c30",
+  "surface-high": "#22263c",
+  "surface-highest": "#2c3148",
+  "on-bg": "#e6e8f2",
+  "on-variant": "#c3c7d6",
+  "outline": "#8d92a6",
+  "outline-variant": "#43485d",
+  "primary": "#a9b8ff",
+  "on-primary": "#16205e",
+  "primary-container": "#2f3a86",
+  "on-primary-container": "#dde2ff",
+  "secondary-container": "#373c58",
+  "on-secondary-container": "#dfe2f5",
+  "tertiary": "#ff8170",
+  "accent": "#7b8cff"
+ },
+ "hero": {
+  "bg": "#0b0e1c",
+  "width": 2400,
+  "height": 1200
+ },
+ "screens": null,
+ "ld": {
+  "type": "SoftwareApplication",
+  "category": "DeveloperApplication",
+  "subcategory": "Quick Look extension",
+  "os": "macOS 14 or later (Apple silicon)"
+ },
+ "targets": [
+  {
+   "id": "macos",
+   "label": "Download for macOS",
+   "short": "macOS",
+   "asset": "^Loupe-v[0-9][0-9A-Za-z.\\-]*-macOS\\.zip$",
+   "requirement": "macOS 14+ · Apple silicon",
+   "ua": "macintosh|mac os x"
+  }
+ ],
+ "chips": [
+  {
+   "label": "JSON",
+   "color": "#f5c542"
+  },
+  {
+   "label": "Markdown",
+   "color": "#c3c7d6"
+  },
+  {
+   "label": "Logs",
+   "color": "#7ab8ff"
+  },
+  {
+   "label": "TSV",
+   "color": "#3fb950"
+  },
+  {
+   "label": "XML",
+   "color": "#ff8170"
+  },
+  {
+   "label": "PowerShell",
+   "color": "#5391fe"
+  },
+  {
+   "label": "Batch",
+   "color": "#9aa0ad"
+  },
+  {
+   "label": "Swift",
+   "color": "#f05138"
+  },
+  {
+   "label": "Python",
+   "color": "#3776ab"
+  },
+  {
+   "label": "Rust",
+   "color": "#dea584"
+  },
+  {
+   "label": "Go",
+   "color": "#00add8"
+  },
+  {
+   "label": "YAML",
+   "color": "#cb171e"
+  }
+ ],
+ "repo_stats": {
+  "path": ".github/repo-stats.json",
+  "items": [
+   {
+    "key": "loc",
+    "format": "int",
+    "label": {
+     "en": "Lines of Swift",
+     "de": "Zeilen Swift"
+    }
+   },
+   {
+    "key": "tests",
+    "format": "int",
+    "label": {
+     "en": "Unit tests",
+     "de": "Unit-Tests"
+    }
+   }
+  ]
+ },
+ "verify_rows": [],
+ "content": {
+  "meta": {
+   "title": "Loupe — Quick Look for JSON, Markdown, Logs & Code",
+   "description": "Free, open-source Quick Look extension for macOS: readable previews of JSON, Markdown, logs, TSV and source code. Press Space in Finder.",
+   "og_title": "Loupe — Press Space. See it properly.",
+   "og_description": "Native Quick Look previews for developer files on macOS: JSON trees, Markdown, logs, TSV and code in 20+ languages. Free, open source, offline.",
+   "twitter_description": "Quick Look for developers: JSON, Markdown, logs, TSV and code, readable in Finder. Free, open source, zero JavaScript.",
+   "image_alt": "Three Quick Look windows: a Markdown document, a collapsible JSON tree and a colour-coded server log — Loupe for macOS."
+  },
+  "summary": "Loupe is a free, open-source Quick Look extension for macOS 14+. Press Space on a file in Finder and it shows JSON as a collapsible tree with exact error positions, renders Markdown, turns log files into a colour-coded table (newest lines first in view), lays out TSV as a table and highlights source code in 20+ languages, PowerShell, Batch and XML dialects included. It runs sandboxed, read-only and offline, and its previews contain no JavaScript. A companion app switches previews on or off per category and sets appearance, text size and language (English or German).",
+  "meta_fallback": "macOS 14+ · Apple silicon · free",
+  "feature_list": [
+   "Collapsible JSON tree with exact line and column of syntax errors",
+   "Markdown rendering (GitHub flavoured) with blocked remote images",
+   "Log files as a table: time, level, source, message; seven formats; big logs read from the end",
+   "TSV files as a table with numeric columns aligned",
+   "Syntax highlighting for 20+ languages including PowerShell, Batch and XML dialects",
+   "Switch previews on or off, globally or per category",
+   "Light and dark appearance, three text sizes; companion app in English and German",
+   "Sandboxed, read-only, offline; previews contain no JavaScript"
+  ],
+  "limits": [
+   "macOS 14 or later on Apple silicon only",
+   "CSV (.csv) cannot be previewed: macOS reserves that type for its own generator — use .tsv",
+   "Some file types (.ts, .tsx, .jsx, .scss …) never reach Quick Look extensions because macOS types them differently",
+   "Not notarized: ad-hoc signed, so the first launch needs right-click → Open",
+   "Read-only: Loupe shows files, it does not edit them"
+  ],
+  "agent_queries": [
+   "How do I preview JSON files nicely with Quick Look on a Mac?",
+   "Is there a free Quick Look plugin for Markdown and log files on macOS?",
+   "How can I see syntax-highlighted code when I press Space in Finder?"
+  ],
+  "tags": [
+   "macOS",
+   "Quick Look",
+   "Finder",
+   "JSON",
+   "Markdown",
+   "developer tools"
+  ],
+  "hero.kicker": {
+   "en": "macOS · Open source · Free",
+   "de": "macOS · Open Source · Kostenlos"
+  },
+  "hero.title": {
+   "en": "Press Space.<br>See it properly.",
+   "de": "Leertaste drücken.<br>Richtig sehen."
+  },
+  "hero.lead": {
+   "en": "A Quick Look extension for developer files: JSON as a tree, Markdown rendered, logs as a colour-coded table, code highlighted — right in Finder.",
+   "de": "Eine Quick-Look-Erweiterung für Entwickler-Dateien: JSON als Baum, Markdown gerendert, Logs als farbige Tabelle, Code hervorgehoben – direkt im Finder."
+  },
+  "pl.h": {
+   "en": "Previews for",
+   "de": "Vorschau für"
+  },
+  "f.h": {
+   "en": "What Loupe does",
+   "de": "Was Loupe kann"
+  },
+  "features": [
+   {
+    "t": {
+     "en": "JSON you can read",
+     "de": "JSON, das man lesen kann"
+    },
+    "p": {
+     "en": "A collapsible tree with counts and a peek at each object. A broken file shows the exact line and column, with the offending spot marked.",
+     "de": "Ein aufklappbarer Baum mit Zählern und Vorschau je Objekt. Bei einer kaputten Datei stehen Zeile und Spalte da, die Stelle ist markiert."
+    }
+   },
+   {
+    "t": {
+     "en": "Markdown, rendered",
+     "de": "Markdown, gerendert"
+    },
+    "p": {
+     "en": "Headings, tables, task lists and highlighted code blocks. Remote images stay blocked, so a preview never phones home.",
+     "de": "Überschriften, Tabellen, Aufgabenlisten und hervorgehobene Codeblöcke. Externe Bilder bleiben blockiert – eine Vorschau telefoniert nie nach Hause."
+    }
+   },
+   {
+    "t": {
+     "en": "Logs at a glance",
+     "de": "Logs auf einen Blick"
+    },
+    "p": {
+     "en": "Time, level, source and message in columns; seven formats, from nginx to JSON Lines. Big logs are read from the end, where the news is.",
+     "de": "Zeit, Level, Quelle und Nachricht in Spalten; sieben Formate, von nginx bis JSON Lines. Große Logs werden vom Ende gelesen – dort steht das Neueste."
+    }
+   },
+   {
+    "t": {
+     "en": "Code in 20+ languages",
+     "de": "Code in über 20 Sprachen"
+    },
+    "p": {
+     "en": "Swift, Python, Go, Rust, SQL, YAML and more, plus PowerShell, Batch and 13 XML dialects that macOS would otherwise never show.",
+     "de": "Swift, Python, Go, Rust, SQL, YAML und mehr, dazu PowerShell, Batch und 13 XML-Dialekte, die macOS sonst nie zeigen würde."
+    }
+   },
+   {
+    "t": {
+     "en": "You decide",
+     "de": "Sie entscheiden"
+    },
+    "p": {
+     "en": "Switch Loupe off globally or per category — Markdown, JSON, tables, logs, code. Off means plain text, exactly as without Loupe.",
+     "de": "Loupe global oder je Rubrik abschalten – Markdown, JSON, Tabellen, Logs, Code. Aus heißt Rohtext, genau wie ohne Loupe."
+    }
+   },
+   {
+    "t": {
+     "en": "Private and fast",
+     "de": "Privat und schnell"
+    },
+    "p": {
+     "en": "Sandboxed, read-only, offline, and not a single byte of JavaScript in a preview. Light and dark mode; the app speaks English and German.",
+     "de": "Sandbox, nur lesend, offline und kein Byte JavaScript in einer Vorschau. Hell und dunkel; die App spricht Deutsch und Englisch."
+    }
+   }
+  ],
+  "s.h": {
+   "en": "What it looks like",
+   "de": "So sieht es aus"
+  },
+  "gallery": [
+   {
+    "id": "json",
+    "t": {
+     "en": "JSON tree",
+     "de": "JSON-Baum"
+    },
+    "p": {
+     "en": "Every object with its key count and a peek at its content.",
+     "de": "Jedes Objekt mit Schlüsselzahl und Blick auf den Inhalt."
+    }
+   },
+   {
+    "id": "json-error",
+    "t": {
+     "en": "JSON errors",
+     "de": "JSON-Fehler"
+    },
+    "p": {
+     "en": "The exact position of the problem, with the lines around it.",
+     "de": "Die genaue Stelle des Fehlers, mit den Zeilen drumherum."
+    }
+   },
+   {
+    "id": "markdown",
+    "t": {
+     "en": "Markdown",
+     "de": "Markdown"
+    },
+    "p": {
+     "en": "Rendered like on GitHub, in your system's appearance.",
+     "de": "Gerendert wie auf GitHub, im Erscheinungsbild des Systems."
+    }
+   },
+   {
+    "id": "log",
+    "t": {
+     "en": "Log files",
+     "de": "Log-Dateien"
+    },
+    "p": {
+     "en": "Levels counted in the toolbar, errors tinted with their stack trace.",
+     "de": "Level gezählt in der Leiste, Fehler samt Stack-Trace eingefärbt."
+    }
+   },
+   {
+    "id": "tsv",
+    "t": {
+     "en": "Tables",
+     "de": "Tabellen"
+    },
+    "p": {
+     "en": "TSV laid out as a table, numbers aligned on the right.",
+     "de": "TSV als Tabelle, Zahlen rechtsbündig."
+    }
+   },
+   {
+    "id": "code",
+    "t": {
+     "en": "Source code",
+     "de": "Quellcode"
+    },
+    "p": {
+     "en": "Highlighting with line numbers and the language badge.",
+     "de": "Hervorhebung mit Zeilennummern und Sprachkennung."
+    }
+   },
+   {
+    "id": "powershell",
+    "t": {
+     "en": "PowerShell",
+     "de": "PowerShell"
+    },
+    "p": {
+     "en": "Variables, cmdlets, parameters and here-strings.",
+     "de": "Variablen, Cmdlets, Parameter und Here-Strings."
+    }
+   },
+   {
+    "id": "xml",
+    "t": {
+     "en": "XML",
+     "de": "XML"
+    },
+    "p": {
+     "en": "Elements, attributes, CDATA and entities, each in its own colour.",
+     "de": "Elemente, Attribute, CDATA und Entities, jeweils in eigener Farbe."
+    }
+   },
+   {
+    "id": "app",
+    "t": {
+     "en": "The companion app",
+     "de": "Die Begleit-App"
+    },
+    "p": {
+     "en": "Switches per category, appearance, text size and language.",
+     "de": "Schalter je Rubrik, Erscheinungsbild, Textgröße und Sprache."
+    }
+   }
+  ],
+  "install": [
+   {
+    "t": {
+     "en": "Download",
+     "de": "Herunterladen"
+    },
+    "p": {
+     "en": "Get the ZIP above and unpack it.",
+     "de": "Die ZIP-Datei oben laden und entpacken."
+    }
+   },
+   {
+    "t": {
+     "en": "Move and open",
+     "de": "Verschieben und öffnen"
+    },
+    "p": {
+     "en": "Drag <strong>Loupe.app</strong> to Applications. The app is not notarized: open it once with right-click → <em>Open</em>.",
+     "de": "<strong>Loupe.app</strong> in „Programme“ ziehen. Die App ist nicht notarisiert: beim ersten Mal per Rechtsklick → <em>Öffnen</em> starten."
+    }
+   },
+   {
+    "t": {
+     "en": "Turn it on",
+     "de": "Einschalten"
+    },
+    "p": {
+     "en": "System Settings → General → Login Items &amp; Extensions → Quick Look → enable <strong>Loupe</strong>. Then press Space on a file.",
+     "de": "Systemeinstellungen → Allgemein → Anmeldeobjekte &amp; Erweiterungen → Quick Look → <strong>Loupe</strong> einschalten. Dann auf einer Datei die Leertaste drücken."
+    }
+   }
+  ],
+  "i.note": {
+   "en": "On macOS 14 the switch is under Privacy &amp; Security → Extensions → Quick Look. Stuck on plain text? Run <code>qlmanage -r &amp;&amp; qlmanage -r cache</code> once.",
+   "de": "Unter macOS 14 liegt der Schalter unter Datenschutz &amp; Sicherheit → Erweiterungen → Quick Look. Bleibt es bei Rohtext? Einmal <code>qlmanage -r &amp;&amp; qlmanage -r cache</code> ausführen."
+  },
+  "v.p": {
+   "en": "Loupe is ad-hoc signed, not notarized — there is no Apple Team ID to check. Compare the SHA-256 of your download with the value above; the release on GitHub lists the same checksum.",
+   "de": "Loupe ist ad hoc signiert, nicht notarisiert – eine Apple-Team-ID zum Prüfen gibt es nicht. Vergleichen Sie die SHA-256 Ihres Downloads mit dem Wert oben; das Release auf GitHub nennt dieselbe Prüfsumme."
+  },
+  "faq": [
+   {
+    "q": {
+     "en": "Is Loupe free?",
+     "de": "Ist Loupe kostenlos?"
+    },
+    "a": {
+     "en": "Yes. It is free and open source under the MIT licence, with no ads, no account and no tracking.",
+     "de": "Ja. Loupe ist kostenlos und quelloffen unter der MIT-Lizenz, ohne Werbung, ohne Konto und ohne Tracking."
+    }
+   },
+   {
+    "q": {
+     "en": "Why isn't it in the App Store?",
+     "de": "Warum gibt es Loupe nicht im App Store?"
+    },
+    "a": {
+     "en": "Loupe is a small open-source project without a paid Apple developer account. That is also why it is not notarized and needs right-click → Open on the first launch.",
+     "de": "Loupe ist ein kleines Open-Source-Projekt ohne kostenpflichtiges Apple-Entwicklerkonto. Deshalb ist es auch nicht notarisiert und braucht beim ersten Start Rechtsklick → Öffnen."
+    }
+   },
+   {
+    "q": {
+     "en": "What do I need?",
+     "de": "Was brauche ich?"
+    },
+    "a": {
+     "en": "A Mac with Apple silicon and macOS 14 Sonoma or later.",
+     "de": "Einen Mac mit Apple-Chip und macOS 14 Sonoma oder neuer."
+    }
+   },
+   {
+    "q": {
+     "en": "Why does my .csv file still look plain?",
+     "de": "Warum sieht meine .csv-Datei weiter schlicht aus?"
+    },
+    "a": {
+     "en": "macOS reserves CSV for its own preview, and no extension gets asked. Save the table as <code>.tsv</code> and Loupe shows it. A few other types (<code>.ts</code>, <code>.tsx</code>, <code>.scss</code> …) never reach extensions either.",
+     "de": "macOS reserviert CSV für die eigene Vorschau, keine Erweiterung wird gefragt. Als <code>.tsv</code> gespeichert zeigt Loupe die Tabelle. Ein paar weitere Typen (<code>.ts</code>, <code>.tsx</code>, <code>.scss</code> …) erreichen Erweiterungen ebenfalls nie."
+    }
+   },
+   {
+    "q": {
+     "en": "How do I update?",
+     "de": "Wie aktualisiere ich?"
+    },
+    "a": {
+     "en": "Download the new ZIP from this page and replace Loupe.app in Applications. Your settings stay.",
+     "de": "Die neue ZIP-Datei von dieser Seite laden und Loupe.app in „Programme“ ersetzen. Die Einstellungen bleiben erhalten."
+    }
+   },
+   {
+    "q": {
+     "en": "Does Loupe send my files anywhere?",
+     "de": "Schickt Loupe meine Dateien irgendwohin?"
+    },
+    "a": {
+     "en": "No. The extension runs sandboxed and read-only, has no network access in its previews and contains no JavaScript. Remote images in Markdown stay blocked.",
+     "de": "Nein. Die Erweiterung läuft in der Sandbox und nur lesend, hat in ihren Vorschauen keinen Netzzugriff und enthält kein JavaScript. Externe Bilder in Markdown bleiben blockiert."
+    }
+   }
+  ]
+ }
+}

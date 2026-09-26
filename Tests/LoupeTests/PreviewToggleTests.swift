@@ -94,10 +94,12 @@ public enum PreviewToggleTests {
                 }
             }
 
-            runner.runTest(name: "testEveryCategoryHasAGermanLabelAndIsDistinct") {
-                let labels = PreviewCategory.allCases.map(\.displayName)
-                try assertEqual(Set(labels).count, labels.count)
-                for l in labels { try assertFalse(l.isEmpty) }
+            runner.runTest(name: "testEveryCategoryHasADistinctLabelInEveryLanguage") {
+                for lang in LoupeLanguage.allCases {
+                    let labels = PreviewCategory.allCases.map { $0.displayName(lang) }
+                    try assertEqual(Set(labels).count, labels.count)
+                    for l in labels { try assertFalse(l.isEmpty) }
+                }
                 try assertEqual(PreviewCategory.allCases.count, 5)
             }
         }

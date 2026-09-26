@@ -3,12 +3,14 @@ import Foundation
 public enum ExtensionStatus: Equatable, Sendable {
     case active, installed, notInstalled, unknown
 
-    public var title: String {
+    public func title(_ lang: LoupeLanguage) -> String {
+        let de = lang == .de
         switch self {
-        case .active:       return "Installiert und aktiv"
-        case .installed:    return "Installiert, aber deaktiviert"
-        case .notInstalled: return "Nicht registriert"
-        case .unknown:      return "Status aus der App nicht prüfbar – siehe Hinweise unten"
+        case .active:       return de ? "Installiert und aktiv" : "Installed and active"
+        case .installed:    return de ? "Installiert, aber deaktiviert" : "Installed, but switched off"
+        case .notInstalled: return de ? "Nicht registriert" : "Not registered"
+        case .unknown:      return de ? "Status aus der App nicht prüfbar – siehe Hinweise unten"
+                                      : "Status can't be checked from the app – see the hints below"
         }
     }
 

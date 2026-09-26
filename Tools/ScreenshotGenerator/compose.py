@@ -137,5 +137,47 @@ social = page("dark", (1280, 640), social_body).replace("</style>", SOCIAL_CSS +
 (PAGE_DIR / "social-preview.html").write_text(social, encoding="utf-8")
 sizes.append(("social-preview", 1280, 640))
 
+# --- Produktseite loupe.celox.io -------------------------------------------------
+# Heldenbild: Motiv links, rechts ruhiger Grund fuer den Text der Seite
+# (gerendert mit Faktor 2 -> 2400 x 1200; site.json hero.bg = SITE_BG).
+SITE_BG = "#0b0e1c"
+SITE_CANVAS = (f"radial-gradient(700px 520px at 18% 30%, #2b2f7a 0%, transparent 70%),"
+               f"radial-gradient(600px 460px at 38% 90%, #0c4a63 0%, transparent 70%), {SITE_BG}")
+site_css = ".site-bg { position:absolute; inset:0; background:%s; }" % SITE_CANVAS
+hero_body = ['<div class="site-bg"></div>',
+             window("README.md", "README.md", "Open with TextEdit", "dark", (40, 60, 560, 380), zoom=0.8),
+             window("package.json", "package.json", "Open with Xcode", "dark", (170, 150, 540, 370), zoom=0.8),
+             window("server.log", "server.log", "Open with Console", "dark", (300, 240, 560, 330), zoom=0.7)]
+hero = page("dark", (1200, 600), hero_body).replace("</style>", site_css + "</style>")
+(PAGE_DIR / "site-hero.html").write_text(hero, encoding="utf-8")
+sizes.append(("site-hero", 1200, 600))
+
+# Galerie: je Vorschautyp ein Fenster, 1120 x 800 (Faktor 1, Format des Kits).
+GALLERY = [("json", "package.json", "Open with Xcode"),
+           ("json-error", "broken.json", "Open with Xcode"),
+           ("markdown", "README.md", "Open with TextEdit"),
+           ("log", "server.log", "Open with Console"),
+           ("tsv", "sales.tsv", "Open with Numbers"),
+           ("code", "RendererRegistry.swift", "Open with Xcode"),
+           ("powershell", "deploy.ps1", "Open with Visual Studio Code"),
+           ("xml", "01-config.xml", "Open with Xcode")]
+for ident, src, button in GALLERY:
+    body = ['<div class="site-bg"></div>', window(src, src, button, "dark", (48, 40, 1024, 720), zoom=0.85)]
+    doc = page("dark", (1120, 800), body).replace("</style>", site_css + "</style>")
+    (PAGE_DIR / f"gallery-{ident}.html").write_text(doc, encoding="utf-8")
+    sizes.append((f"gallery-{ident}", 1120, 800))
+
+# Die Begleit-App: echtes Bildschirmfoto (website/art/app.png, Retina) auf demselben Grund.
+app_png = Path(__file__).resolve().parents[2] / "website" / "art" / "app.png"
+if app_png.exists():
+    import base64
+    data = base64.b64encode(app_png.read_bytes()).decode()
+    img = (f'<img src="data:image/png;base64,{data}" style="position:absolute;left:50%;top:40px;'
+           f'height:720px;transform:translateX(-50%);border-radius:12px;'
+           f'box-shadow:0 50px 100px rgba(0,0,0,.55),0 18px 40px rgba(0,0,0,.45)">')
+    doc = page("dark", (1120, 800), ['<div class="site-bg"></div>', img]).replace("</style>", site_css + "</style>")
+    (PAGE_DIR / "gallery-app.html").write_text(doc, encoding="utf-8")
+    sizes.append(("gallery-app", 1120, 800))
+
 (PAGE_DIR / "sizes.txt").write_text("".join(f"{i} {w} {h}\n" for i, w, h in sizes), encoding="utf-8")
 print(f"{len(sizes)} Seiten in {PAGE_DIR}")

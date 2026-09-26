@@ -1,0 +1,200 @@
+- generic [active] [ref=f1e1]:
+  - link "Skip to content" [ref=f1e2] [cursor=pointer]:
+    - /url: "#main"
+  - banner [ref=f1e3]:
+    - link "Loupe" [ref=f1e4] [cursor=pointer]:
+      - /url: "#top"
+    - navigation "Main" [ref=f1e6]:
+      - link "Source code on GitHub" [ref=f1e7] [cursor=pointer]:
+        - /url: https://github.com/pepperonas/loupe
+      - 'button "Language: English" [ref=f1e11] [cursor=pointer]':
+        - generic [ref=f1e13]: EN
+  - main [ref=f1e16]:
+    - generic [ref=f1e20]:
+      - paragraph [ref=f1e21]: macOS · Open source · Free
+      - heading "Press Space. See it properly." [level=1] [ref=f1e22]: Press Space.See it properly.
+      - paragraph [ref=f1e23]: "A Quick Look extension for developer files: JSON as a tree, Markdown rendered, logs as a colour-coded table, code highlighted — right in Finder."
+      - generic [ref=f1e24]:
+        - link "Download for macOS" [ref=f1e25] [cursor=pointer]:
+          - /url: /download
+        - link "Source code" [ref=f1e29] [cursor=pointer]:
+          - /url: https://github.com/pepperonas/loupe
+      - paragraph [ref=f1e30]: v0.5.1 · 1.5 MB · 25 Sep 2026 · macOS 14+ · Apple silicon
+    - region [ref=f1e31]:
+      - heading "Previews for" [level=2] [ref=f1e32]
+      - list [ref=f1e33]:
+        - listitem [ref=f1e34]: JSON
+        - listitem [ref=f1e35]: Markdown
+        - listitem [ref=f1e36]: Logs
+        - listitem [ref=f1e37]: TSV
+        - listitem [ref=f1e38]: XML
+        - listitem [ref=f1e39]: PowerShell
+        - listitem [ref=f1e40]: Batch
+        - listitem [ref=f1e41]: Swift
+        - listitem [ref=f1e42]: Python
+        - listitem [ref=f1e43]: Rust
+        - listitem [ref=f1e44]: Go
+        - listitem [ref=f1e45]: YAML
+    - region [ref=f1e46]:
+      - heading "In numbers" [level=2] [ref=f1e47]
+      - generic [ref=f1e48]:
+        - generic [ref=f1e49]:
+          - term [ref=f1e50]: Lines of Swift
+          - definition [ref=f1e51]:
+            - generic [ref=f1e52]: —
+        - generic [ref=f1e53]:
+          - term [ref=f1e54]: Unit tests
+          - definition [ref=f1e55]:
+            - generic [ref=f1e56]: —
+      - paragraph [ref=f1e57]: Counted from the source code and updated automatically with every change.
+    - region [ref=f1e58]:
+      - heading "What Loupe does" [level=2] [ref=f1e59]
+      - generic [ref=f1e60]:
+        - article [ref=f1e61]:
+          - heading "JSON you can read" [level=3] [ref=f1e62]
+          - paragraph [ref=f1e63]: A collapsible tree with counts and a peek at each object. A broken file shows the exact line and column, with the offending spot marked.
+        - article [ref=f1e64]:
+          - heading "Markdown, rendered" [level=3] [ref=f1e65]
+          - paragraph [ref=f1e66]: Headings, tables, task lists and highlighted code blocks. Remote images stay blocked, so a preview never phones home.
+        - article [ref=f1e67]:
+          - heading "Logs at a glance" [level=3] [ref=f1e68]
+          - paragraph [ref=f1e69]: Time, level, source and message in columns; seven formats, from nginx to JSON Lines. Big logs are read from the end, where the news is.
+        - article [ref=f1e70]:
+          - heading "Code in 20+ languages" [level=3] [ref=f1e71]
+          - paragraph [ref=f1e72]: Swift, Python, Go, Rust, SQL, YAML and more, plus PowerShell, Batch and 13 XML dialects that macOS would otherwise never show.
+        - article [ref=f1e73]:
+          - heading "You decide" [level=3] [ref=f1e74]
+          - paragraph [ref=f1e75]: Switch Loupe off globally or per category — Markdown, JSON, tables, logs, code. Off means plain text, exactly as without Loupe.
+        - article [ref=f1e76]:
+          - heading "Private and fast" [level=3] [ref=f1e77]
+          - paragraph [ref=f1e78]: Sandboxed, read-only, offline, and not a single byte of JavaScript in a preview. Light and dark mode, English and German.
+    - region [ref=f1e79]:
+      - heading "What it looks like" [level=2] [ref=f1e80]
+      - generic [ref=f1e81]:
+        - figure [ref=f1e82]:
+          - button "Enlarge" [ref=f1e83]:
+            - img "JSON tree" [ref=f1e85]
+          - generic [ref=f1e86]:
+            - heading "JSON tree" [level=3] [ref=f1e87]
+            - paragraph [ref=f1e88]: Every object with its key count and a peek at its content.
+        - figure [ref=f1e89]:
+          - button "Enlarge" [ref=f1e90]:
+            - img "JSON errors" [ref=f1e92]
+          - generic [ref=f1e93]:
+            - heading "JSON errors" [level=3] [ref=f1e94]
+            - paragraph [ref=f1e95]: The exact position of the problem, with the lines around it.
+        - figure [ref=f1e96]:
+          - button "Enlarge" [ref=f1e97]:
+            - img "Markdown" [ref=f1e99]
+          - generic [ref=f1e100]:
+            - heading "Markdown" [level=3] [ref=f1e101]
+            - paragraph [ref=f1e102]: Rendered like on GitHub, in your system's appearance.
+        - figure [ref=f1e103]:
+          - button "Enlarge" [ref=f1e104]:
+            - img "Log files" [ref=f1e106]
+          - generic [ref=f1e107]:
+            - heading "Log files" [level=3] [ref=f1e108]
+            - paragraph [ref=f1e109]: Levels counted in the toolbar, errors tinted with their stack trace.
+        - figure [ref=f1e110]:
+          - button "Enlarge" [ref=f1e111]:
+            - img "Tables" [ref=f1e113]
+          - generic [ref=f1e114]:
+            - heading "Tables" [level=3] [ref=f1e115]
+            - paragraph [ref=f1e116]: TSV laid out as a table, numbers aligned on the right.
+        - figure [ref=f1e117]:
+          - button "Enlarge" [ref=f1e118]:
+            - img "Source code" [ref=f1e120]
+          - generic [ref=f1e121]:
+            - heading "Source code" [level=3] [ref=f1e122]
+            - paragraph [ref=f1e123]: Highlighting with line numbers and the language badge.
+        - figure [ref=f1e124]:
+          - button "Enlarge" [ref=f1e125]:
+            - img "PowerShell" [ref=f1e127]
+          - generic [ref=f1e128]:
+            - heading "PowerShell" [level=3] [ref=f1e129]
+            - paragraph [ref=f1e130]: Variables, cmdlets, parameters and here-strings.
+        - figure [ref=f1e131]:
+          - button "Enlarge" [ref=f1e132]:
+            - img "XML" [ref=f1e134]
+          - generic [ref=f1e135]:
+            - heading "XML" [level=3] [ref=f1e136]
+            - paragraph [ref=f1e137]: Elements, attributes, CDATA and entities, each in its own colour.
+        - figure [ref=f1e138]:
+          - button "Enlarge" [ref=f1e139]:
+            - img "The companion app" [ref=f1e141]
+          - generic [ref=f1e142]:
+            - heading "The companion app" [level=3] [ref=f1e143]
+            - paragraph [ref=f1e144]: Switches per category, appearance, text size and language.
+    - region [ref=f1e145]:
+      - heading "Install in three steps" [level=2] [ref=f1e146]
+      - list [ref=f1e147]:
+        - listitem [ref=f1e148]:
+          - generic [ref=f1e149]: "1"
+          - heading "Download" [level=3] [ref=f1e150]
+          - paragraph [ref=f1e151]: Get the ZIP above and unpack it.
+        - listitem [ref=f1e152]:
+          - generic [ref=f1e153]: "2"
+          - heading "Move and open" [level=3] [ref=f1e154]
+          - paragraph [ref=f1e155]:
+            - text: Drag
+            - strong [ref=f1e156]: Loupe.app
+            - text: "to Applications. The app is not notarized: open it once with right-click →"
+            - emphasis [ref=f1e157]: Open
+            - text: .
+        - listitem [ref=f1e158]:
+          - generic [ref=f1e159]: "3"
+          - heading "Turn it on" [level=3] [ref=f1e160]
+          - paragraph [ref=f1e161]:
+            - text: System Settings → General → Login Items & Extensions → Quick Look → enable
+            - strong [ref=f1e162]: Loupe
+            - text: . Then press Space on a file.
+      - generic [ref=f1e163]:
+        - heading "Check what you downloaded" [level=3] [ref=f1e164]
+        - generic [ref=f1e165]:
+          - term [ref=f1e166]: Loupe-v0.5.1-macOS.zip
+          - definition [ref=f1e167]:
+            - code [ref=f1e168]: 13cc645893ae5b7951c282d6169fc30d036958cf012583f45b71e0430371aff4
+        - paragraph [ref=f1e169]: Loupe is ad-hoc signed, not notarized — there is no Apple Team ID to check. Compare the SHA-256 of your download with the value above; the release on GitHub lists the same checksum.
+      - paragraph [ref=f1e170]:
+        - text: On macOS 14 the switch is under Privacy & Security → Extensions → Quick Look. Stuck on plain text? Run
+        - code [ref=f1e171]: qlmanage -r && qlmanage -r cache
+        - text: once.
+    - region [ref=f1e172]:
+      - heading "Questions" [level=2] [ref=f1e173]
+      - generic [ref=f1e174]:
+        - group [ref=f1e175]:
+          - generic "Is Loupe free?" [ref=f1e176] [cursor=pointer]
+        - group [ref=f1e177]:
+          - generic "Why isn't it in the App Store?" [ref=f1e178] [cursor=pointer]
+        - group [ref=f1e179]:
+          - generic "What do I need?" [ref=f1e180] [cursor=pointer]
+        - group [ref=f1e181]:
+          - generic "Why does my .csv file still look plain?" [ref=f1e182] [cursor=pointer]
+        - group [ref=f1e183]:
+          - generic "How do I update?" [ref=f1e184] [cursor=pointer]
+        - group [ref=f1e185]:
+          - generic "Does Loupe send my files anywhere?" [ref=f1e186] [cursor=pointer]
+    - region [ref=f1e187]:
+      - generic [ref=f1e188]:
+        - generic [ref=f1e189]:
+          - heading "Like the app?" [level=2] [ref=f1e190]
+          - paragraph [ref=f1e191]: Loupe is free, has no ads and stays that way. A small donation keeps it maintained — and a review of celox.io on Google helps just as much.
+        - generic [ref=f1e192]:
+          - link "Donate with PayPal" [ref=f1e193] [cursor=pointer]:
+            - /url: https://www.paypal.com/donate/?business=martin.pfeffer@celox.io&currency_code=EUR&item_name=Loupe
+          - link "Rate celox.io on Google" [ref=f1e197] [cursor=pointer]:
+            - /url: https://g.page/r/CXgdRV3QysvxEBM/review
+  - contentinfo [ref=f1e210]:
+    - paragraph [ref=f1e211]:
+      - text: © 2026 Martin Pfeffer ·
+      - link "celox.io" [ref=f1e212] [cursor=pointer]:
+        - /url: https://celox.io
+    - paragraph [ref=f1e213]:
+      - button "MIT licence" [ref=f1e214] [cursor=pointer]
+      - button "Changelog" [ref=f1e215] [cursor=pointer]
+      - link "Rate celox.io" [ref=f1e216] [cursor=pointer]:
+        - /url: https://g.page/r/CXgdRV3QysvxEBM/review
+      - link "Imprint" [ref=f1e217] [cursor=pointer]:
+        - /url: https://celox.io/impressum/
+      - link "Privacy" [ref=f1e218] [cursor=pointer]:
+        - /url: https://celox.io/datenschutz/

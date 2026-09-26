@@ -3,11 +3,12 @@ import Foundation
 public enum LoupeAppearance: String, CaseIterable, Codable, Equatable, Sendable {
     case system, light, dark
 
-    public var displayName: String {
+    public func displayName(_ lang: LoupeLanguage) -> String {
+        let de = lang == .de
         switch self {
         case .system: return "System"
-        case .light:  return "Hell"
-        case .dark:   return "Dunkel"
+        case .light:  return de ? "Hell" : "Light"
+        case .dark:   return de ? "Dunkel" : "Dark"
         }
     }
 }
@@ -15,11 +16,12 @@ public enum LoupeAppearance: String, CaseIterable, Codable, Equatable, Sendable 
 public enum LoupeTextSize: String, CaseIterable, Codable, Equatable, Sendable {
     case small, standard, large
 
-    public var displayName: String {
+    public func displayName(_ lang: LoupeLanguage) -> String {
+        let de = lang == .de
         switch self {
-        case .small:    return "Klein"
+        case .small:    return de ? "Klein" : "Small"
         case .standard: return "Standard"
-        case .large:    return "Groß"
+        case .large:    return de ? "Groß" : "Large"
         }
     }
 
@@ -57,12 +59,13 @@ public enum LoupeContentWidth: String, CaseIterable, Codable, Equatable, Sendabl
     case wide = "wide"
     case full = "full"
 
-    public var displayName: String {
+    public func displayName(_ lang: LoupeLanguage) -> String {
+        let de = lang == .de
         switch self {
-        case .compact: return "Kompakt (680px)"
-        case .standard: return "Standard (840px)"
-        case .wide: return "Breit (1040px)"
-        case .full: return "Volle Breite"
+        case .compact: return de ? "Kompakt (680 px)" : "Compact (680 px)"
+        case .standard: return "Standard (840 px)"
+        case .wide: return de ? "Breit (1040 px)" : "Wide (1040 px)"
+        case .full: return de ? "Volle Breite" : "Full width"
         }
     }
 
@@ -92,6 +95,9 @@ public struct LoupeSettings: Codable, Equatable, Sendable {
     /// Abgeschaltete Rubriken. Gespeichert wird, was AUS ist -- so ist eine
     /// Rubrik, die eine spaetere Version neu einfuehrt, automatisch an.
     public var disabledCategories: Set<PreviewCategory>
+    /// Sprache der Begleit-App: System (Deutsch, wenn Deutsch vorn steht, sonst Englisch) oder fest.
+    /// Wirkt nur auf Fenster und Menue der App -- die Vorschau wird nicht uebersetzt.
+    public var language: LoupeLanguageSetting
 
     /// Gemeinsame Praeferenz-Domain von App und Erweiterung. Beide sind
     /// sandboxed; erreichbar ist sie ueber die Sandbox-Ausnahme `shared-preference`
@@ -114,7 +120,8 @@ public struct LoupeSettings: Codable, Equatable, Sendable {
         showLineNumbers: Bool = false,
         maxFileSizeBytes: Int = 5 * 1024 * 1024,
         previewsEnabled: Bool = true,
-        disabledCategories: Set<PreviewCategory> = []
+        disabledCategories: Set<PreviewCategory> = [],
+        language: LoupeLanguageSetting = .system
     ) {
         self.appearance = appearance
         self.textSize = textSize
@@ -127,6 +134,7 @@ public struct LoupeSettings: Codable, Equatable, Sendable {
         self.maxFileSizeBytes = maxFileSizeBytes
         self.previewsEnabled = previewsEnabled
         self.disabledCategories = disabledCategories
+        self.language = language
     }
 
     public init(from decoder: Decoder) throws {
@@ -145,7 +153,12 @@ public struct LoupeSettings: Codable, Equatable, Sendable {
         // darf nicht die ganzen Einstellungen unlesbar machen.
         let raw = (try? container.decodeIfPresent([String].self, forKey: .disabledCategories)) ?? nil
         self.disabledCategories = Set((raw ?? []).compactMap(PreviewCategory.init(rawValue:)))
+        self.language = (try? container.decodeIfPresent(LoupeLanguageSetting.self, forKey: .language)) ?? .system
     }
+
+    /// Die tatsaechlich verwendete Sprache der App.
+    public var uiLanguage: LoupeLanguage { language.resolved() }
+    public var l10n: L10n { L10n(uiLanguage) }
 
     /// Ob Loupe fuer diese Rubrik eine Vorschau liefert (globaler Schalter UND Rubrik).
     public func isEnabled(_ category: PreviewCategory) -> Bool {
