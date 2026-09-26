@@ -36,3 +36,4 @@ Tests/Fixtures/large.json
 !Tests/Fixtures/logs/*.log
 !Tools/ScreenshotGenerator/samples/*.log
 Tests/Fixtures/logs/14-large-tail.log
+.playwright-mcp/
