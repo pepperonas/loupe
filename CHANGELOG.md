@@ -5,6 +5,22 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+## [0.7.0] - 2026-09-27
+
+### Hinzugefügt
+- **Vorschau für Rhythmusspiel-Charts (`.chart`, Clone Hero / Moonscraper).** Jeder Abschnitt
+  (`[Song]`, `[SyncTrack]`, `[Events]`, die Spuren) ist ein Aufklapper und startet **zugeklappt**; die
+  Zusammenfassung zählt Noten, Star Power und Ereignisse, die Kopfzeile nennt Interpret und Titel.
+  Aufgeklappt: Tick und **Songzeit** (aus `Resolution` und allen Tempowechseln), Noten in Bundfarben
+  (Force/Tap/Open als Kennung) mit Sustain, Star-Power-Phrasen, Abschnittsmarken, Tempo in BPM, Taktarten.
+  Kaputte Zeilen werden mit Zeilennummer gemeldet statt die Vorschau zu verhindern; eine Datei ohne
+  Abschnitte erscheint als Rohtext.
+- Eigener Typ `io.celox.loupe.chart` (abgeleitet von `public.plain-text`) — macOS kennt `.chart` nicht und
+  vergibt sonst nur einen dynamischen Typ, für den Quick Look keine Erweiterung fragt.
+- Eigene Rubrik **Charts (.chart)** mit Schalter in der App; ausgeschaltet zeigt Quick Look den Rohtext.
+- Grenzen für sehr große Charts: höchstens 8 MB gelesen, 5.000 Zeilen je Abschnitt und 30.000 insgesamt
+  gezeichnet (typische Charts: ~27.000 Zeilen, 0,5 MB). Neue Lesestrategie `headAtMost` dafür.
+
 ## [0.6.0] - 2026-09-26
 
 ### Hinzugefügt

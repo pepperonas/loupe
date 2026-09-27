@@ -21,8 +21,8 @@
 [![Aktuelles Release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release-Build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-342%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
-[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-5.912-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-374%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
+[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-6.460-blue?logo=swift&logoColor=white)](Sources/)
 [![Lizenz](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Letzter Commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit-Aktivität](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -92,7 +92,7 @@
 ## 📑 Inhalt
 
 - [Warum Loupe?](#-warum-loupe)
-- [Galerie](#-galerie) — [JSON](#-json) · [Markdown](#-markdown) · [Log-Dateien](#-log-dateien) · [Quellcode](#-quellcode) · [XML](#-xml) · [PowerShell & Batch](#-powershell--batch) · [TSV & CSV](#-tsv--csv)
+- [Galerie](#-galerie) — [JSON](#-json) · [Markdown](#-markdown) · [Log-Dateien](#-log-dateien) · [Quellcode](#-quellcode) · [XML](#-xml) · [PowerShell & Batch](#-powershell--batch) · [Charts](#-rhythmusspiel-charts-chart) · [TSV & CSV](#-tsv--csv)
 - [Unterstützte Dateitypen](#-unterstützte-dateitypen)
 - [Installation](#-installation)
 - [Einstellungen](#%EF%B8%8F-einstellungen)
@@ -253,6 +253,14 @@ macOS vergibt für `.ps1`, `.bat` und `.cmd` nur einen *dynamischen* Typ — kei
 - **PowerShell** — `<# Hilfe #>`-Blöcke und `#`-Kommentare, Variablen inkl. Bereichen (`$env:PATH`, `$script:x`, `${beliebiger Name}`), Cmdlets (`Get-ChildItem`), Parameter (`-Path`), Wort-Operatoren (`-eq`, `-notin`, `-match`), Typ-Literale (`[string]`, `[System.IO.File]`), Strings mit **Einsetzung** von `$var` und `$(…)`, Here-Strings `@" … "@`, Größen-Literale (`10MB`), Schlüsselwörter ohne Groß-/Kleinschreibung.
 - **Batch** — `REM`- und `::`-Kommentare, Sprungmarken und `goto :eof`, jede Variablenform (`%PATH%`, `%~dp0`, `%1`, `%%i`, `%%~nxf`, `!verzögert!`, `%DATE:~0,4%`), Schalter (`/b`, `/a`), Schlüsselwörter ohne Groß-/Kleinschreibung (`IF NOT EXIST`, `EQU`, `ERRORLEVEL`).
 
+### 🎸 Rhythmusspiel-Charts (`.chart`)
+
+Clone-Hero-/Moonscraper-Charts erscheinen abschnittsweise — `[Song]`, `[SyncTrack]`, `[Events]` und jede Spur wie `[ExpertSingle]`. **Jeder Abschnitt startet zugeklappt**; seine Zusammenfassung sagt, was drinsteckt (*4811 Noten · 36 Star Power · 4 Ereignisse*), und die Kopfzeile nennt Interpret und Titel aus `[Song]`. Aufgeklappt zeigt jede Zeile **Tick und Songzeit** (berechnet aus `Resolution` und allen Tempowechseln), die Art des Eintrags und einen lesbaren Wert: Noten in ihren **Bundfarben** (grün, rot, gelb, blau, orange; Force/Tap/Open) samt Sustain, Star-Power-Phrasen, Abschnittsmarken, Tempo als BPM und Taktarten wie `6/8`.
+
+- macOS kennt `.chart` nicht — Loupe deklariert `io.celox.loupe.chart` (abgeleitet von Text), sonst würde Quick Look Loupe nie fragen.
+- Eine Datei mit derselben Endung, die kein Chart ist, erscheint als Rohtext statt als Fehler.
+- Grenzen: 5.000 Zeilen je Abschnitt, 30.000 insgesamt, `.chart` wird bis 8 MB gelesen. Typische Charts liegen weit darunter (ein vollständiger Chart mit fünf Schwierigkeiten: ~27.000 Zeilen, 0,5 MB).
+
 ### 📊 TSV & CSV
 
 <picture>
@@ -292,6 +300,7 @@ Entscheidend ist nicht, was Loupe rendern *kann*, sondern was **Quick Look tats�
 | XML | `.xml` | `public.xml` | ✅ |
 | XML-Dialekte | `.xsd` `.xsl` `.xslt` `.xaml` `.csproj` `.vbproj` `.fsproj` `.vcxproj` `.props` `.targets` `.resx` `.wsdl` `.nuspec` | `io.celox.loupe.xml-document` *(von Loupe deklariert)* | ✅ |
 | CSS | `.css` | `public.css` | ✅ |
+| Rhythmusspiel-Chart | `.chart` | `io.celox.loupe.chart` *(von Loupe deklariert)* | ✅ |
 <!-- filetypes:end -->
 
 **Hervorgehoben, aber aus dem Finder standardmäßig nicht erreichbar** — auf einem normalen macOS bekommen diese Endungen einen *dynamischen* Typ oder einen, der etwas anderem gehört, deshalb fragt Quick Look Loupe nicht. Deklariert ein anderes installiertes Programm (etwa Xcode) einen Quellcode-Typ dafür, gibt Quick Look die Datei doch an Loupe:
@@ -355,6 +364,7 @@ In der Begleit-App (`Loupe.app`) schalten Sie Loupe ein und aus und stellen das 
 | **Tabellen (TSV)** | `.tsv`, `.tab` |
 | **Log-Dateien** | `.log` |
 | **Code** | Alle Programmiersprachen, Skripte (PowerShell, Batch, Shell), XML und Konfigurationsdateien |
+| **Charts (.chart)** | `.chart` (Clone Hero / Moonscraper) |
 
 Ist Loupe aus – global oder für eine Rubrik –, erscheint der Rohtext, genau wie auf einem Mac ohne Loupe. Die Auswahl je Rubrik bleibt erhalten, solange der globale Schalter aus ist.
 
@@ -391,8 +401,9 @@ Gemessen von der Test-Suite (Release-Build, Apple M1 Pro, macOS 27). Die Suite e
 | Kleines JSON-Dokument | JSON-Baum | **8 ms** |
 | 5 MB JSON | JSON-Baum (Knotengrenze greift) | **162 ms** |
 | 4 MB Log (≈ 40.000 Zeilen → neueste 5.000) | Log-Tabelle | **338 ms** |
+| 8 MB `.chart` (größte lesbare, ≈ 470.000 Zeilen → 30.000 gezeigt) | Chart-Abschnitte | **450 ms** |
 
-Große Dateien werden nie vollständig gelesen: JSON und Code höchstens 20 MB vom Anfang, Logs vom Ende (4 MB).
+Große Dateien werden nie vollständig gelesen: JSON und Code höchstens 20 MB vom Anfang, `.chart` höchstens 8 MB, Logs vom Ende (4 MB).
 
 ---
 
@@ -473,6 +484,7 @@ Sources/
     ├── CSV/                      RFC-4180-Parser mit Trennzeichenerkennung, Tabellen-Renderer
     ├── Log/                      Log-Modell, Formaterkennung, Hervorhebung in Nachrichten
     ├── Highlighting/             Tokenizer für 23 Sprachen (inkl. PowerShell & Batch)
+    ├── Chart/                    .chart-Parser und Tempo-Zeitrechnung
     ├── Preview/                  Renderer-Protokoll, Registry, Dateileser, ein Renderer je Format
     ├── Render/                   JSON-Baum, Aufklapp-Planung, HTML-Escaping
     ├── Theme/                    CSS-Generator (hell/dunkel, WCAG AA)
@@ -496,7 +508,7 @@ swift run LoupeTests              # Debug
 swift run -c release LoupeTests   # Release (wie im Release-Workflow)
 ```
 
-**306 Tests** in einem abhängigkeitsfreien Test-Harness, bei jedem Push von der CI ausgeführt:
+**374 Tests** in einem abhängigkeitsfreien Test-Harness, bei jedem Push von der CI ausgeführt:
 
 | Bereich | Tests | Schwerpunkte |
 | :--- | ---: | :--- |
@@ -507,9 +519,10 @@ swift run -c release LoupeTests   # Release (wie im Release-Workflow)
 | TSV / CSV | 22 | RFC-4180-Anführungszeichen, Trennzeichenerkennung, Grenzen |
 | Erscheinungsbild & Einstellungen | 40 | Helles/dunkles CSS, Migration der Einstellungen, Schalter je Rubrik, Kodierungen des Rohtexts, gemeinsame Präferenz-Domain + Entitlements |
 | Sprache & Über | 14 | App-Texte Englisch/Deutsch, Sprachauflösung, **Vorschau in jeder Sprache byte-gleich**, jeder „Über“-Link auf sein echtes Ziel festgenagelt |
+| Charts (`.chart`) | 31 | Abschnitte, BOM/CRLF, kaputte Dateien, Tempowechsel → Songzeit, **jeder Abschnitt startet zugeklappt**, Bundfarben, Escaping, Zeilen- und Lesegrenzen, WCAG-Kontrast, Typ-Anmeldung |
 | Registry & App | 19 | Typ-Zuordnung, CSP, ungültiges UTF-8, leere Dateien, pluginkit-Auswertung inkl. Sandbox-Verweigerung |
 | Doku-Abgleich | 6 | Diese README gegen den Code: Versionen, Test-Badge, Bildpfade, Gleichstand EN/DE, Erreichbarkeit im Finder |
-| Leistung | 3 | Harte Zeitgrenzen für große Eingaben |
+| Leistung | 4 | Harte Zeitgrenzen für große Eingaben |
 
 So bleiben die Tests ehrlich:
 

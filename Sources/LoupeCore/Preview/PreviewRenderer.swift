@@ -27,6 +27,9 @@ public struct PreviewInput: Sendable {
 public enum PreviewReadStrategy: Equatable, Sendable {
     /// Vom Anfang bis zur Byte-Grenze (Dokumente, Code).
     case head
+    /// Vom Anfang, aber hoechstens `maxBytes` -- fuer Formate, deren Vorschau bei
+    /// sehr grossen Dateien sonst zaeh wuerde (.chart: 8 MB statt der allgemeinen 20).
+    case headAtMost(maxBytes: Int)
     /// Nur die letzten `maxBytes` (Logs: das Neueste steht am Ende).
     case tail(maxBytes: Int)
 }

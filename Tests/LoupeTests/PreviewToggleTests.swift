@@ -77,13 +77,15 @@ public enum PreviewToggleTests {
                 try assertEqual(CSVPreviewRenderer.category, .table)
                 try assertEqual(LogPreviewRenderer.category, .log)
                 try assertEqual(SourceCodePreviewRenderer.category, .code)
+                try assertEqual(ChartPreviewRenderer.category, .chart)
             }
 
             runner.runTest(name: "testCategoryFollowsTheRendererChosenForAFile") {
                 let cases: [(String, PreviewCategory)] = [
                     ("a.json", .json), ("README.md", .markdown), ("t.tsv", .table),
                     ("server.log", .log), ("main.swift", .code), ("deploy.ps1", .code),
-                    ("build.bat", .code), ("pom.xml", .code), ("Dockerfile", .code)
+                    ("build.bat", .code), ("pom.xml", .code), ("Dockerfile", .code),
+                    ("notes.chart", .chart)
                 ]
                 for (name, expected) in cases {
                     let url = URL(fileURLWithPath: "/tmp/loupe-toggle-test/\(name)")
@@ -100,7 +102,7 @@ public enum PreviewToggleTests {
                     try assertEqual(Set(labels).count, labels.count)
                     for l in labels { try assertFalse(l.isEmpty) }
                 }
-                try assertEqual(PreviewCategory.allCases.count, 5)
+                try assertEqual(PreviewCategory.allCases.count, 6)
             }
         }
     }

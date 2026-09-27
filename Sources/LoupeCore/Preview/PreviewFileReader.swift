@@ -22,13 +22,15 @@ public enum PreviewFileReader {
         let size = (attributes[.size] as? NSNumber)?.intValue ?? 0
 
         switch strategy {
-        case .head:
-            guard size > headLimit else {
+        case .head, .headAtMost:
+            var limit = headLimit
+            if case .headAtMost(let most) = strategy { limit = min(headLimit, most) }
+            guard size > limit else {
                 return Result(data: try Data(contentsOf: url), truncatedAtEnd: false, skippedBytesAtStart: 0)
             }
             let handle = try FileHandle(forReadingFrom: url)
             defer { try? handle.close() }
-            let data = try handle.read(upToCount: headLimit) ?? Data()
+            let data = try handle.read(upToCount: limit) ?? Data()
             return Result(data: data, truncatedAtEnd: true, skippedBytesAtStart: 0)
 
         case .tail(let maxBytes):

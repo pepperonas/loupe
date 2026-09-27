@@ -8,6 +8,7 @@ public enum RendererRegistry {
         MarkdownPreviewRenderer(),
         CSVPreviewRenderer(),
         LogPreviewRenderer(),
+        ChartPreviewRenderer(),
         SourceCodePreviewRenderer()
     ]
 
@@ -25,6 +26,8 @@ public enum RendererRegistry {
     public static func renderer(for url: URL) -> (any PreviewRenderer)? {
         let ext = url.pathExtension.lowercased()
         let filename = url.lastPathComponent.lowercased()
+        // .chart hat ausserhalb von Loupe keinen Typ -- ueber die Endung erkennen.
+        if ext == "chart" { return ChartPreviewRenderer() }
         if SourceCodePreviewRenderer.supportedExtensions.contains(ext) ||
            SourceCodePreviewRenderer.supportedExtensions.contains(filename) {
             return SourceCodePreviewRenderer()

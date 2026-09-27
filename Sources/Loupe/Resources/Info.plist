@@ -19,7 +19,7 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.6.0</string>
+    <string>0.7.0</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>CFBundleSupportedPlatforms</key>
@@ -114,6 +114,15 @@
             </array>
         </dict>
         <dict>
+            <key>CFBundleTypeName</key><string>Rhythm Game Chart</string>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>Alternate</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>io.celox.loupe.chart</string>
+            </array>
+        </dict>
+        <dict>
             <key>CFBundleTypeName</key><string>XML Document</string>
             <key>CFBundleTypeRole</key><string>Viewer</string>
             <key>LSHandlerRank</key><string>Alternate</string>
@@ -193,6 +202,26 @@
          .storyboard/.xib/.entitlements: diese Typen gehoeren Xcode. -->
     <key>UTExportedTypeDeclarations</key>
     <array>
+        <!-- Clone-Hero-/Moonscraper-Charts: macOS kennt .chart nicht (nur ein
+             dynamischer Typ, den Quick Look nie an eine Erweiterung gibt). Von
+             public.plain-text abgeleitet, damit "aus" wieder Rohtext zeigt. -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.celox.loupe.chart</string>
+            <key>UTTypeDescription</key>
+            <string>Rhythm Game Chart</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.plain-text</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>chart</string>
+                </array>
+            </dict>
+        </dict>
         <dict>
             <key>UTTypeIdentifier</key>
             <string>io.celox.loupe.xml-document</string>

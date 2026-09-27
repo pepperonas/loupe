@@ -90,6 +90,42 @@ public enum PerformanceTests {
                 // Die Zeilengrenze muss greifen: 5000 Zeilen, nicht ~40.000.
                 try assertTrue(html.contains("5000 Zeilen"))
             }
+
+            runner.runTest(name: "testLargestReadableChartUnderOneSecond") {
+                // Die Chart-Lesegrenze (8 MB) voll ausgeschoepft: viele Spuren mit je weit
+                // mehr als maxRowsPerSection Noten, dazu Tempowechsel.
+                var lines = ["[Song]", "{", "  Resolution = 480", "}", "[SyncTrack]", "{"]
+                for t in 0..<200 { lines.append("  \(t * 3840) = B \(120000 + t * 100)") }
+                lines.append("}")
+                var bytes = lines.joined(separator: "\n").utf8.count
+                var section = 0
+                let names = ["ExpertSingle", "HardSingle", "MediumSingle", "EasySingle"]
+                while bytes < ChartPreviewRenderer.maxReadBytes {
+                    lines.append("[\(names[section % 4])\(section / 4)]"); lines.append("{")
+                    for n in 0..<40_000 {
+                        let line = "  \(n * 120) = N \(n % 5) \(n % 3 == 0 ? 240 : 0)"
+                        lines.append(line)
+                        bytes += line.utf8.count + 1
+                        if bytes >= ChartPreviewRenderer.maxReadBytes { break }
+                    }
+                    lines.append("}")
+                    section += 1
+                }
+                let input = PreviewInput(data: Data(lines.joined(separator: "\n").utf8),
+                                         url: URL(fileURLWithPath: "/tmp/big.chart"),
+                                         wasTruncatedByReader: false)
+                let start = CFAbsoluteTimeGetCurrent()
+                let html = ChartPreviewRenderer().renderHTML(input: input, settings: LoupeSettings())
+                let ms = (CFAbsoluteTimeGetCurrent() - start) * 1000
+                #if DEBUG
+                let threshold = 4500.0   // wie die uebrigen Debug-Grenzen (geteilte CI-Runner)
+                #else
+                let threshold = 1000.0
+                #endif
+                try assertLessThan(ms, threshold)
+                try assertTrue(html.contains("weitere Einträge nicht dargestellt"), "die Zeilengrenze muss greifen")
+                try assertLessThan(html.utf8.count, 16 * 1024 * 1024)
+            }
         }
     }
 }

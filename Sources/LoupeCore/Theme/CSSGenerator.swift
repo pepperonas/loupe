@@ -1093,4 +1093,142 @@ public enum CSSGenerator {
         .lg-empty { padding: 12px 16px; color: var(--lg-dim); }
         """
     }
+
+    // MARK: - Chart (.chart)
+
+    private static let chartLightVars = """
+        --ch-f0: #1b6e30;
+        --ch-f1: #b8150f;
+        --ch-f2: #7a5b00;
+        --ch-f3: #0a5fc2;
+        --ch-f4: #a34700;
+        --ch-flag: #5a2bb5;
+        --ch-sp: #006a80;
+        --ch-ev: #a10d5c;
+        --ch-sync: #8a4d00;
+        --ch-tick: #63636a;
+        --ch-time: #0c6974;
+        --ch-dim: #5c5c62;
+    """
+
+    private static let chartDarkVars = """
+        --ch-f0: #6ad782;
+        --ch-f1: #ff7a70;
+        --ch-f2: #f5d547;
+        --ch-f3: #64b5ff;
+        --ch-f4: #ffab5c;
+        --ch-flag: #c9a7ff;
+        --ch-sp: #5fd3e8;
+        --ch-ev: #ff85c0;
+        --ch-sync: #ffb340;
+        --ch-tick: #9d9da3;
+        --ch-time: #66c2cd;
+        --ch-dim: #a8a8ad;
+    """
+
+    /// Code-Grundgeruest plus Chart-Rollen (Bundfarben, Star Power, Ereignisse, Tempo).
+    public static func generateChartCSS(settings: LoupeSettings) -> String {
+        let chartRoot: String
+        switch settings.appearance {
+        case .light:
+            chartRoot = ":root {\n\(chartLightVars)\n}"
+        case .dark:
+            chartRoot = ":root {\n\(chartDarkVars)\n}"
+        case .system:
+            chartRoot = """
+            :root {
+            \(chartLightVars)
+            }
+            @media (prefers-color-scheme: dark) {
+                :root {
+                \(chartDarkVars)
+                }
+            }
+            """
+        }
+
+        return """
+        \(generateCodeCSS(settings: settings))
+
+        \(chartRoot)
+
+        .ch-title { color: var(--text-primary); font-weight: 600; }
+
+        .ch-body { padding: 6px 0; }
+
+        .ch-sec > summary {
+            cursor: default;
+            list-style: none;
+            padding: 5px 14px;
+            display: flex;
+            gap: 12px;
+            align-items: baseline;
+            font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+            font-size: \(settings.textSize.baseFontSizePx)px;
+        }
+        .ch-sec > summary::-webkit-details-marker { display: none; }
+        .ch-sec > summary::before {
+            content: "\\25B8";
+            display: inline-block;
+            width: 1em;
+            color: var(--ch-dim);
+            transition: transform 120ms ease;
+        }
+        .ch-sec[open] > summary::before { transform: rotate(90deg); }
+        .ch-sec > summary:hover { background: var(--bg-code-header); }
+        .ch-sec > summary:focus-visible { outline: 2px solid var(--ch-f3); outline-offset: -2px; }
+        .ch-name { color: var(--text-primary); font-weight: 700; }
+        .ch-sum { color: var(--ch-dim); }
+
+        .ch-table {
+            border-collapse: collapse;
+            margin: 2px 0 8px 2.3em;
+            font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+            font-size: \(max(11, settings.textSize.baseFontSizePx - 1))px;
+            line-height: 1.55;
+        }
+        .ch-table td { padding: 0 14px 0 0; vertical-align: top; white-space: nowrap; }
+        .ch-tick { color: var(--ch-tick); text-align: right; font-variant-numeric: tabular-nums; }
+        .ch-time { color: var(--ch-time); font-variant-numeric: tabular-nums; }
+        .ch-key { color: var(--hl-prop); }
+        .ch-val { color: var(--text-primary); white-space: pre-wrap; }
+        .ch-str { color: var(--hl-str); }
+        .ch-num { color: var(--hl-num); }
+
+        .ch-badge {
+            display: inline-block;
+            min-width: 2.2em;
+            padding: 0 5px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 700;
+            text-align: center;
+            color: var(--ch-dim);
+            background-color: color-mix(in srgb, currentColor 13%, transparent);
+        }
+        .ch-k-S { color: var(--ch-sp); }
+        .ch-k-E { color: var(--ch-ev); }
+        .ch-k-B, .ch-k-TS { color: var(--ch-sync); }
+
+        .ch-fret { font-weight: 700; }
+        .ch-f0 { color: var(--ch-f0); }
+        .ch-f1 { color: var(--ch-f1); }
+        .ch-f2 { color: var(--ch-f2); }
+        .ch-f3 { color: var(--ch-f3); }
+        .ch-f4 { color: var(--ch-f4); }
+        .ch-flag { color: var(--ch-flag); font-weight: 600; }
+        .ch-sp { color: var(--ch-sp); font-weight: 600; }
+        .ch-ev { color: var(--ch-ev); }
+        .ch-section { font-weight: 700; }
+        .ch-sync { color: var(--ch-sync); }
+        .ch-sus, .ch-rawval { color: var(--ch-dim); }
+
+        .ch-empty, .ch-omitted { color: var(--ch-dim); padding: 2px 0 8px 2.3em; }
+        .ch-raw { margin: 0; padding: 12px 16px; white-space: pre-wrap; color: var(--text-primary); }
+
+        @media (prefers-reduced-motion: reduce) {
+            .ch-sec > summary::before { transition: none; }
+        }
+        """
+    }
 }

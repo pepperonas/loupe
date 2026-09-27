@@ -17,6 +17,9 @@ LOC_FMT_EN=$(printf "%'d" "${LOC}" 2>/dev/null | sed 's/\./,/g')
 LOC_FMT_DE=$(echo "${LOC_FMT_EN}" | sed 's/,/./g')
 
 sed -i '' -E "s#badge/Tests-[0-9]+%20#badge/Tests-${TESTS}%20#" README.md README.de.md
+# Auch die Zahl im Fliesstext des Test-Abschnitts ("**306 tests**" stand dort wochenlang veraltet).
+sed -i '' -E "s#\*\*[0-9]+ tests\*\*#**${TESTS} tests**#" README.md
+sed -i '' -E "s#\*\*[0-9]+ Tests\*\*#**${TESTS} Tests**#" README.de.md
 sed -i '' -E "s#badge/Swift%20LoC-[0-9.,%2C]+-#badge/Swift%20LoC-${LOC_FMT_EN//,/%2C}-#" README.md
 sed -i '' -E "s#badge/Swift%20LoC-[0-9.,%2C]+-#badge/Swift%20LoC-${LOC_FMT_DE}-#" README.de.md
 # Dieselben Zahlen fuer die Produktseite loupe.celox.io: ihr Release-Timer holt die
