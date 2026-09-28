@@ -133,18 +133,18 @@
    "title": "Loupe — Quick Look for JSON, Markdown, Logs & Code",
    "description": "Free, open-source Quick Look extension for macOS: readable previews of JSON, Markdown, logs, TSV and source code. Press Space in Finder.",
    "og_title": "Loupe — Press Space. See it properly.",
-   "og_description": "Native Quick Look previews for developer files on macOS: JSON trees, Markdown, logs, TSV and code in 20+ languages. Free, open source, offline.",
+   "og_description": "Native Quick Look previews for developer files on macOS: JSON trees, Markdown, logs, TSV and code in 35 languages. Free, open source, offline.",
    "twitter_description": "Quick Look for developers: JSON, Markdown, logs, TSV and code, readable in Finder. Free, open source, zero JavaScript.",
    "image_alt": "Three Quick Look windows: a Markdown document, a collapsible JSON tree and a colour-coded server log — Loupe for macOS."
   },
-  "summary": "Loupe is a free, open-source Quick Look extension for macOS 14+. Press Space on a file in Finder and it shows JSON as a collapsible tree with exact error positions, renders Markdown, turns log files into a colour-coded table (newest lines first in view), lays out TSV as a table and highlights source code in 20+ languages, PowerShell, Batch and XML dialects included. It runs sandboxed, read-only and offline, and its previews contain no JavaScript. A companion app switches previews on or off per category and sets appearance, text size and language (English or German).",
+  "summary": "Loupe is a free, open-source Quick Look extension for macOS 14+. Press Space on a file in Finder and it shows JSON as a collapsible tree with exact error positions, renders Markdown, turns log files into a colour-coded table (newest lines first in view), lays out TSV as a table and highlights source code in 35 languages, PowerShell, Batch and XML dialects included. It runs sandboxed, read-only and offline, and its previews contain no JavaScript. A companion app switches previews on or off per category and sets appearance, text size and language (English or German).",
   "meta_fallback": "macOS 14+ · Apple silicon · free",
   "feature_list": [
    "Collapsible JSON tree with exact line and column of syntax errors",
    "Markdown rendering (GitHub flavoured) with blocked remote images",
    "Log files as a table: time, level, source, message; seven formats; big logs read from the end",
    "TSV files as a table with numeric columns aligned",
-   "Syntax highlighting for 20+ languages including PowerShell, Batch and XML dialects",
+   "Syntax highlighting for 35 languages including PowerShell, Batch and XML dialects",
    "Switch previews on or off, globally or per category",
    "Light and dark appearance, three text sizes; companion app in English and German",
    "Sandboxed, read-only, offline; previews contain no JavaScript"
@@ -222,12 +222,12 @@
    },
    {
     "t": {
-     "en": "Code in 20+ languages",
-     "de": "Code in über 20 Sprachen"
+     "en": "Code in 35 languages",
+     "de": "Code in 35 Sprachen"
     },
     "p": {
-     "en": "Swift, Python, Go, Rust, SQL, YAML and more, plus PowerShell, Batch and 13 XML dialects that macOS would otherwise never show.",
-     "de": "Swift, Python, Go, Rust, SQL, YAML und mehr, dazu PowerShell, Batch und 13 XML-Dialekte, die macOS sonst nie zeigen würde."
+     "en": "Swift, Python, C#, Go, Rust, SQL, YAML and more, plus PowerShell, Batch and 13 XML dialects that macOS would otherwise never show.",
+     "de": "Swift, Python, C#, Go, Rust, SQL, YAML und mehr, dazu PowerShell, Batch und 13 XML-Dialekte, die macOS sonst nie zeigen würde."
     }
    },
    {

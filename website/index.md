@@ -1,7 +1,7 @@
 <!--# block name="none" --><!--# endblock -->
 # Loupe — Quick Look for JSON, Markdown, Logs & Code
 
-> Loupe is a free, open-source Quick Look extension for macOS 14+. Press Space on a file in Finder and it shows JSON as a collapsible tree with exact error positions, renders Markdown, turns log files into a colour-coded table (newest lines first in view), lays out TSV as a table and highlights source code in 20+ languages, PowerShell, Batch and XML dialects included. It runs sandboxed, read-only and offline, and its previews contain no JavaScript. A companion app switches previews on or off per category and sets appearance, text size and language (English or German).
+> Loupe is a free, open-source Quick Look extension for macOS 14+. Press Space on a file in Finder and it shows JSON as a collapsible tree with exact error positions, renders Markdown, turns log files into a colour-coded table (newest lines first in view), lays out TSV as a table and highlights source code in 35 languages, PowerShell, Batch and XML dialects included. It runs sandboxed, read-only and offline, and its previews contain no JavaScript. A companion app switches previews on or off per category and sets appearance, text size and language (English or German).
 
 This is the Markdown version of https://loupe.celox.io/ for agents and text tools. A short summary with every link lives at https://loupe.celox.io/llms.txt.
 
@@ -21,7 +21,7 @@ Files in the current release:
 - **JSON you can read** — A collapsible tree with counts and a peek at each object. A broken file shows the exact line and column, with the offending spot marked.
 - **Markdown, rendered** — Headings, tables, task lists and highlighted code blocks. Remote images stay blocked, so a preview never phones home.
 - **Logs at a glance** — Time, level, source and message in columns; seven formats, from nginx to JSON Lines. Big logs are read from the end, where the news is.
-- **Code in 20+ languages** — Swift, Python, Go, Rust, SQL, YAML and more, plus PowerShell, Batch and 13 XML dialects that macOS would otherwise never show.
+- **Code in 35 languages** — Swift, Python, C#, Go, Rust, SQL, YAML and more, plus PowerShell, Batch and 13 XML dialects that macOS would otherwise never show.
 - **You decide** — Switch Loupe off globally or per category — Markdown, JSON, tables, logs, code. Off means plain text, exactly as without Loupe.
 - **Private and fast** — Sandboxed, read-only, offline, and not a single byte of JavaScript in a preview. Light and dark mode; the app speaks English and German.
 

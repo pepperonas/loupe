@@ -4,6 +4,8 @@
 window.SITE_I18N = {
   "de": {
     "skip": "Zum Inhalt springen",
+    "nav.sounds": "Töne",
+    "so.play": "Abspielen",
     "nav.features": "Funktionen",
     "nav.install": "Installieren",
     "nav.faq": "FAQ",
@@ -56,8 +58,8 @@ window.SITE_I18N = {
     "f2.p": "Überschriften, Tabellen, Aufgabenlisten und hervorgehobene Codeblöcke. Externe Bilder bleiben blockiert – eine Vorschau telefoniert nie nach Hause.",
     "f3.t": "Logs auf einen Blick",
     "f3.p": "Zeit, Level, Quelle und Nachricht in Spalten; sieben Formate, von nginx bis JSON Lines. Große Logs werden vom Ende gelesen – dort steht das Neueste.",
-    "f4.t": "Code in über 20 Sprachen",
-    "f4.p": "Swift, Python, Go, Rust, SQL, YAML und mehr, dazu PowerShell, Batch und 13 XML-Dialekte, die macOS sonst nie zeigen würde.",
+    "f4.t": "Code in 35 Sprachen",
+    "f4.p": "Swift, Python, C#, Go, Rust, SQL, YAML und mehr, dazu PowerShell, Batch und 13 XML-Dialekte, die macOS sonst nie zeigen würde.",
     "f5.t": "Sie entscheiden",
     "f5.p": "Loupe global oder je Rubrik abschalten – Markdown, JSON, Tabellen, Logs, Code. Aus heißt Rohtext, genau wie ohne Loupe.",
     "f6.t": "Privat und schnell",
