@@ -5,6 +5,29 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+## [0.8.0] - 2026-09-27
+
+### Hinzugefügt
+- **Zwölf weitere Sprachen hervorgehoben:** C# (`.cs` `.csx`), F# (`.fs` `.fsx` `.fsi`), Visual Basic
+  (`.vb`), Objective-C (`.m` `.mm`), Dart, Scala (`.scala` `.sc`), Groovy/Gradle, Lua, R, Perl (`.pl`
+  `.pm`), Elixir (`.ex` `.exs`) und Zig — jetzt 35. Auswahl nach der Stack-Overflow-Umfrage 2025: alle
+  Sprachen unter den häufigsten 30, die bisher fehlten. Markdown-Codeblöcke erkennen dieselben Namen
+  (`csharp`, `c#`, `fsharp`, `objc` …).
+- **Wortgetreue C#-/F#-Zeichenketten** (`@"C:\pfad\"`, `$@"…"`): kein Backslash-Escape, `""` als
+  Anführungszeichen, dürfen über Zeilen laufen. Visual Basic ohne Backslash-Escape und mit
+  Schlüsselwörtern unabhängig von Groß-/Kleinschreibung.
+
+### Behoben
+- **`.rs`, `.go`, `.kt`, `.sql`, `.toml` und `.ini` kamen auf einem frischen Mac nie bei Loupe an.** Ihre
+  Typen bringt macOS gar nicht mit, nur Editoren wie CotEditor oder BBEdit — ohne einen solchen bekamen die
+  Dateien einen dynamischen Typ, und Quick Look fragt für dynamische Typen keine Erweiterung. Loupe
+  importiert die Typen jetzt selbst, mit denselben Kennungen wie diese Editoren. Dasselbe gilt für die neuen
+  Sprachen (`com.microsoft.c-sharp`, `org.lua.lua-source`, `dev.dart.dart-script`,
+  `org.scala-lang.scala-source`).
+- **`.tsx`, `.jsx`, `.cjs`, `.pyw`, `.scss`, `.sass`, `.less` und `.dockerfile` sind jetzt aus dem Finder
+  erreichbar** (eigene Typen `io.celox.loupe.*`); bisher standen sie als „nicht erreichbar" im README.
+  Einzig `.ts` bleibt dem Video-Typ von macOS überlassen.
+
 ## [0.7.0] - 2026-09-27
 
 ### Hinzugefügt

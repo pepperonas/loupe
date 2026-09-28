@@ -27,7 +27,19 @@ public struct SourceCodePreviewRenderer: PreviewRenderer, Sendable {
         "makefile", "make",
         "toml", "ini",
         "ps1", "psm1", "psd1",
-        "bat", "cmd"
+        "bat", "cmd",
+        "cs", "csx",
+        "fs", "fsx", "fsi",
+        "vb",
+        "lua",
+        "dart",
+        "scala", "sc",
+        "groovy", "gradle",
+        "r",
+        "pl", "pm",
+        "ex", "exs",
+        "m", "mm",
+        "zig"
     ]
 
     public static let category: PreviewCategory = .code

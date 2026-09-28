@@ -21,8 +21,8 @@
 [![Aktuelles Release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release-Build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-374%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
-[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-6.460-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-389%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
+[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-6.673-blue?logo=swift&logoColor=white)](Sources/)
 [![Lizenz](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Letzter Commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit-Aktivität](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -41,7 +41,7 @@
 [![JSON](https://img.shields.io/badge/JSON-aufklappbarer%20Baum-F7DF1E?logo=json&logoColor=black)](#-json)
 [![Markdown](https://img.shields.io/badge/Markdown-CommonMark%20%2B%20GFM-000000?logo=markdown&logoColor=white)](#-markdown)
 [![Logs](https://img.shields.io/badge/Logs-7%20Formate-EF6C00?logo=logstash&logoColor=white)](#-log-dateien)
-[![Quellcode](https://img.shields.io/badge/Hervorhebung-23%20Sprachen-8E44AD?logo=codefactor&logoColor=white)](#-quellcode)
+[![Quellcode](https://img.shields.io/badge/Hervorhebung-35%20Sprachen-8E44AD?logo=codefactor&logoColor=white)](#-quellcode)
 [![PowerShell](https://img.shields.io/badge/PowerShell-.ps1%20.psm1%20.psd1-5391FE?logo=powershell&logoColor=white)](#-powershell--batch)
 [![Batch](https://img.shields.io/badge/Batch-.bat%20.cmd-4D4D4D?logo=windowsterminal&logoColor=white)](#-powershell--batch)
 [![XML](https://img.shields.io/badge/XML-%2B%2013%20Dialekte-E34F26?logo=xml&logoColor=white)](#-xml)
@@ -114,7 +114,7 @@ macOS zeigt die meisten Entwicklerdateien in Quick Look als graue Wand aus Monos
 | | |
 | :--- | :--- |
 | 🌳 **JSON als Baum** — aufklappbar, in Dateireihenfolge, mit Zählern und Typfarben. Kaputte Dateien zeigen trotzdem alles bis zum Fehler, dazu einen Caret genau an der Stelle. | 🪵 **Logs zum Überfliegen** — Zeit, Level, Quelle und Nachricht in Spalten, Fehler getönt, Stacktraces zusammengehalten. Sieben Log-Formate werden erkannt. |
-| 📝 **Markdown, gerendert** — CommonMark + GFM: Tabellen, Aufgabenlisten, hervorgehobener Code, lokale Bilder. | 🌈 **23 Sprachen hervorgehoben** — inklusive PowerShell und Batch, die macOS nicht einmal als Dateityp kennt. |
+| 📝 **Markdown, gerendert** — CommonMark + GFM: Tabellen, Aufgabenlisten, hervorgehobener Code, lokale Bilder. | 🌈 **35 Sprachen hervorgehoben** — inklusive PowerShell und Batch, die macOS nicht einmal als Dateityp kennt. |
 | ⚡ **Schnell** — eine 5-MB-JSON-Datei in 162 ms, ein 4-MB-Log in 338 ms. | 🔒 **Sicher gebaut** — Sandbox, nur lesend, strikte CSP, kein einziges Byte JavaScript, kein Netzwerk. |
 
 ---
@@ -216,7 +216,7 @@ Jede Zeile wird in **Zeit · Level · Quelle · Nachricht** zerlegt — egal in 
   <img src="docs/screenshots/code-light.png" alt="Loupe-Swift-Vorschau mit Zeilennummern und Hervorhebung" width="100%">
 </picture>
 
-Ein in Swift geschriebener Tokenizer hebt **23 Sprachen** hervor: Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, PHP, Ruby, SQL, Shell/Bash/Zsh, **PowerShell**, **Batch**, JSON, YAML, TOML/INI, XML/HTML, CSS, Dockerfile — mit Zeilennummern, Sprach-Badge und Dateistatistik. Tokens werden auf der Host-Seite zu `<span>`s; in der Vorschau läuft nichts.
+Ein in Swift geschriebener Tokenizer hebt **35 Sprachen** hervor: Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, PHP, Ruby, SQL, C#, F#, Visual Basic, Objective-C, Dart, Scala, Groovy, Lua, R, Perl, Elixir, Zig, Shell/Bash/Zsh, **PowerShell**, **Batch**, JSON, YAML, TOML/INI, XML/HTML, CSS, Dockerfile — mit Zeilennummern, Sprach-Badge und Dateistatistik. Tokens werden auf der Host-Seite zu `<span>`s; in der Vorschau läuft nichts.
 
 ### 🧩 XML
 
@@ -289,26 +289,34 @@ Entscheidend ist nicht, was Loupe rendern *kann*, sondern was **Quick Look tats�
 | Kommagetrennt | `.csv` | `public.comma-separated-values-text` | ❌ von macOS reserviert, [siehe oben](#-tsv--csv) |
 | PowerShell | `.ps1` `.psm1` `.psd1` | `com.microsoft.powershell-script` *(von Loupe deklariert)* | ✅ |
 | Batch | `.bat` `.cmd` | `com.microsoft.batch-file` *(von Loupe deklariert)* | ✅ |
-| Swift · Rust · Go | `.swift` `.rs` `.go` | `public.swift-source` · `org.rust-lang.rust-script` · `org.golang.go-script` | ✅ |
-| Python · Ruby · PHP | `.py` `.rb` `.php` | `public.python-script` · `public.ruby-script` · `public.php-script` | ✅ |
-| JavaScript | `.js` `.mjs` | `com.netscape.javascript-source` | ✅ |
-| Java · Kotlin | `.java` `.kt` `.kts` | `com.sun.java-source` · `org.kotlinlang.source` | ✅ |
+| Swift · Rust · Go | `.swift` `.rs` `.go` | `public.swift-source` · `org.rust-lang.rust-script` · `org.golang.go-script` *(von Loupe importiert)* | ✅ |
+| Python · Ruby · PHP | `.py` `.pyw` `.rb` `.php` | `public.python-script` (`.pyw`: `io.celox.loupe.python-windows-script` *(von Loupe deklariert)*) · `public.ruby-script` · `public.php-script` | ✅ |
+| JavaScript · JSX/TSX | `.js` `.mjs` `.cjs` `.jsx` `.tsx` | `com.netscape.javascript-source` · `io.celox.loupe.commonjs-source` · `io.celox.loupe.jsx-source` *(von Loupe deklariert)* | ✅ |
+| Java · Kotlin | `.java` `.kt` `.kts` | `com.sun.java-source` · `org.kotlinlang.source` *(von Loupe importiert)* | ✅ |
 | C · C++ | `.c` `.h` `.cpp` `.cc` `.cxx` `.hpp` `.hxx` `.h++` | `public.c-source` · `public.c-plus-plus-source` · Header | ✅ |
 | Shell | `.sh` `.bash` `.zsh` | `public.shell-script` und Varianten | ✅ |
-| SQL | `.sql` | `org.iso.sql` | ✅ |
-| YAML · TOML · INI | `.yaml` `.yml` `.toml` `.ini` | `public.yaml` · `public.toml` · `com.microsoft.ini` | ✅ |
+| SQL | `.sql` | `org.iso.sql` *(von Loupe importiert)* | ✅ |
+| YAML · TOML · INI | `.yaml` `.yml` `.toml` `.ini` | `public.yaml` · `public.toml` · `com.microsoft.ini` *(von Loupe importiert)* | ✅ |
 | XML | `.xml` | `public.xml` | ✅ |
 | XML-Dialekte | `.xsd` `.xsl` `.xslt` `.xaml` `.csproj` `.vbproj` `.fsproj` `.vcxproj` `.props` `.targets` `.resx` `.wsdl` `.nuspec` | `io.celox.loupe.xml-document` *(von Loupe deklariert)* | ✅ |
-| CSS | `.css` | `public.css` | ✅ |
+| CSS · SCSS · Sass · Less | `.css` `.scss` `.sass` `.less` | `public.css` · `io.celox.loupe.stylesheet-source` *(von Loupe deklariert)* | ✅ |
+| C# · F# · Visual Basic | `.cs` `.csx` `.fs` `.fsx` `.fsi` `.vb` | `com.microsoft.c-sharp` *(von Loupe importiert)* · `io.celox.loupe.fsharp-source` · `io.celox.loupe.visual-basic-source` *(von Loupe deklariert)* | ✅ |
+| Lua · Dart · Scala | `.lua` `.dart` `.scala` `.sc` | `org.lua.lua-source` · `dev.dart.dart-script` · `org.scala-lang.scala-source` *(von Loupe importiert)* | ✅ |
+| Groovy · Gradle | `.groovy` `.gradle` | `io.celox.loupe.groovy-source` *(von Loupe deklariert)* | ✅ |
+| Objective-C | `.m` `.mm` | `public.objective-c-source` · `public.objective-c-plus-plus-source` | ✅ |
+| R · Perl | `.r` `.pl` `.pm` | `com.apple.rez-source` (macOS hält `.r` für Rez, Loupe erkennt R an der Endung) · `public.perl-script` | ✅ |
+| Elixir · Zig | `.ex` `.exs` `.zig` | `io.celox.loupe.elixir-source` · `io.celox.loupe.zig-source` *(von Loupe deklariert)* | ✅ |
+| Dockerfile | `.dockerfile` | `io.celox.loupe.dockerfile` *(von Loupe deklariert)* | ✅ |
 | Rhythmusspiel-Chart | `.chart` | `io.celox.loupe.chart` *(von Loupe deklariert)* | ✅ |
 <!-- filetypes:end -->
 
-**Hervorgehoben, aber aus dem Finder standardmäßig nicht erreichbar** — auf einem normalen macOS bekommen diese Endungen einen *dynamischen* Typ oder einen, der etwas anderem gehört, deshalb fragt Quick Look Loupe nicht. Deklariert ein anderes installiertes Programm (etwa Xcode) einen Quellcode-Typ dafür, gibt Quick Look die Datei doch an Loupe:
+**Hervorgehoben, aber aus dem Finder nicht erreichbar:**
 
 <!-- unreachable:start -->
 - `.ts` — macOS führt das als **MPEG-2-Transportstrom** (Video). Den Typ zu beanspruchen würde echte Videodateien als Text anzeigen.
-- `.tsx` `.jsx` `.cjs` `.pyw` `.scss` `.sass` `.less` `.dockerfile` — nur dynamische Typen.
 <!-- unreachable:end -->
+
+*Von Loupe importiert* heißt: macOS selbst kennt diesen Typ nicht, nur Editoren wie CotEditor oder BBEdit bringen ihn mit. Ohne sie bekäme z. B. `.rs` oder `.cs` einen dynamischen Typ, und Quick Look fragte Loupe nie. Loupe übernimmt dieselbe Kennung wie diese Editoren, damit sich beides nicht stört. *Von Loupe deklariert* sind Typen, für die es gar keine verbreitete Kennung gibt.
 
 Dasselbe gilt für `.out`, `.err` und rotierte Logs wie `app.log.1`: dynamische Typen — und `.out` zu beanspruchen würde zudem Binärdateien wie `a.out` zu Text machen.
 
@@ -483,7 +491,7 @@ Sources/
     ├── Markdown/                 swift-markdown-Visitor, Bereinigung, sicheres Laden von Bildern
     ├── CSV/                      RFC-4180-Parser mit Trennzeichenerkennung, Tabellen-Renderer
     ├── Log/                      Log-Modell, Formaterkennung, Hervorhebung in Nachrichten
-    ├── Highlighting/             Tokenizer für 23 Sprachen (inkl. PowerShell & Batch)
+    ├── Highlighting/             Tokenizer für 35 Sprachen (inkl. PowerShell & Batch)
     ├── Chart/                    .chart-Parser und Tempo-Zeitrechnung
     ├── Preview/                  Renderer-Protokoll, Registry, Dateileser, ein Renderer je Format
     ├── Render/                   JSON-Baum, Aufklapp-Planung, HTML-Escaping
@@ -508,13 +516,13 @@ swift run LoupeTests              # Debug
 swift run -c release LoupeTests   # Release (wie im Release-Workflow)
 ```
 
-**374 Tests** in einem abhängigkeitsfreien Test-Harness, bei jedem Push von der CI ausgeführt:
+**389 Tests** in einem abhängigkeitsfreien Test-Harness, bei jedem Push von der CI ausgeführt:
 
 | Bereich | Tests | Schwerpunkte |
 | :--- | ---: | :--- |
 | JSON | 70 | Reihenfolge, Duplikate, Zahlenschreibweise, Wiederaufsetzen, Grenzen inkl. Tiefenbombe, Caret-Ausrichtung |
 | Log-Dateien | 64 | Alle sieben Formate, Level-Vereinheitlichung, Stacktraces, CRLF, Lesen vom Ende, absolute Zeilennummern, WCAG-Kontrast |
-| Hervorhebung | 63 | 23 Sprachen, XML/HTML mit Beachtung der Anführungszeichen, PowerShell & Batch, keine Phantom-Endzeile, **jedes druckbare Zeichen muss in jeder Sprache abbrechen und verlustfrei erhalten bleiben** |
+| Hervorhebung | 78 | 35 Sprachen, XML/HTML mit Beachtung der Anführungszeichen, PowerShell & Batch, wortgetreue C#-Strings, **jeder nicht vom System stammende Dateityp ist deklariert, damit Quick Look Loupe überhaupt fragt**, keine Phantom-Endzeile, **jedes druckbare Zeichen muss in jeder Sprache abbrechen und verlustfrei erhalten bleiben** |
 | Markdown & Sicherheit | 41 | GFM, Umgehungsversuche der Bereinigung, Pfad-Traversal, Blockieren entfernter Bilder |
 | TSV / CSV | 22 | RFC-4180-Anführungszeichen, Trennzeichenerkennung, Grenzen |
 | Erscheinungsbild & Einstellungen | 40 | Helles/dunkles CSS, Migration der Einstellungen, Schalter je Rubrik, Kodierungen des Rohtexts, gemeinsame Präferenz-Domain + Entitlements |

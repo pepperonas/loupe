@@ -9,7 +9,7 @@
     <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
     <key>CFBundleName</key><string>LoupePreview</string>
     <key>CFBundlePackageType</key><string>XPC!</string>
-    <key>CFBundleShortVersionString</key><string>0.7.0</string>
+    <key>CFBundleShortVersionString</key><string>0.8.0</string>
     <key>CFBundleVersion</key><string>1</string>
     <key>CFBundleSupportedPlatforms</key><array><string>MacOSX</string></array>
     <key>LSMinimumSystemVersion</key><string>14.0</string>
@@ -57,6 +57,22 @@
                 <string>com.microsoft.batch-file</string>
                 <string>io.celox.loupe.xml-document</string>
                 <string>io.celox.loupe.chart</string>
+                <string>com.microsoft.c-sharp</string>
+                <string>org.lua.lua-source</string>
+                <string>dev.dart.dart-script</string>
+                <string>org.scala-lang.scala-source</string>
+                <string>io.celox.loupe.fsharp-source</string>
+                <string>io.celox.loupe.visual-basic-source</string>
+                <string>io.celox.loupe.groovy-source</string>
+                <string>io.celox.loupe.elixir-source</string>
+                <string>io.celox.loupe.zig-source</string>
+                <string>io.celox.loupe.jsx-source</string>
+                <string>io.celox.loupe.commonjs-source</string>
+                <string>io.celox.loupe.python-windows-script</string>
+                <string>io.celox.loupe.stylesheet-source</string>
+                <string>io.celox.loupe.dockerfile</string>
+                <string>public.objective-c-source</string>
+                <string>public.objective-c-plus-plus-source</string>
             </array>
             <key>QLSupportsSearchableItems</key><false/>
         </dict>

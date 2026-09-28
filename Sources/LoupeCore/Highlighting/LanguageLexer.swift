@@ -52,6 +52,18 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
     case toml
     case powershell = "ps1"
     case batch = "bat"
+    case csharp = "cs"
+    case fsharp = "fs"
+    case visualBasic = "vb"
+    case lua
+    case dart
+    case scala
+    case groovy
+    case r
+    case perl = "pl"
+    case elixir = "ex"
+    case objectiveC = "m"
+    case zig
     case unknown
     
     public static func from(identifier: String?) -> SupportedLanguage {
@@ -78,6 +90,18 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         case "markdown", "md", "mdown", "mkd": return .markdown
         case "c", "h": return .c
         case "cpp", "c++", "cc", "cxx", "hpp", "hxx", "h++": return .cpp
+        case "csharp", "c#", "cs", "csx": return .csharp
+        case "fsharp", "f#", "fs", "fsx", "fsi": return .fsharp
+        case "vb", "vbnet", "vb.net", "visualbasic": return .visualBasic
+        case "lua": return .lua
+        case "dart": return .dart
+        case "scala", "sc": return .scala
+        case "groovy", "gradle", "gvy": return .groovy
+        case "r": return .r
+        case "perl", "pl", "pm": return .perl
+        case "elixir", "ex", "exs": return .elixir
+        case "objective-c", "objectivec", "objc", "m", "objective-c++", "objc++", "mm": return .objectiveC
+        case "zig": return .zig
         case "go", "golang": return .go
         case "php": return .php
         case "ruby", "rb": return .ruby
@@ -115,6 +139,18 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         case .toml: return "TOML"
         case .powershell: return "PowerShell"
         case .batch: return "Batch"
+        case .csharp: return "C#"
+        case .fsharp: return "F#"
+        case .visualBasic: return "Visual Basic"
+        case .lua: return "Lua"
+        case .dart: return "Dart"
+        case .scala: return "Scala"
+        case .groovy: return "Groovy"
+        case .r: return "R"
+        case .perl: return "Perl"
+        case .elixir: return "Elixir"
+        case .objectiveC: return "Objective-C"
+        case .zig: return "Zig"
         case .unknown: return ""
         }
     }

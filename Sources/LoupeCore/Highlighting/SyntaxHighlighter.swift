@@ -97,6 +97,127 @@ public final class SyntaxHighlighter: Sendable {
         "super", "then", "true", "undef", "unless", "until", "when", "while", "yield"
     ]
 
+
+    private let csharpKeywords: Set<String> = [
+        "abstract", "as", "async", "await", "base", "bool", "break", "byte", "case", "catch",
+        "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do",
+        "double", "dynamic", "else", "enum", "event", "explicit", "extern", "false", "finally",
+        "fixed", "float", "for", "foreach", "get", "goto", "if", "implicit", "in", "init", "int",
+        "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object",
+        "operator", "out", "override", "params", "partial", "private", "protected", "public",
+        "readonly", "record", "ref", "required", "return", "sbyte", "sealed", "set", "short",
+        "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true",
+        "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "value",
+        "var", "virtual", "void", "volatile", "when", "where", "while", "with", "yield",
+        "and", "or", "not", "nameof", "global", "file", "scoped"
+    ]
+
+    private let fsharpKeywords: Set<String> = [
+        "abstract", "and", "as", "assert", "base", "begin", "class", "default", "delegate", "do",
+        "done", "downcast", "downto", "elif", "else", "end", "exception", "extern", "false",
+        "finally", "for", "fun", "function", "global", "if", "in", "inherit", "inline",
+        "interface", "internal", "lazy", "let", "match", "member", "module", "mutable",
+        "namespace", "new", "not", "null", "of", "open", "or", "override", "private", "public",
+        "rec", "return", "static", "struct", "then", "to", "true", "try", "type", "upcast",
+        "use", "val", "void", "when", "while", "with", "yield", "async", "task"
+    ]
+
+    /// Klein geschrieben: Visual Basic unterscheidet keine Gross-/Kleinschreibung.
+    private let visualBasicKeywords: Set<String> = [
+        "addhandler", "addressof", "alias", "and", "andalso", "as", "async", "await", "boolean",
+        "byref", "byte", "byval", "call", "case", "catch", "cbool", "cdbl", "char", "cint",
+        "class", "clng", "const", "continue", "cstr", "ctype", "date", "decimal", "declare",
+        "default", "delegate", "dim", "directcast", "do", "double", "each", "else", "elseif",
+        "end", "enum", "erase", "error", "event", "exit", "false", "finally", "for", "friend",
+        "function", "get", "gettype", "global", "handles", "if", "implements", "imports", "in",
+        "inherits", "integer", "interface", "is", "isnot", "iterator", "let", "lib", "like",
+        "long", "loop", "me", "mod", "module", "mustinherit", "mustoverride", "mybase",
+        "namespace", "narrowing", "new", "next", "not", "nothing", "notinheritable",
+        "notoverridable", "object", "of", "on", "operator", "option", "optional", "or",
+        "orelse", "overloads", "overridable", "overrides", "paramarray", "partial", "private",
+        "property", "protected", "public", "raiseevent", "readonly", "redim", "rem",
+        "removehandler", "resume", "return", "select", "set", "shadows", "shared", "short",
+        "single", "static", "step", "stop", "string", "structure", "sub", "synclock", "then",
+        "throw", "to", "true", "try", "trycast", "typeof", "using", "when", "while",
+        "widening", "with", "withevents", "writeonly", "xor", "yield"
+    ]
+
+    private let luaKeywords: Set<String> = [
+        "and", "break", "do", "else", "elseif", "end", "false", "for", "function", "goto", "if",
+        "in", "local", "nil", "not", "or", "repeat", "return", "then", "true", "until", "while",
+        "self"
+    ]
+
+    private let dartKeywords: Set<String> = [
+        "abstract", "as", "assert", "async", "await", "base", "break", "case", "catch", "class",
+        "const", "continue", "covariant", "default", "deferred", "do", "dynamic", "else", "enum",
+        "export", "extends", "extension", "external", "factory", "false", "final", "finally",
+        "for", "get", "hide", "if", "implements", "import", "in", "interface", "is", "late",
+        "library", "mixin", "new", "null", "on", "operator", "part", "required", "rethrow",
+        "return", "sealed", "set", "show", "static", "super", "switch", "sync", "this", "throw",
+        "true", "try", "typedef", "var", "void", "when", "while", "with", "yield"
+    ]
+
+    private let scalaKeywords: Set<String> = [
+        "abstract", "case", "catch", "class", "def", "do", "else", "enum", "export", "extends",
+        "false", "final", "finally", "for", "forSome", "given", "if", "implicit", "import",
+        "lazy", "match", "new", "null", "object", "override", "package", "private", "protected",
+        "return", "sealed", "super", "then", "this", "throw", "trait", "true", "try", "type",
+        "using", "val", "var", "while", "with", "yield", "extension", "inline", "opaque", "open"
+    ]
+
+    private let groovyKeywords: Set<String> = [
+        "abstract", "as", "assert", "boolean", "break", "byte", "case", "catch", "char", "class",
+        "const", "continue", "def", "default", "do", "double", "else", "enum", "extends",
+        "false", "final", "finally", "float", "for", "goto", "if", "implements", "import", "in",
+        "instanceof", "int", "interface", "long", "native", "new", "null", "package", "private",
+        "protected", "public", "return", "short", "static", "super", "switch", "synchronized",
+        "this", "throw", "throws", "trait", "transient", "true", "try", "var", "void",
+        "volatile", "while", "it"
+    ]
+
+    private let rKeywords: Set<String> = [
+        "if", "else", "repeat", "while", "function", "for", "in", "next", "break", "TRUE",
+        "FALSE", "NULL", "Inf", "NaN", "NA", "NA_integer_", "NA_real_", "NA_character_",
+        "return", "library", "require"
+    ]
+
+    private let perlKeywords: Set<String> = [
+        "if", "elsif", "else", "unless", "while", "until", "for", "foreach", "do", "last",
+        "next", "redo", "return", "sub", "my", "our", "local", "state", "use", "no", "require",
+        "package", "and", "or", "not", "xor", "eq", "ne", "lt", "gt", "le", "ge", "cmp", "print",
+        "printf", "say", "die", "warn", "eval", "defined", "undef", "ref", "bless", "shift",
+        "BEGIN", "END", "__END__", "__DATA__"
+    ]
+
+    private let elixirKeywords: Set<String> = [
+        "after", "alias", "and", "case", "catch", "cond", "def", "defp", "defmodule",
+        "defmacro", "defmacrop", "defstruct", "defprotocol", "defimpl", "defdelegate",
+        "defguard", "defexception", "do", "else", "end", "false", "fn", "for", "if", "import",
+        "in", "nil", "not", "or", "quote", "raise", "receive", "require", "rescue", "true",
+        "try", "unless", "unquote", "use", "when", "with"
+    ]
+
+    private let zigKeywords: Set<String> = [
+        "addrspace", "align", "allowzero", "and", "anyframe", "anytype", "asm", "async", "await",
+        "break", "callconv", "catch", "comptime", "const", "continue", "defer", "else", "enum",
+        "errdefer", "error", "export", "extern", "false", "fn", "for", "if", "inline",
+        "linksection", "noalias", "noinline", "nosuspend", "null", "opaque", "or", "orelse",
+        "packed", "pub", "resume", "return", "struct", "suspend", "switch", "test",
+        "threadlocal", "true", "try", "undefined", "union", "unreachable", "usingnamespace",
+        "var", "volatile", "while", "void", "bool", "type", "anyerror", "noreturn",
+        "u8", "u16", "u32", "u64", "usize", "i8", "i16", "i32", "i64", "isize", "f32", "f64"
+    ]
+
+    /// C-Schluesselwoerter plus die Objective-C-Ergaenzungen (`@interface` & Co.
+    /// faerbt schon die Attribut-Regel).
+    private var objectiveCKeywords: Set<String> {
+        cCppKeywords.union(["self", "super", "nil", "Nil", "YES", "NO", "id", "BOOL", "SEL",
+                            "IMP", "instancetype", "nonatomic", "atomic", "strong", "weak",
+                            "copy", "assign", "retain", "readwrite", "readonly", "nullable",
+                            "nonnull", "__block", "__weak", "__strong", "in"])
+    }
+
     public init() {}
     
     public func highlight(code: String, languageIdentifier: String?) -> String {
@@ -124,6 +245,30 @@ public final class SyntaxHighlighter: Sendable {
             return tokenizeGeneral(code: code, keywords: phpKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
         case .ruby:
             return tokenizeGeneral(code: code, keywords: rubyKeywords, lineComment: "#", blockCommentStart: "=begin", blockCommentEnd: "=end")
+        case .csharp:
+            return tokenizeGeneral(code: code, keywords: csharpKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/", verbatimStrings: true)
+        case .fsharp:
+            return tokenizeGeneral(code: code, keywords: fsharpKeywords, lineComment: "//", blockCommentStart: "(*", blockCommentEnd: "*)", verbatimStrings: true)
+        case .visualBasic:
+            return tokenizeGeneral(code: code, keywords: visualBasicKeywords, lineComment: "'", blockCommentStart: nil, blockCommentEnd: nil, caseInsensitiveKeywords: true, backslashEscapes: false)
+        case .lua:
+            return tokenizeGeneral(code: code, keywords: luaKeywords, lineComment: "--", blockCommentStart: "--[[", blockCommentEnd: "]]")
+        case .dart:
+            return tokenizeGeneral(code: code, keywords: dartKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
+        case .scala:
+            return tokenizeGeneral(code: code, keywords: scalaKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
+        case .groovy:
+            return tokenizeGeneral(code: code, keywords: groovyKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
+        case .r:
+            return tokenizeGeneral(code: code, keywords: rKeywords, lineComment: "#", blockCommentStart: nil, blockCommentEnd: nil)
+        case .perl:
+            return tokenizeGeneral(code: code, keywords: perlKeywords, lineComment: "#", blockCommentStart: nil, blockCommentEnd: nil)
+        case .elixir:
+            return tokenizeGeneral(code: code, keywords: elixirKeywords, lineComment: "#", blockCommentStart: nil, blockCommentEnd: nil)
+        case .objectiveC:
+            return tokenizeGeneral(code: code, keywords: objectiveCKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
+        case .zig:
+            return tokenizeGeneral(code: code, keywords: zigKeywords, lineComment: "//", blockCommentStart: nil, blockCommentEnd: nil)
         case .yaml, .toml:
             return tokenizeGeneral(code: code, keywords: ["true", "false", "yes", "no", "null"], lineComment: "#", blockCommentStart: nil, blockCommentEnd: nil)
         case .docker:
@@ -183,7 +328,10 @@ public final class SyntaxHighlighter: Sendable {
         keywords: Set<String>,
         lineComment: String,
         blockCommentStart: String?,
-        blockCommentEnd: String?
+        blockCommentEnd: String?,
+        caseInsensitiveKeywords: Bool = false,
+        backslashEscapes: Bool = true,
+        verbatimStrings: Bool = false
     ) -> String {
         var output = ""
         output.reserveCapacity(code.count * 2)
@@ -226,6 +374,30 @@ public final class SyntaxHighlighter: Sendable {
                 continue
             }
             
+            // Wortgetreue Zeichenketten (C# @"..", $@"..", @$".."; F# @".."): kein
+            // Backslash-Escape, "" steht fuer ein Anfuehrungszeichen, darf ueber Zeilen
+            // laufen. Ohne diese Regel lief @"C:\temp\" bis zum Zeilenende weiter.
+            if verbatimStrings, let len = verbatimPrefixLength(chars, i) {
+                var str = String(chars[i..<(i + len)])
+                i += len
+                while i < count {
+                    if chars[i] == "\"" {
+                        if i + 1 < count && chars[i + 1] == "\"" {
+                            str.append("\"\"")
+                            i += 2
+                            continue
+                        }
+                        str.append("\"")
+                        i += 1
+                        break
+                    }
+                    str.append(chars[i])
+                    i += 1
+                }
+                output.append(wrapToken(str, .string))
+                continue
+            }
+
             // Strings: "..." or '...' or `...`
             if c == "\"" || c == "'" || c == "`" {
                 let quote = c
@@ -253,7 +425,7 @@ public final class SyntaxHighlighter: Sendable {
                         i += 1
                         if escaped {
                             escaped = false
-                        } else if cur == "\\" {
+                        } else if cur == "\\" && backslashEscapes {
                             escaped = true
                         } else if cur == quote {
                             break
@@ -299,7 +471,7 @@ public final class SyntaxHighlighter: Sendable {
                     i += 1
                 }
                 
-                if keywords.contains(word) {
+                if keywords.contains(caseInsensitiveKeywords ? word.lowercased() : word) {
                     output.append(wrapToken(word, .keyword))
                 } else if word.first?.isUppercase == true {
                     output.append(wrapToken(word, .typeName))
@@ -594,6 +766,14 @@ public final class SyntaxHighlighter: Sendable {
         return output
     }
     
+    /// Laenge des Praefixes einer wortgetreuen Zeichenkette an `index` inklusive des
+    /// oeffnenden Anfuehrungszeichens (`@"` = 2, `$@"`/`@$"` = 3), sonst nil.
+    private func verbatimPrefixLength(_ chars: [Character], _ index: Int) -> Int? {
+        if matchPrefix(chars, index, "@\"") { return 2 }
+        if matchPrefix(chars, index, "$@\"") || matchPrefix(chars, index, "@$\"") { return 3 }
+        return nil
+    }
+
     private func matchPrefix(_ chars: [Character], _ index: Int, _ prefix: String) -> Bool {
         matchPrefix(chars, index, Array(prefix))
     }
