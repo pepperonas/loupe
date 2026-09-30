@@ -5,6 +5,23 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+## [0.9.0] - 2026-09-30
+
+### Hinzugefügt
+- **Vorschau und Syntaxhervorhebung für Terminal-Skripte & Shells:** `.command` und `.tool` (macOS
+  Terminal-Skripte), Fish-Shell (`.fish`), KornShell (`.ksh`), C-Shell (`.csh`), TENEX-C-Shell (`.tcsh`),
+  Zsh-Themes (`.zsh-theme`) sowie Umgebungsdateien (`.env`).
+- **AppleScript (`.applescript`, `.scpt`):** Syntaxhervorhebung inklusive Schlüsselwörtern (unabhängig
+  von Groß-/Kleinschreibung), Zeilenkommentaren (`--` und `#`) und Blockkommentaren (`(* ... *)`).
+  Damit unterstützt Loupe 36 Sprachen.
+- **Automator- und Kurzbefehle-Workflows:** Unterstützung für Automator-Workflow-Bundles (`.workflow`),
+  bei denen Loupe das enthaltene `document.wflow` liest und als XML darstellt, sowie eigenständige
+  `.wflow`-Dateien.
+- Typdeklarationen und Quick-Look-Anmeldung für alle neuen Skript- und Workflow-Typen
+  (`com.apple.terminal.shell-script`, `com.apple.automator-workflow`, `com.apple.shortcuts.workflow-file`,
+  `com.apple.applescript.text`, `public.ksh-script`, `public.csh-script`, `public.tcsh-script`,
+  `io.celox.loupe.fish-script`, `io.celox.loupe.zsh-theme`, `io.celox.loupe.env`).
+
 ## [0.8.0] - 2026-09-27
 
 ### Hinzugefügt

@@ -9,7 +9,7 @@
     <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
     <key>CFBundleName</key><string>LoupePreview</string>
     <key>CFBundlePackageType</key><string>XPC!</string>
-    <key>CFBundleShortVersionString</key><string>0.8.0</string>
+    <key>CFBundleShortVersionString</key><string>0.9.0</string>
     <key>CFBundleVersion</key><string>1</string>
     <key>CFBundleSupportedPlatforms</key><array><string>MacOSX</string></array>
     <key>LSMinimumSystemVersion</key><string>14.0</string>
@@ -73,6 +73,16 @@
                 <string>io.celox.loupe.dockerfile</string>
                 <string>public.objective-c-source</string>
                 <string>public.objective-c-plus-plus-source</string>
+                <string>com.apple.terminal.shell-script</string>
+                <string>public.ksh-script</string>
+                <string>public.csh-script</string>
+                <string>public.tcsh-script</string>
+                <string>com.apple.applescript.text</string>
+                <string>com.apple.automator-workflow</string>
+                <string>com.apple.shortcuts.workflow-file</string>
+                <string>io.celox.loupe.fish-script</string>
+                <string>io.celox.loupe.zsh-theme</string>
+                <string>io.celox.loupe.env</string>
             </array>
             <key>QLSupportsSearchableItems</key><false/>
         </dict>

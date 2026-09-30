@@ -186,6 +186,48 @@ public enum MoreLanguagesTests {
                     try assertTrue(!Set(conf).isDisjoint(with: textual), "\(d["UTTypeIdentifier"] ?? "?") -> \(conf)")
                 }
             }
+
+            runner.runTest(name: "testAppleScriptHighlightingAndComments") {
+                let code = """
+                -- Line comment
+                # Alt line comment
+                (* Block comment *)
+                tell application "Finder"
+                    display dialog "Hello" buttons {"OK"} default button "OK"
+                end tell
+                """
+                let html = hl(code, "applescript")
+                try assertTrue(html.contains(#"<span class="hl-com">-- Line comment</span>"#), html)
+                try assertTrue(html.contains(#"<span class="hl-com"># Alt line comment</span>"#), html)
+                try assertTrue(html.contains(#"<span class="hl-com">(* Block comment *)</span>"#), html)
+                try assertTrue(html.contains(kw("tell")), html)
+                try assertTrue(html.contains(kw("application")), html)
+                try assertTrue(html.contains(kw("end")), html)
+                try assertTrue(html.contains(#"<span class="hl-str">&quot;Finder&quot;</span>"#), html)
+            }
+
+            runner.runTest(name: "testScriptAndWorkflowExtensionsRouting") {
+                for e in ["command", "tool", "fish", "ksh", "csh", "tcsh", "zsh-theme", "applescript", "workflow", "wflow", "env"] {
+                    try assertTrue(SourceCodePreviewRenderer.supportedExtensions.contains(e), "supportedExtensions must contain \(e)")
+                    let r = RendererRegistry.renderer(for: URL(fileURLWithPath: "/tmp/sample.\(e)"))
+                    try assertTrue(r is SourceCodePreviewRenderer, ".\(e) -> \(String(describing: r))")
+                }
+            }
+
+            runner.runTest(name: "testWorkflowBundleReadsDocumentWflow") {
+                let tempDir = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".workflow")
+                let contentsDir = tempDir.appendingPathComponent("Contents")
+                try FileManager.default.createDirectory(at: contentsDir, withIntermediateDirectories: true)
+                defer { try? FileManager.default.removeItem(at: tempDir) }
+
+                let wflowPath = contentsDir.appendingPathComponent("document.wflow")
+                let xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><plist><dict><key>action</key><string>run</string></dict></plist>"
+                try xml.write(to: wflowPath, atomically: true, encoding: .utf8)
+
+                let res = try PreviewFileReader.read(url: tempDir, strategy: .head, headLimit: 1024 * 1024)
+                let text = String(decoding: res.data, as: UTF8.self)
+                try assertEqual(text, xml)
+            }
         }
     }
 }

@@ -218,6 +218,22 @@ public final class SyntaxHighlighter: Sendable {
                             "nonnull", "__block", "__weak", "__strong", "in"])
     }
 
+    private let appleScriptKeywords: Set<String> = [
+        "about", "above", "after", "against", "and", "apart", "around", "as", "at",
+        "back", "before", "beginning", "behind", "below", "beneath", "beside",
+        "between", "but", "by", "close", "continue", "copy", "div", "does", "eighth",
+        "else", "end", "equal", "equals", "error", "every", "exit", "false", "fifth",
+        "first", "for", "fourth", "from", "front", "get", "given", "global", "if",
+        "ignoring", "in", "instead", "into", "is", "it", "its", "last", "local",
+        "me", "middle", "mod", "my", "ninth", "not", "of", "on", "open", "or",
+        "out", "over", "prop", "property", "quit", "repeat", "return", "returning",
+        "run", "saving", "second", "set", "seventh", "since", "sixth", "some",
+        "tell", "tenth", "that", "the", "then", "third", "through", "thru", "timeout",
+        "times", "to", "transaction", "true", "try", "until", "using", "where",
+        "while", "whose", "with", "without", "application", "app", "display", "dialog",
+        "alert", "buttons", "default", "button", "giving", "up"
+    ]
+
     public init() {}
     
     public func highlight(code: String, languageIdentifier: String?) -> String {
@@ -269,6 +285,8 @@ public final class SyntaxHighlighter: Sendable {
             return tokenizeGeneral(code: code, keywords: objectiveCKeywords, lineComment: "//", blockCommentStart: "/*", blockCommentEnd: "*/")
         case .zig:
             return tokenizeGeneral(code: code, keywords: zigKeywords, lineComment: "//", blockCommentStart: nil, blockCommentEnd: nil)
+        case .appleScript:
+            return tokenizeGeneral(code: code, keywords: appleScriptKeywords, lineComment: "--", blockCommentStart: "(*", blockCommentEnd: "*)", alternateLineComment: "#", caseInsensitiveKeywords: true)
         case .yaml, .toml:
             return tokenizeGeneral(code: code, keywords: ["true", "false", "yes", "no", "null"], lineComment: "#", blockCommentStart: nil, blockCommentEnd: nil)
         case .docker:
@@ -329,6 +347,7 @@ public final class SyntaxHighlighter: Sendable {
         lineComment: String,
         blockCommentStart: String?,
         blockCommentEnd: String?,
+        alternateLineComment: String? = nil,
         caseInsensitiveKeywords: Bool = false,
         backslashEscapes: Bool = true,
         verbatimStrings: Bool = false
@@ -339,6 +358,7 @@ public final class SyntaxHighlighter: Sendable {
         var i = 0
         let count = chars.count
         let lineCommentChars = Array(lineComment)
+        let altLineCommentChars = alternateLineComment.map(Array.init)
         let blockCommentStartChars = blockCommentStart.map(Array.init)
         let blockCommentEndChars = blockCommentEnd.map(Array.init)
         
@@ -364,7 +384,7 @@ public final class SyntaxHighlighter: Sendable {
             }
             
             // Line comment
-            if matchPrefix(chars, i, lineCommentChars) {
+            if matchPrefix(chars, i, lineCommentChars) || (altLineCommentChars != nil && matchPrefix(chars, i, altLineCommentChars!)) {
                 var comment = ""
                 while i < count && chars[i] != "\n" {
                     comment.append(chars[i])

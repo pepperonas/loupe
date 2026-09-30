@@ -36,7 +36,7 @@ public enum DocsSyncTests {
               let b = readme.range(of: "<!-- \(name):end -->"), a.upperBound < b.lowerBound else {
             throw TestFailure(message: "Markierung \(name) fehlt", file: #file, line: #line)
         }
-        return Set(matches(#"`\.([A-Za-z0-9+]+)`"#, in: String(readme[a.upperBound..<b.lowerBound])).map { $0.lowercased() })
+        return Set(matches(#"`\.([A-Za-z0-9+-]+)`"#, in: String(readme[a.upperBound..<b.lowerBound])).map { $0.lowercased() })
     }
 
     private static let readmes = ["README.md", "README.de.md"]

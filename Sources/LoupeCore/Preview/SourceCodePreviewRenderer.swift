@@ -39,7 +39,11 @@ public struct SourceCodePreviewRenderer: PreviewRenderer, Sendable {
         "pl", "pm",
         "ex", "exs",
         "m", "mm",
-        "zig"
+        "zig",
+        "command", "tool", "fish", "ksh", "csh", "tcsh", "zsh-theme",
+        "workflow", "wflow",
+        "applescript",
+        "env"
     ]
 
     public static let category: PreviewCategory = .code
@@ -70,7 +74,17 @@ public struct SourceCodePreviewRenderer: PreviewRenderer, Sendable {
             "com.microsoft.ini",
             "com.microsoft.powershell-script",
             "com.microsoft.batch-file",
-            "io.celox.loupe.xml-document"
+            "io.celox.loupe.xml-document",
+            "com.apple.terminal.shell-script",
+            "public.ksh-script",
+            "public.csh-script",
+            "public.tcsh-script",
+            "com.apple.applescript.text",
+            "com.apple.automator-workflow",
+            "com.apple.shortcuts.workflow-file",
+            "io.celox.loupe.fish-script",
+            "io.celox.loupe.zsh-theme",
+            "io.celox.loupe.env"
         ]
         for uti in customUTIs {
             if let t = UTType(uti), !types.contains(t) {

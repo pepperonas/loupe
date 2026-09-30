@@ -21,8 +21,8 @@ Press <kbd>Space</kbd> in Finder. Get a readable, theme-aware preview. Zero Java
 [![Latest release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-389%20passing-brightgreen?logo=checkmarx&logoColor=white)](#-testing)
-[![Swift LoC](https://img.shields.io/badge/Swift%20LoC-6%2C673-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-392%20passing-brightgreen?logo=checkmarx&logoColor=white)](#-testing)
+[![Swift LoC](https://img.shields.io/badge/Swift%20LoC-6%2C721-blue?logo=swift&logoColor=white)](Sources/)
 [![License](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Last commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit activity](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -41,7 +41,7 @@ Press <kbd>Space</kbd> in Finder. Get a readable, theme-aware preview. Zero Java
 [![JSON](https://img.shields.io/badge/JSON-collapsible%20tree-F7DF1E?logo=json&logoColor=black)](#-json)
 [![Markdown](https://img.shields.io/badge/Markdown-CommonMark%20%2B%20GFM-000000?logo=markdown&logoColor=white)](#-markdown)
 [![Logs](https://img.shields.io/badge/Logs-7%20formats-EF6C00?logo=logstash&logoColor=white)](#-log-files)
-[![Source code](https://img.shields.io/badge/Highlighting-35%20languages-8E44AD?logo=codefactor&logoColor=white)](#-source-code)
+[![Source code](https://img.shields.io/badge/Highlighting-36%20languages-8E44AD?logo=codefactor&logoColor=white)](#-source-code)
 [![PowerShell](https://img.shields.io/badge/PowerShell-.ps1%20.psm1%20.psd1-5391FE?logo=powershell&logoColor=white)](#-powershell--batch)
 [![Batch](https://img.shields.io/badge/Batch-.bat%20.cmd-4D4D4D?logo=windowsterminal&logoColor=white)](#-powershell--batch)
 [![XML](https://img.shields.io/badge/XML-%2B%2013%20dialects-E34F26?logo=xml&logoColor=white)](#-xml)
@@ -114,7 +114,7 @@ macOS shows most developer files in Quick Look as a grey wall of monospace text 
 | | |
 | :--- | :--- |
 | 🌳 **JSON as a tree** — collapsible, in source order, with counts and type colors. Broken files still show everything up to the error, plus a caret pointing at it. | 🪵 **Logs you can scan** — time, level, source and message in columns, errors tinted, stack traces kept together. Seven log formats recognized. |
-| 📝 **Markdown, rendered** — CommonMark + GFM: tables, task lists, highlighted code, local images. | 🌈 **35 languages highlighted** — including PowerShell and Batch, which macOS doesn't even know as file types. |
+| 📝 **Markdown, rendered** — CommonMark + GFM: tables, task lists, highlighted code, local images. | 🌈 **36 languages highlighted** — including PowerShell and Batch, which macOS doesn't even know as file types. |
 | ⚡ **Fast** — a 5 MB JSON file renders in 162 ms, a 4 MB log in 338 ms. | 🔒 **Safe by design** — sandboxed, read-only, strict CSP, not a single byte of JavaScript, no network. |
 
 ---
@@ -216,7 +216,7 @@ Every line is split into **time · level · source · message** — whatever for
   <img src="docs/screenshots/code-light.png" alt="Loupe Swift source preview with line numbers and highlighting" width="100%">
 </picture>
 
-An in-process tokenizer written in Swift highlights **35 languages**: Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, PHP, Ruby, SQL, C#, F#, Visual Basic, Objective-C, Dart, Scala, Groovy, Lua, R, Perl, Elixir, Zig, Shell/Bash/Zsh, **PowerShell**, **Batch**, JSON, YAML, TOML/INI, XML/HTML, CSS, Dockerfile — with line numbers, a language badge and file statistics. Tokens become `<span>`s on the host side; nothing executes in the preview.
+An in-process tokenizer written in Swift highlights **36 languages**: Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, PHP, Ruby, SQL, C#, F#, Visual Basic, Objective-C, Dart, Scala, Groovy, Lua, R, Perl, Elixir, Zig, AppleScript, Shell/Bash/Zsh, **PowerShell**, **Batch**, JSON, YAML, TOML/INI, XML/HTML, CSS, Dockerfile — with line numbers, a language badge and file statistics. Tokens become `<span>`s on the host side; nothing executes in the preview.
 
 ### 🧩 XML
 
@@ -294,7 +294,9 @@ What matters is not what Loupe *can* render, but what **Quick Look actually hand
 | JavaScript · JSX/TSX | `.js` `.mjs` `.cjs` `.jsx` `.tsx` | `com.netscape.javascript-source` · `io.celox.loupe.commonjs-source` · `io.celox.loupe.jsx-source` *(declared by Loupe)* | ✅ |
 | Java · Kotlin | `.java` `.kt` `.kts` | `com.sun.java-source` · `org.kotlinlang.source` *(imported by Loupe)* | ✅ |
 | C · C++ | `.c` `.h` `.cpp` `.cc` `.cxx` `.hpp` `.hxx` `.h++` | `public.c-source` · `public.c-plus-plus-source` · headers | ✅ |
-| Shell | `.sh` `.bash` `.zsh` | `public.shell-script` and variants | ✅ |
+| Shell & Terminal | `.sh` `.bash` `.zsh` `.command` `.tool` `.fish` `.ksh` `.csh` `.tcsh` `.zsh-theme` `.env` | `public.shell-script` and variants (`.command`/`.tool`: `com.apple.terminal.shell-script`; `.fish`: `io.celox.loupe.fish-script`; `.zsh-theme`: `io.celox.loupe.zsh-theme`; `.env`: `io.celox.loupe.env`) | ✅ |
+| AppleScript | `.applescript` | `com.apple.applescript.text` | ✅ |
+| Workflow | `.workflow` `.wflow` | `com.apple.automator-workflow` · `com.apple.shortcuts.workflow-file` | ✅ |
 | SQL | `.sql` | `org.iso.sql` *(imported by Loupe)* | ✅ |
 | YAML · TOML · INI | `.yaml` `.yml` `.toml` `.ini` | `public.yaml` · `public.toml` · `com.microsoft.ini` *(imported by Loupe)* | ✅ |
 | XML | `.xml` | `public.xml` | ✅ |
@@ -491,7 +493,7 @@ Sources/
     ├── Markdown/                 swift-markdown visitor, sanitizer, safe image resolver
     ├── CSV/                      RFC 4180 parser with delimiter detection, table renderer
     ├── Log/                      Log model, format detection, message highlighter
-    ├── Highlighting/             Tokenizers for 35 languages (incl. PowerShell & Batch)
+    ├── Highlighting/             Tokenizers for 36 languages (incl. PowerShell & Batch)
     ├── Chart/                    .chart parser and tempo map → song time
     ├── Preview/                  Renderer protocol, registry, file reader, one renderer per format
     ├── Render/                   JSON tree, expansion planner, HTML escaping
@@ -516,13 +518,13 @@ swift run LoupeTests              # debug
 swift run -c release LoupeTests   # release (as in the release workflow)
 ```
 
-**389 tests** in a dependency-free harness, run by CI on every push:
+**392 tests** in a dependency-free harness, run by CI on every push:
 
 | Area | Tests | Highlights |
 | :--- | ---: | :--- |
 | JSON | 70 | Order, duplicates, number spelling, recovery, limits incl. depth bomb, caret alignment |
 | Log files | 64 | All seven formats, level normalization, stack traces, CRLF, tail reading, absolute line numbers, WCAG contrast |
-| Highlighting | 78 | 35 languages, quote-aware XML/HTML, PowerShell & Batch, C# verbatim strings, **every non-system file type declared so Quick Look actually asks Loupe**, no phantom last line, **every printable character in every language must terminate and round-trip** |
+| Highlighting | 78 | 36 languages, quote-aware XML/HTML, PowerShell & Batch, C# verbatim strings, **every non-system file type declared so Quick Look actually asks Loupe**, no phantom last line, **every printable character in every language must terminate and round-trip** |
 | Markdown & safety | 41 | GFM, sanitizer bypass attempts, path traversal, remote-image blocking |
 | TSV / CSV | 22 | RFC 4180 quoting, delimiter detection, limits |
 | Theming & settings | 40 | Light/dark CSS, settings migration, on/off switches per category, plain-text fallback encodings, shared preference domain + entitlements |

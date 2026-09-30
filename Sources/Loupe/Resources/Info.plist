@@ -19,7 +19,7 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>0.8.0</string>
+    <string>0.9.0</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>CFBundleSupportedPlatforms</key>
@@ -198,6 +198,17 @@
                 <string>cjs</string>
                 <string>pyw</string>
                 <string>dockerfile</string>
+                <string>command</string>
+                <string>tool</string>
+                <string>fish</string>
+                <string>ksh</string>
+                <string>csh</string>
+                <string>tcsh</string>
+                <string>zsh-theme</string>
+                <string>applescript</string>
+                <string>workflow</string>
+                <string>wflow</string>
+                <string>env</string>
             </array>
             <key>LSItemContentTypes</key>
             <array>
@@ -244,6 +255,16 @@
                 <string>public.perl-script</string>
                 <string>public.objective-c-source</string>
                 <string>public.objective-c-plus-plus-source</string>
+                <string>com.apple.terminal.shell-script</string>
+                <string>public.ksh-script</string>
+                <string>public.csh-script</string>
+                <string>public.tcsh-script</string>
+                <string>com.apple.applescript.text</string>
+                <string>com.apple.automator-workflow</string>
+                <string>com.apple.shortcuts.workflow-file</string>
+                <string>io.celox.loupe.fish-script</string>
+                <string>io.celox.loupe.zsh-theme</string>
+                <string>io.celox.loupe.env</string>
             </array>
         </dict>
     </array>
@@ -477,6 +498,59 @@
                 <key>public.filename-extension</key>
                 <array>
                     <string>dockerfile</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.celox.loupe.fish-script</string>
+            <key>UTTypeDescription</key>
+            <string>Fish Shell Script</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.shell-script</string>
+                <string>public.script</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>fish</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.celox.loupe.zsh-theme</string>
+            <key>UTTypeDescription</key>
+            <string>Zsh Theme</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.shell-script</string>
+                <string>public.script</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>zsh-theme</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.celox.loupe.env</string>
+            <key>UTTypeDescription</key>
+            <string>Environment Configuration</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.plain-text</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>env</string>
                 </array>
             </dict>
         </dict>
@@ -723,6 +797,132 @@
                 <array>
                     <string>scala</string>
                     <string>sc</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>com.apple.automator-workflow</string>
+            <key>UTTypeDescription</key>
+            <string>Automator Workflow</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>com.apple.package</string>
+                <string>public.xml</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>workflow</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>com.apple.shortcuts.workflow-file</string>
+            <key>UTTypeDescription</key>
+            <string>Shortcuts / Automator Workflow File</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>com.apple.property-list</string>
+                <string>public.xml</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>wflow</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>com.apple.terminal.shell-script</string>
+            <key>UTTypeDescription</key>
+            <string>Terminal Shell Script</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.shell-script</string>
+                <string>public.script</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>command</string>
+                    <string>tool</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>com.apple.applescript.text</string>
+            <key>UTTypeDescription</key>
+            <string>AppleScript Source</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.source-code</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>applescript</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>public.ksh-script</string>
+            <key>UTTypeDescription</key>
+            <string>KornShell Script</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.shell-script</string>
+                <string>public.script</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>ksh</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>public.csh-script</string>
+            <key>UTTypeDescription</key>
+            <string>C Shell Script</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.shell-script</string>
+                <string>public.script</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>csh</string>
+                </array>
+            </dict>
+        </dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>public.tcsh-script</string>
+            <key>UTTypeDescription</key>
+            <string>TC Shell Script</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.shell-script</string>
+                <string>public.script</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>tcsh</string>
                 </array>
             </dict>
         </dict>

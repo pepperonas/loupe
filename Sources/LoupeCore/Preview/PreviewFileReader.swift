@@ -18,7 +18,18 @@ public enum PreviewFileReader {
     public static let maxCountedBytes = 512 * 1024 * 1024
 
     public static func read(url: URL, strategy: PreviewReadStrategy, headLimit: Int) throws -> Result {
-        let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
+        var fileURL = url
+        var isDir: ObjCBool = false
+        if FileManager.default.fileExists(atPath: url.path, isDirectory: &isDir), isDir.boolValue {
+            let candidates = [
+                url.appendingPathComponent("Contents/document.wflow"),
+                url.appendingPathComponent("document.wflow")
+            ]
+            if let target = candidates.first(where: { FileManager.default.fileExists(atPath: $0.path) }) {
+                fileURL = target
+            }
+        }
+        let attributes = try FileManager.default.attributesOfItem(atPath: fileURL.path)
         let size = (attributes[.size] as? NSNumber)?.intValue ?? 0
 
         switch strategy {
@@ -26,18 +37,18 @@ public enum PreviewFileReader {
             var limit = headLimit
             if case .headAtMost(let most) = strategy { limit = min(headLimit, most) }
             guard size > limit else {
-                return Result(data: try Data(contentsOf: url), truncatedAtEnd: false, skippedBytesAtStart: 0)
+                return Result(data: try Data(contentsOf: fileURL), truncatedAtEnd: false, skippedBytesAtStart: 0)
             }
-            let handle = try FileHandle(forReadingFrom: url)
+            let handle = try FileHandle(forReadingFrom: fileURL)
             defer { try? handle.close() }
             let data = try handle.read(upToCount: limit) ?? Data()
             return Result(data: data, truncatedAtEnd: true, skippedBytesAtStart: 0)
 
         case .tail(let maxBytes):
             guard size > maxBytes else {
-                return Result(data: try Data(contentsOf: url), truncatedAtEnd: false, skippedBytesAtStart: 0)
+                return Result(data: try Data(contentsOf: fileURL), truncatedAtEnd: false, skippedBytesAtStart: 0)
             }
-            let handle = try FileHandle(forReadingFrom: url)
+            let handle = try FileHandle(forReadingFrom: fileURL)
             defer { try? handle.close() }
             let offset = size - maxBytes
             try handle.seek(toOffset: UInt64(offset))

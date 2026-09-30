@@ -64,6 +64,7 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
     case elixir = "ex"
     case objectiveC = "m"
     case zig
+    case appleScript = "applescript"
     case unknown
     
     public static func from(identifier: String?) -> SupportedLanguage {
@@ -79,12 +80,13 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         case "json", "jsonc": return .json
         case "yaml", "yml": return .yaml
         case "html", "htm", "xhtml": return .html
-        case "xml", "plist", "svg",
+        case "xml", "plist", "svg", "wflow", "workflow",
              "xsd", "xsl", "xslt", "xaml", "csproj", "vbproj", "fsproj", "vcxproj",
              "props", "targets", "resx", "wsdl", "nuspec": return .xml
         case "css", "scss", "sass", "less": return .css
         case "sql": return .sql
-        case "bash", "sh", "zsh", "shell", "makefile", "make": return .bash
+        case "bash", "sh", "zsh", "shell", "makefile", "make",
+             "command", "tool", "fish", "ksh", "csh", "tcsh", "zsh-theme": return .bash
         case "java": return .java
         case "kotlin", "kt", "kts": return .kotlin
         case "markdown", "md", "mdown", "mkd": return .markdown
@@ -102,6 +104,7 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         case "elixir", "ex", "exs": return .elixir
         case "objective-c", "objectivec", "objc", "m", "objective-c++", "objc++", "mm": return .objectiveC
         case "zig": return .zig
+        case "applescript", "scpt": return .appleScript
         case "go", "golang": return .go
         case "php": return .php
         case "ruby", "rb": return .ruby
@@ -151,6 +154,7 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         case .elixir: return "Elixir"
         case .objectiveC: return "Objective-C"
         case .zig: return "Zig"
+        case .appleScript: return "AppleScript"
         case .unknown: return ""
         }
     }
