@@ -32,6 +32,10 @@ Counted from the source code, updated with every change:
 - **Lines of Swift:** <!--# include virtual="/ssi/stat-loc.txt" stub="none" --> (<!--# include virtual="/ssi/stat-loc-detail.txt" stub="none" -->)
 - **Unit tests:** <!--# include virtual="/ssi/stat-tests.txt" stub="none" --> (<!--# include virtual="/ssi/stat-tests-detail.txt" stub="none" -->)
 
+### Without Loupe, with Loupe
+
+Ten files, each first the way macOS shows it on its own, then with Loupe. The Loupe side is the real output of its renderers; the Finder and the side without Loupe are reconstructed. ([video, MP4](https://loupe.celox.io/assets/video/loupe-demo.mp4))
+
 ### What it looks like
 
 - **JSON tree** — Every object with its key count and a peek at its content. ([image](https://loupe.celox.io/assets/gallery/json.jpg))

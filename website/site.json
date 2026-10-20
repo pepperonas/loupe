@@ -457,6 +457,23 @@
      "de": "Nein. Die Erweiterung läuft in der Sandbox und nur lesend, hat in ihren Vorschauen keinen Netzzugriff und enthält kein JavaScript. Externe Bilder in Markdown bleiben blockiert."
     }
    }
-  ]
+  ],
+  "video": {
+   "id": "loupe-demo",
+   "width": 1280,
+   "height": 720,
+   "t": {
+    "en": "Without Loupe, with Loupe",
+    "de": "Ohne Loupe, mit Loupe"
+   },
+   "p": {
+    "en": "Ten files, each first the way macOS shows it on its own, then with Loupe. The Loupe side is the real output of its renderers; the Finder and the side without Loupe are reconstructed.",
+    "de": "Zehn Dateien, jede zuerst so, wie macOS sie von sich aus zeigt, dann mit Loupe. Die Loupe-Seite ist die echte Ausgabe der Renderer; der Finder und die Seite ohne Loupe sind nachgebaut."
+   },
+   "alt": {
+    "en": "Demo video: Quick Look without Loupe and with Loupe",
+    "de": "Demo-Video: Quick Look ohne Loupe und mit Loupe"
+   }
+  }
  }
 }

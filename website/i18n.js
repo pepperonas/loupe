@@ -101,6 +101,9 @@ window.SITE_I18N = {
     "g8.t": "XML",
     "g8.p": "Elemente, Attribute, CDATA und Entities, jeweils in eigener Farbe.",
     "g9.t": "Die Begleit-App",
-    "g9.p": "Schalter je Rubrik, Erscheinungsbild, Textgröße und Sprache."
+    "g9.p": "Schalter je Rubrik, Erscheinungsbild, Textgröße und Sprache.",
+    "vd.t": "Ohne Loupe, mit Loupe",
+    "vd.p": "Zehn Dateien, jede zuerst so, wie macOS sie von sich aus zeigt, dann mit Loupe. Die Loupe-Seite ist die echte Ausgabe der Renderer; der Finder und die Seite ohne Loupe sind nachgebaut.",
+    "vd.alt": "Demo-Video: Quick Look ohne Loupe und mit Loupe"
   }
 };
