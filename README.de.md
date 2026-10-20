@@ -79,6 +79,12 @@
 
 <sub>Jede Vorschau auf dieser Seite ist Loupes echte HTML-Ausgabe, erzeugt von den tatsächlichen Renderern — gezeichnet ist nur der Fensterrahmen (<a href="#-screenshots--mockups">wie</a>). Die Bilder folgen deinem hellen oder dunklen GitHub-Theme.</sub>
 
+### 🎬 Ohne Loupe und mit Loupe
+
+<a href="docs/video/loupe-demo.mp4"><img src="docs/video/loupe-demo.gif" alt="Animation: Im Finder werden eine JSON- und eine C#-Datei mit der Leertaste geöffnet. Ohne Loupe zeigt Quick Look Rohtext oder nur ein Dateisymbol; ein Wisch legt danach Loupes Vorschau frei – einen aufklappbaren JSON-Baum und hervorgehobenen C#-Code" width="100%"></a>
+
+<sub>Zwei von zehn Dateien aus der Demo. ▶ <a href="docs/video/loupe-demo.mp4"><b>Ganzes Video ansehen</b></a> (77 s, MP4): JSON, kaputtes JSON, Markdown, TSV, Logs, ein Rhythmusspiel-Chart, C#, PowerShell, ein Dockerfile und ein Automator-Workflow. Die Seite „Mit Loupe“ ist Loupes echte Ausgabe, die Seite „Ohne Loupe“ und der Finder sind nachgebaut (<a href="#-screenshots--mockups">wie</a>).</sub>
+
 <br><br>
 
 <a href="https://www.paypal.com/donate/?business=martin.pfeffer%40celox.io&item_name=Loupe&currency_code=EUR">
@@ -569,6 +575,8 @@ Issues und Pull Requests sind willkommen.
 ## 📸 Screenshots & Mockups
 
 Die Bilder dieser Seite erzeugt [`Tools/ScreenshotGenerator`](Tools/ScreenshotGenerator/): Ein kleines Swift-Werkzeug rendert die Beispieldateien über Loupes **echte `RendererRegistry` und Renderer** (hell und dunkel), ein Python-Skript setzt jedes Ergebnis in ein Quick-Look-Fenster im macOS-Stil, und Headless-Chrome nimmt es in 1,5-facher Auflösung auf. Rahmen und Hintergrund sind gezeichnet, der Inhalt ist Loupes unveränderte Ausgabe.
+
+Das Demo-Video folgt demselben Prinzip: Die Loupe-Seite jeder Szene ist die unveränderte Ausgabe der echten Renderer (dunkles Erscheinungsbild). Gezeichnet sind das Finder-Fenster, der Mauszeiger und die Seite „Ohne Loupe“. Was macOS ohne Loupe zeigt, ergibt sich aus dem Dateityp, den macOS meldet: Typen, die es als Text kennt (`.json`, `.md`, `.tsv`, `.log`), erscheinen als Rohtext; Typen, die nur Loupe anmeldet (`.cs`, `.ps1`, `.chart`), Dateien ohne Endung (`Dockerfile`) und Automator-Workflows erscheinen als Dateisymbol.
 
 ---
 
