@@ -5,6 +5,15 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+## [Unveröffentlicht]
+
+### Behoben
+- **Zwei senkrechte Scrollbalken in der Code-Vorschau:** Mit dauerhaft sichtbaren Scrollbalken (Maus
+  angeschlossen) bekam der Codekasten einen eigenen senkrechten Balken neben dem des Fensters, sobald
+  eine Zeile breiter war als der Kasten. Code, Logs und `.chart` füllen das Fenster jetzt ohne Rand und
+  Kartenrahmen; die Kopfzeile bleibt stehen, nur der Inhalt scrollt. Breite Tabellen (CSV/TSV) hatten
+  denselben Fehler und scrollen jetzt nur noch seitwärts.
+
 ## [0.9.0] - 2026-09-30
 
 ### Hinzugefügt

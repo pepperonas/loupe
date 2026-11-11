@@ -233,6 +233,7 @@ public enum CSSGenerator {
             border-radius: 6px;
             color: var(--text);
             overflow-x: auto;
+            overflow-y: hidden;
             white-space: pre;
         }
         .lp-caret { color: var(--err-fg); font-weight: 700; }
@@ -619,6 +620,9 @@ public enum CSSGenerator {
 
         .lp-csv-table-wrapper {
             overflow-x: auto;
+            /* Ohne dies zieht overflow-x:auto ein overflow-y:auto nach: der waagerechte
+               Balken nimmt dem Kasten Hoehe, und neben dem Seitenbalken steht ein zweiter. */
+            overflow-y: hidden;
             max-width: 100%;
             border: 1px solid var(--border);
             border-radius: 6px;
@@ -799,9 +803,19 @@ public enum CSSGenerator {
             -webkit-font-smoothing: antialiased;
         }
 
+        /* Editor-Aufbau: Kopfzeile steht fest, NUR der Codebereich scrollt.
+           Seite und Codebereich duerfen nicht beide scrollen -- mit dauerhaft
+           sichtbaren Scrollbalken (Maus angeschlossen) standen sonst zwei
+           senkrechte Balken nebeneinander: der waagerechte Balken einer langen
+           Zeile nahm dem Kasten Hoehe, und overflow-x:auto zieht overflow-y:auto nach. */
+        html, body {
+            height: 100%;
+        }
+
         body {
             margin: 0;
-            padding: 16px 20px 32px 20px;
+            padding: 0;
+            overflow: hidden;
             background-color: var(--bg-primary);
             color: var(--text-primary);
         }
@@ -810,16 +824,16 @@ public enum CSSGenerator {
             display: flex;
             flex-direction: column;
             width: 100%;
+            height: 100%;
         }
 
         .lp-toolbar {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex: none;
             background-color: var(--bg-code-header);
-            border: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-subtle);
-            border-radius: 8px 8px 0 0;
             padding: 8px 14px;
             font-size: 11px;
             color: var(--text-secondary);
@@ -860,11 +874,10 @@ public enum CSSGenerator {
         }
 
         .lp-code-scroll {
-            overflow-x: auto;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: auto;
             background-color: var(--bg-code);
-            border: 1px solid var(--border-color);
-            border-top: none;
-            border-radius: 0 0 8px 8px;
             padding: 10px 0;
         }
 
@@ -911,10 +924,11 @@ public enum CSSGenerator {
 
         /* Banners */
         .lp-banner {
+            flex: none;
             padding: 10px 14px;
             border-radius: 6px;
             font-size: 0.9em;
-            margin-bottom: 12px;
+            margin: 10px 12px;
         }
 
         .lp-banner-notice {

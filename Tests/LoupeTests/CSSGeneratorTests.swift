@@ -97,6 +97,31 @@ public enum CSSGeneratorTests {
                 }
             }
 
+            // Genau EIN Scrollbereich: Seite und Codekasten scrollten frueher beide,
+            // mit dauerhaft sichtbaren Balken standen zwei senkrechte nebeneinander.
+            runner.runTest(name: "testCodeViewHasExactlyOneScroller") {
+                let css = CSSGenerator.generateCodeCSS(settings: LoupeSettings())
+                func rule(_ selector: String) -> String {
+                    guard let start = css.range(of: "\n" + selector + " {"),
+                          let end = css.range(of: "}", range: start.upperBound..<css.endIndex) else { return "" }
+                    return String(css[start.upperBound..<end.lowerBound])
+                }
+                let body = rule("body"), scroll = rule(".lp-code-scroll"), box = rule(".lp-code-container")
+                try assertTrue(body.contains("overflow: hidden"), "die Seite darf nicht selbst scrollen")
+                try assertTrue(body.contains("padding: 0;"), "kein Rahmen um die Vorschau")
+                try assertTrue(rule("html, body").contains("height: 100%"))
+                try assertTrue(box.contains("height: 100%"))
+                try assertTrue(scroll.contains("overflow: auto") && scroll.contains("min-height: 0"))
+                try assertFalse(scroll.contains("border"), "kein innerer Rahmen um den Code")
+            }
+
+            runner.runTest(name: "testCSVWrapperScrollsOnlySideways") {
+                let css = CSSGenerator.generateCSVCSS(settings: LoupeSettings())
+                let rest = css.components(separatedBy: ".lp-csv-table-wrapper {").dropFirst().first ?? ""
+                let rule = rest.components(separatedBy: "}").first ?? ""
+                try assertTrue(rule.contains("overflow-y: hidden"))
+            }
+
             runner.runTest(name: "testCodeNoJavaScript") {
                 let css = CSSGenerator.generateCodeCSS(settings: LoupeSettings())
                 try assertFalse(css.lowercased().contains("<script"))
