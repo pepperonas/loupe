@@ -17,7 +17,7 @@ permissions:
 jobs:
   build-and-release:
     name: Build and Release Loupe
-    runs-on: macos-14
+    runs-on: macos-15
 
     steps:
       - name: Checkout Repository

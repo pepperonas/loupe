@@ -5,7 +5,7 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
-## [Unveröffentlicht]
+## [0.9.1] - 2026-11-11
 
 ### Behoben
 - **Zwei senkrechte Scrollbalken in der Code-Vorschau:** Mit dauerhaft sichtbaren Scrollbalken (Maus
