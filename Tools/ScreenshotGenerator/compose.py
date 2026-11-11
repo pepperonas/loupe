@@ -130,7 +130,7 @@ social_body = [
     '<div class="brand"><h1>🔍 <span>Loupe</span></h1>'
     '<p>Native Quick Look previews<br>for developer files.</p>'
     '<div class="chips"><i>JSON</i><i>Markdown</i><i>Logs</i><i>XML</i><i>PowerShell</i>'
-    '<i>Batch</i><i>TSV</i><i>23 languages</i></div>'
+    '<i>Batch</i><i>TSV</i><i>36 languages</i></div>'
     '<small>macOS 14+ · zero JavaScript · offline</small></div>',
 ]
 social = page("dark", (1280, 640), social_body).replace("</style>", SOCIAL_CSS + "</style>")
