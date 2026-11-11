@@ -8,7 +8,7 @@
  "tagline": "Press Space. See it properly.",
  "license": "MIT",
  "year": 2026,
- "asset_version": 3,
+ "asset_version": 4,
  "languages": [
   "en",
   "de"
@@ -467,8 +467,8 @@
     "de": "Ohne Loupe, mit Loupe"
    },
    "p": {
-    "en": "Ten files, each first the way macOS shows it on its own, then with Loupe. The Loupe side is the real output of its renderers; the Finder and the side without Loupe are reconstructed.",
-    "de": "Zehn Dateien, jede zuerst so, wie macOS sie von sich aus zeigt, dann mit Loupe. Die Loupe-Seite ist die echte Ausgabe der Renderer; der Finder und die Seite ohne Loupe sind nachgebaut."
+    "en": "Ten files, each first the way macOS shows it on its own, then with Loupe, explained on screen in English (2 min 31 s). The Loupe side is the real output of its renderers; the Finder and the side without Loupe are reconstructed.",
+    "de": "Zehn Dateien, jede zuerst so, wie macOS sie von sich aus zeigt, dann mit Loupe, mit englischen Erklärtexten im Bild (2 min 31 s). Die Loupe-Seite ist die echte Ausgabe der Renderer; der Finder und die Seite ohne Loupe sind nachgebaut."
    },
    "alt": {
     "en": "Demo video: Quick Look without Loupe and with Loupe",

@@ -5,6 +5,13 @@ Alle nennenswerten Änderungen an **Loupe** stehen in dieser Datei.
 Format nach [Keep a Changelog](https://keepachangelog.com/de/1.1.0/),
 Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
+## [Unveröffentlicht]
+
+### Geändert
+- **Demo-Video neu aufgenommen:** langsamer (2 min 31 s statt 77 s), mit englischen Erklärtexten im Bild
+  und der neuen randlosen Code-Ansicht. README beschreibt den Editor-Aufbau der Code-, Log- und
+  Chart-Vorschau.
+
 ## [0.9.1] - 2026-11-11
 
 ### Behoben

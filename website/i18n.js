@@ -103,7 +103,7 @@ window.SITE_I18N = {
     "g9.t": "Die Begleit-App",
     "g9.p": "Schalter je Rubrik, Erscheinungsbild, Textgröße und Sprache.",
     "vd.t": "Ohne Loupe, mit Loupe",
-    "vd.p": "Zehn Dateien, jede zuerst so, wie macOS sie von sich aus zeigt, dann mit Loupe. Die Loupe-Seite ist die echte Ausgabe der Renderer; der Finder und die Seite ohne Loupe sind nachgebaut.",
+    "vd.p": "Zehn Dateien, jede zuerst so, wie macOS sie von sich aus zeigt, dann mit Loupe, mit englischen Erklärtexten im Bild (2 min 31 s). Die Loupe-Seite ist die echte Ausgabe der Renderer; der Finder und die Seite ohne Loupe sind nachgebaut.",
     "vd.alt": "Demo-Video: Quick Look ohne Loupe und mit Loupe"
   }
 };

@@ -83,7 +83,7 @@
 
 <a href="docs/video/loupe-demo.mp4"><img src="docs/video/loupe-demo.gif" alt="Animation: Im Finder werden eine JSON- und eine C#-Datei mit der Leertaste geöffnet. Ohne Loupe zeigt Quick Look Rohtext oder nur ein Dateisymbol; ein Wisch legt danach Loupes Vorschau frei – einen aufklappbaren JSON-Baum und hervorgehobenen C#-Code" width="100%"></a>
 
-<sub>Zwei von zehn Dateien aus der Demo. ▶ <a href="docs/video/loupe-demo.mp4"><b>Ganzes Video ansehen</b></a> (77 s, MP4): JSON, kaputtes JSON, Markdown, TSV, Logs, ein Rhythmusspiel-Chart, C#, PowerShell, ein Dockerfile und ein Automator-Workflow. Die Seite „Mit Loupe“ ist Loupes echte Ausgabe, die Seite „Ohne Loupe“ und der Finder sind nachgebaut (<a href="#-screenshots--mockups">wie</a>).</sub>
+<sub>Zwei von zehn Dateien aus der Demo. ▶ <a href="docs/video/loupe-demo.mp4"><b>Ganzes Video ansehen</b></a> (2 min 31 s, MP4, englische Erklärtexte im Bild): JSON, kaputtes JSON, Markdown, TSV, Logs, ein Rhythmusspiel-Chart, C#, PowerShell, ein Dockerfile und ein Automator-Workflow. Die Seite „Mit Loupe“ ist Loupes echte Ausgabe, die Seite „Ohne Loupe“ und der Finder sind nachgebaut (<a href="#-screenshots--mockups">wie</a>).</sub>
 
 <br><br>
 
@@ -222,7 +222,7 @@ Jede Zeile wird in **Zeit · Level · Quelle · Nachricht** zerlegt — egal in 
   <img src="docs/screenshots/code-light.png" alt="Loupe-Swift-Vorschau mit Zeilennummern und Hervorhebung" width="100%">
 </picture>
 
-Ein in Swift geschriebener Tokenizer hebt **36 Sprachen** hervor: Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, PHP, Ruby, SQL, C#, F#, Visual Basic, Objective-C, Dart, Scala, Groovy, Lua, R, Perl, Elixir, Zig, AppleScript, Shell/Bash/Zsh, **PowerShell**, **Batch**, JSON, YAML, TOML/INI, XML/HTML, CSS, Dockerfile — mit Zeilennummern, Sprach-Badge und Dateistatistik. Tokens werden auf der Host-Seite zu `<span>`s; in der Vorschau läuft nichts.
+Ein in Swift geschriebener Tokenizer hebt **36 Sprachen** hervor: Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, PHP, Ruby, SQL, C#, F#, Visual Basic, Objective-C, Dart, Scala, Groovy, Lua, R, Perl, Elixir, Zig, AppleScript, Shell/Bash/Zsh, **PowerShell**, **Batch**, JSON, YAML, TOML/INI, XML/HTML, CSS, Dockerfile — mit Zeilennummern, Sprach-Badge und Dateistatistik. Die Vorschau füllt das Fenster wie ein Editor: Die Kopfzeile mit Dateiname, Sprache und Zeilenzahl bleibt stehen und nur der Code scrollt, bei langen Zeilen auch seitwärts. Logs und Charts nutzen denselben Aufbau. Tokens werden auf der Host-Seite zu `<span>`s; in der Vorschau läuft nichts.
 
 ### 🧩 XML
 
@@ -576,7 +576,7 @@ Issues und Pull Requests sind willkommen.
 
 Die Bilder dieser Seite erzeugt [`Tools/ScreenshotGenerator`](Tools/ScreenshotGenerator/): Ein kleines Swift-Werkzeug rendert die Beispieldateien über Loupes **echte `RendererRegistry` und Renderer** (hell und dunkel), ein Python-Skript setzt jedes Ergebnis in ein Quick-Look-Fenster im macOS-Stil, und Headless-Chrome nimmt es in 1,5-facher Auflösung auf. Rahmen und Hintergrund sind gezeichnet, der Inhalt ist Loupes unveränderte Ausgabe.
 
-Das Demo-Video folgt demselben Prinzip: Die Loupe-Seite jeder Szene ist die unveränderte Ausgabe der echten Renderer (dunkles Erscheinungsbild). Gezeichnet sind das Finder-Fenster, der Mauszeiger und die Seite „Ohne Loupe“. Was macOS ohne Loupe zeigt, ergibt sich aus dem Dateityp, den macOS meldet: Typen, die es als Text kennt (`.json`, `.md`, `.tsv`, `.log`), erscheinen als Rohtext; Typen, die nur Loupe anmeldet (`.cs`, `.ps1`, `.chart`), Dateien ohne Endung (`Dockerfile`) und Automator-Workflows erscheinen als Dateisymbol.
+Das Demo-Video folgt demselben Prinzip: Die Loupe-Seite jeder Szene ist die unveränderte Ausgabe der echten Renderer (dunkles Erscheinungsbild). Gezeichnet sind das Finder-Fenster, der Mauszeiger und die Seite „Ohne Loupe“. Jede Datei bleibt lange genug stehen, um sie zu lesen: Eine Zeile am unteren Bildrand erklärt auf Englisch, was zu sehen ist, erst ohne Loupe, dann mit. Der Text in den Loupe-Vorschauen selbst ist deutsch, weil Vorschauen nicht übersetzt werden. Was macOS ohne Loupe zeigt, ergibt sich aus dem Dateityp, den macOS meldet: Typen, die es als Text kennt (`.json`, `.md`, `.tsv`, `.log`), erscheinen als Rohtext; Typen, die nur Loupe anmeldet (`.cs`, `.ps1`, `.chart`), Dateien ohne Endung (`Dockerfile`) und Automator-Workflows erscheinen als Dateisymbol.
 
 ---
 
