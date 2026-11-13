@@ -1,7 +1,7 @@
 <!--# block name="none" --><!--# endblock -->
 # Loupe — Quick Look for JSON, Markdown, Logs & Code
 
-> Loupe is a free, open-source Quick Look extension for macOS 14+. Press Space on a file in Finder and it shows JSON as a collapsible tree with exact error positions, renders Markdown, turns log files into a colour-coded table (newest lines first in view), lays out TSV as a table and highlights source code in 36 languages, PowerShell, Batch, AppleScript and XML dialects included. It runs sandboxed, read-only and offline, and its previews contain no JavaScript. A companion app switches previews on or off per category and sets appearance, text size and language (English or German).
+> Loupe is a free, open-source Quick Look extension for macOS 14+. Press Space on a file in Finder and it shows JSON as a collapsible tree with exact error positions, renders Markdown, turns log files into a colour-coded table (newest lines first in view), lays out TSV as a table and highlights source code in 36 languages, PowerShell, Batch, AppleScript and XML dialects included. Java keystores show their aliases and certificate fingerprints without asking for a password. It runs sandboxed, read-only and offline, and its previews contain no JavaScript. A companion app switches previews on or off per category and sets appearance, text size and language (English or German).
 
 This is the Markdown version of https://loupe.celox.io/ for agents and text tools. A short summary with every link lives at https://loupe.celox.io/llms.txt.
 

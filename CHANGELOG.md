@@ -7,6 +7,8 @@ Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unveröffentlicht]
 
+## [0.10.0] - 2026-11-13
+
 ### Hinzugefügt
 - **Java-Keystores (`.jks`, `.keystore`):** Statt des Dateisymbols zeigt die Vorschau Format (JKS, JCEKS,
   PKCS #12), Aliase mit Art und Anlagedatum sowie je Zertifikat Inhaber, Aussteller, Gültigkeit,
