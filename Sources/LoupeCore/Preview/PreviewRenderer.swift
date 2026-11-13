@@ -39,9 +39,13 @@ public protocol PreviewRenderer: Sendable {
     static var readStrategy: PreviewReadStrategy { get }
     /// Rubrik fuer die Schalter in der Companion-App. Bewusst ohne Default.
     static var category: PreviewCategory { get }
+    /// Was Quick Look zeigt, wenn die Rubrik abgeschaltet ist: den Rohtext (true)
+    /// oder -- bei Binaerformaten -- die Datei-Karte wie ohne Loupe (false).
+    static var plainTextWhenDisabled: Bool { get }
     func renderHTML(input: PreviewInput, settings: LoupeSettings) -> String
 }
 
 public extension PreviewRenderer {
     static var readStrategy: PreviewReadStrategy { .head }
+    static var plainTextWhenDisabled: Bool { true }
 }

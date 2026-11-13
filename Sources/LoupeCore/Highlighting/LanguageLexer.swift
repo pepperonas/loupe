@@ -50,6 +50,7 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
     case ruby = "rb"
     case docker = "dockerfile"
     case toml
+    case properties
     case powershell = "ps1"
     case batch = "bat"
     case csharp = "cs"
@@ -110,6 +111,7 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         case "ruby", "rb": return .ruby
         case "dockerfile", "docker": return .docker
         case "toml", "ini", "conf", "env": return .toml
+        case "properties": return .properties
         case "powershell", "pwsh", "ps1", "psm1", "psd1": return .powershell
         case "batch", "bat", "cmd": return .batch
         default: return .unknown
@@ -140,6 +142,7 @@ public enum SupportedLanguage: String, CaseIterable, Sendable {
         case .ruby: return "Ruby"
         case .docker: return "Dockerfile"
         case .toml: return "TOML"
+        case .properties: return "Properties"
         case .powershell: return "PowerShell"
         case .batch: return "Batch"
         case .csharp: return "C#"

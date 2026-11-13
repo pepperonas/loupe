@@ -81,6 +81,7 @@ public enum DocsSyncTests {
                 let known = SourceCodePreviewRenderer.supportedExtensions
                     .filter { !["make", "makefile", "docker"].contains($0) }   // Dateinamen, keine Endungen
                     .union(["json", "md", "markdown", "tsv", "log", "chart"])
+                    .union(KeystorePreviewRenderer.supportedExtensions)
                 for name in readmes {
                     let md = try text(name)
                     let listed = try markedExtensions("filetypes", in: md)

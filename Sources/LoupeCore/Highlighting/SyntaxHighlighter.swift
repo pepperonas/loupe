@@ -289,6 +289,8 @@ public final class SyntaxHighlighter: Sendable {
             return tokenizeGeneral(code: code, keywords: appleScriptKeywords, lineComment: "--", blockCommentStart: "(*", blockCommentEnd: "*)", alternateLineComment: "#", caseInsensitiveKeywords: true)
         case .yaml, .toml:
             return tokenizeGeneral(code: code, keywords: ["true", "false", "yes", "no", "null"], lineComment: "#", blockCommentStart: nil, blockCommentEnd: nil)
+        case .properties:
+            return tokenizeProperties(code: code)
         case .docker:
             return tokenizeGeneral(code: code, keywords: ["FROM", "RUN", "CMD", "LABEL", "EXPOSE", "ENV", "ADD", "COPY", "ENTRYPOINT", "VOLUME", "USER", "WORKDIR", "ARG", "ONBUILD", "STOPSIGNAL", "HEALTHCHECK", "SHELL"], lineComment: "#", blockCommentStart: nil, blockCommentEnd: nil)
         case .sql:

@@ -1245,4 +1245,76 @@ public enum CSSGenerator {
         }
         """
     }
+    // MARK: - Keystore (.jks)
+
+    /// Code-Grundgeruest plus Karten je Keystore-Eintrag.
+    public static func generateKeystoreCSS(settings: LoupeSettings) -> String {
+        let size = settings.textSize.baseFontSizePx
+        return """
+        \(generateCodeCSS(settings: settings))
+
+        .ks-body { padding: 14px 16px 18px; }
+
+        .ks-entry {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-code);
+            margin: 0 0 14px;
+            max-width: 980px;
+        }
+        .ks-head {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: baseline;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-code-header);
+            border-radius: 10px 10px 0 0;
+        }
+        .ks-alias {
+            font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+            font-size: \(size + 1)px;
+            font-weight: 700;
+            color: var(--text-primary);
+            overflow-wrap: anywhere;
+        }
+        .ks-kind {
+            font-size: \(max(11, size - 2))px;
+            font-weight: 600;
+            padding: 1px 8px;
+            border-radius: 999px;
+            background-color: color-mix(in srgb, currentColor 14%, transparent);
+        }
+        .ks-k-key { color: var(--hl-kw); }
+        .ks-k-cert { color: var(--hl-fn); }
+        .ks-k-secret { color: var(--hl-attr); }
+        .ks-created { margin-left: auto; color: var(--text-secondary); font-size: \(max(11, size - 2))px; }
+
+        .ks-table { border-collapse: collapse; width: 100%; font-size: \(max(11, size - 1))px; line-height: 1.5; }
+        .ks-table th {
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            vertical-align: top;
+            padding: 5px 16px 5px 14px;
+            width: 1%;
+        }
+        .ks-table td { padding: 5px 14px 5px 0; color: var(--text-primary); overflow-wrap: anywhere; }
+        .ks-table tr + tr th, .ks-table tr + tr td { border-top: 1px solid var(--border-subtle); }
+        .ks-mono {
+            font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+            font-size: 0.92em;
+            color: var(--hl-num);
+        }
+        .ks-dim { color: var(--text-secondary); }
+        .ks-state { font-weight: 600; margin-left: 6px; }
+        .ks-ok { color: var(--hl-fn); }
+        .ks-warn { color: var(--hl-attr); }
+        .ks-bad { color: var(--hl-str); }
+        .ks-empty { color: var(--text-secondary); padding: 10px 14px; }
+        .ks-foot { color: var(--text-secondary); font-size: \(max(11, size - 2))px; padding: 2px 2px 0; }
+        """
+    }
 }

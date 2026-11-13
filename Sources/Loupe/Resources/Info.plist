@@ -122,6 +122,17 @@
                 <string>io.celox.loupe.chart</string>
             </array>
         </dict>
+        <!-- Rang None: Loupe zeigt Keystores nur in Quick Look und bietet sich
+             nicht als Programm zum Oeffnen an. -->
+        <dict>
+            <key>CFBundleTypeName</key><string>Java Keystore</string>
+            <key>CFBundleTypeRole</key><string>Viewer</string>
+            <key>LSHandlerRank</key><string>None</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>io.celox.loupe.java-keystore</string>
+            </array>
+        </dict>
         <dict>
             <key>CFBundleTypeName</key><string>XML Document</string>
             <key>CFBundleTypeRole</key><string>Viewer</string>
@@ -265,6 +276,7 @@
                 <string>io.celox.loupe.fish-script</string>
                 <string>io.celox.loupe.zsh-theme</string>
                 <string>io.celox.loupe.env</string>
+                <string>io.celox.loupe.java-properties</string>
             </array>
         </dict>
     </array>
@@ -551,6 +563,46 @@
                 <key>public.filename-extension</key>
                 <array>
                     <string>env</string>
+                </array>
+            </dict>
+        </dict>
+        <!-- Java-/Android-Properties (gradle.properties, keystore.properties):
+             macOS vergibt nur einen dynamischen Typ. Von public.plain-text
+             abgeleitet, damit "aus" wieder Rohtext zeigt. -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.celox.loupe.java-properties</string>
+            <key>UTTypeDescription</key>
+            <string>Java Properties</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.plain-text</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>properties</string>
+                </array>
+            </dict>
+        </dict>
+        <!-- Java-Keystores sind binaer: public.data, NICHT Text. Loupe zeigt
+             nur, was ohne Passwort lesbar ist (Format, Aliase, Zertifikate). -->
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>io.celox.loupe.java-keystore</string>
+            <key>UTTypeDescription</key>
+            <string>Java Keystore</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.data</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>jks</string>
+                    <string>keystore</string>
                 </array>
             </dict>
         </dict>

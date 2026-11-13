@@ -43,7 +43,8 @@ public struct SourceCodePreviewRenderer: PreviewRenderer, Sendable {
         "command", "tool", "fish", "ksh", "csh", "tcsh", "zsh-theme",
         "workflow", "wflow",
         "applescript",
-        "env"
+        "env",
+        "properties"
     ]
 
     public static let category: PreviewCategory = .code
@@ -84,7 +85,8 @@ public struct SourceCodePreviewRenderer: PreviewRenderer, Sendable {
             "com.apple.shortcuts.workflow-file",
             "io.celox.loupe.fish-script",
             "io.celox.loupe.zsh-theme",
-            "io.celox.loupe.env"
+            "io.celox.loupe.env",
+            "io.celox.loupe.java-properties"
         ]
         for uti in customUTIs {
             if let t = UTType(uti), !types.contains(t) {

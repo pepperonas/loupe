@@ -443,3 +443,77 @@ extension SyntaxHighlighter {
         return out
     }
 }
+
+// MARK: - Java Properties (.properties)
+
+extension SyntaxHighlighter {
+    /// `schluessel=wert`, `schluessel: wert` oder `schluessel wert`; Kommentare
+    /// mit `#` oder `!`; ein Backslash am Zeilenende setzt den Wert in der
+    /// naechsten Zeile fort (java.util.Properties).
+    func tokenizeProperties(code: String) -> String {
+        var out = ""
+        out.reserveCapacity(code.count * 2)
+        let lines = code.split(omittingEmptySubsequences: false, whereSeparator: { $0 == "\n" || $0 == "\r\n" })
+        var continuing = false
+        for (index, line) in lines.enumerated() {
+            if index > 0 { out += "\n" }
+            let chars = Array(line)
+            if continuing {
+                out += propertiesValue(String(chars))
+                continuing = Self.endsWithContinuation(chars)
+                continue
+            }
+            var i = 0
+            while i < chars.count, chars[i] == " " || chars[i] == "\t" || chars[i] == "\u{0C}" {
+                out.append(chars[i]); i += 1
+            }
+            guard i < chars.count else { continue }
+            if chars[i] == "#" || chars[i] == "!" {
+                out += wrapToken(String(chars[i...]), .comment)
+                continue
+            }
+            // Schluessel: bis zum ersten unmaskierten Trenner.
+            var j = i
+            while j < chars.count {
+                let c = chars[j]
+                if c == "\\" { j += 2; continue }
+                if c == "=" || c == ":" || c == " " || c == "\t" { break }
+                j += 1
+            }
+            j = min(j, chars.count)
+            out += wrapToken(String(chars[i..<j]), .property)
+            // Trenner: Leerraum, hoechstens EIN `=` oder `:`, wieder Leerraum.
+            var k = j
+            var sawSeparator = false
+            while k < chars.count {
+                let c = chars[k]
+                if c == " " || c == "\t" { out.append(c); k += 1; continue }
+                if (c == "=" || c == ":") && !sawSeparator {
+                    out += wrapToken(String(c), .operatorChar)
+                    sawSeparator = true; k += 1; continue
+                }
+                break
+            }
+            if k < chars.count { out += propertiesValue(String(chars[k...])) }
+            continuing = Self.endsWithContinuation(chars)
+        }
+        return out
+    }
+
+    private func propertiesValue(_ value: String) -> String {
+        let trimmed = value.trimmingCharacters(in: .whitespaces)
+        if trimmed == "true" || trimmed == "false" { return wrapToken(value, .keyword) }
+        if !trimmed.isEmpty, Double(trimmed) != nil, trimmed.first?.isNumber == true || trimmed.first == "-" {
+            return wrapToken(value, .number)
+        }
+        return wrapToken(value, .string)
+    }
+
+    /// Ungerade Zahl von Backslashes am Ende = Fortsetzungszeile.
+    static func endsWithContinuation(_ chars: [Character]) -> Bool {
+        var n = 0
+        var i = chars.count - 1
+        while i >= 0, chars[i] == "\\" { n += 1; i -= 1 }
+        return n % 2 == 1
+    }
+}

@@ -7,6 +7,19 @@ Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unveröffentlicht]
 
+### Hinzugefügt
+- **Java-Keystores (`.jks`, `.keystore`):** Statt des Dateisymbols zeigt die Vorschau Format (JKS, JCEKS,
+  PKCS #12), Aliase mit Art und Anlagedatum sowie je Zertifikat Inhaber, Aussteller, Gültigkeit,
+  Schlüsselart, Signaturverfahren, Seriennummer und die SHA-1-/SHA-256-Fingerabdrücke. Gelesen wird nur,
+  was ohne Passwort lesbar ist; private Schlüssel bleiben verschlüsselt und erscheinen nie. Eigener
+  Schalter „Keystores (.jks)“ in der App; abgeschaltet zeigt Quick Look wieder die Datei-Karte.
+- **`.properties`:** Hervorhebung nach Schlüssel, Trenner (`=`, `:` oder Leerraum) und Wert, mit `#`- und
+  `!`-Kommentaren und Fortsetzungszeilen.
+
+### Nicht möglich
+- **`.txt`:** macOS gibt reinen Text nie an eine Quick-Look-Erweiterung (im Unified Log nachgeprüft, wie
+  bei `.csv`). Steht jetzt in der README unter den nicht erreichbaren Typen.
+
 ### Geändert
 - **Demo-Video neu aufgenommen:** langsamer (2 min 31 s statt 77 s), mit englischen Erklärtexten im Bild
   und der neuen randlosen Code-Ansicht. README beschreibt den Editor-Aufbau der Code-, Log- und

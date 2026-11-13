@@ -181,6 +181,14 @@ public enum MoreLanguagesTests {
                 for d in ((app["UTImportedTypeDeclarations"] as? [[String: Any]]) ?? [])
                     + ((app["UTExportedTypeDeclarations"] as? [[String: Any]]) ?? []) {
                     let conf = d["UTTypeConformsTo"] as? [String] ?? []
+                    // Einzige Ausnahme: Keystores sind binaer. Als Text deklariert,
+                    // zeigte "Vorschau aus" Zeichensalat -- der Renderer sagt darum
+                    // selbst ab (plainTextWhenDisabled == false) und der Typ ist Daten.
+                    if d["UTTypeIdentifier"] as? String == KeystorePreviewRenderer.typeIdentifier {
+                        try assertEqual(conf, ["public.data"])
+                        try assertFalse(KeystorePreviewRenderer.plainTextWhenDisabled)
+                        continue
+                    }
                     let textual = ["public.plain-text", "public.source-code", "public.script", "public.xml",
                                    "public.css", "public.python-script", "com.netscape.javascript-source"]
                     try assertTrue(!Set(conf).isDisjoint(with: textual), "\(d["UTTypeIdentifier"] ?? "?") -> \(conf)")

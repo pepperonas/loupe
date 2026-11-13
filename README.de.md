@@ -21,8 +21,8 @@
 [![Aktuelles Release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release-Build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-394%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
-[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-6.734-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-420%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
+[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-7.530-blue?logo=swift&logoColor=white)](Sources/)
 [![Lizenz](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Letzter Commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit-Aktivität](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -98,7 +98,7 @@
 ## 📑 Inhalt
 
 - [Warum Loupe?](#-warum-loupe)
-- [Galerie](#-galerie) — [JSON](#-json) · [Markdown](#-markdown) · [Log-Dateien](#-log-dateien) · [Quellcode](#-quellcode) · [XML](#-xml) · [PowerShell & Batch](#-powershell--batch) · [Charts](#-rhythmusspiel-charts-chart) · [TSV & CSV](#-tsv--csv)
+- [Galerie](#-galerie) — [JSON](#-json) · [Markdown](#-markdown) · [Log-Dateien](#-log-dateien) · [Quellcode](#-quellcode) · [XML](#-xml) · [PowerShell & Batch](#-powershell--batch) · [Charts](#-rhythmusspiel-charts-chart) · [Keystores & .properties](#-keystores--properties) · [TSV & CSV](#-tsv--csv)
 - [Unterstützte Dateitypen](#-unterstützte-dateitypen)
 - [Installation](#-installation)
 - [Einstellungen](#%EF%B8%8F-einstellungen)
@@ -222,7 +222,7 @@ Jede Zeile wird in **Zeit · Level · Quelle · Nachricht** zerlegt — egal in 
   <img src="docs/screenshots/code-light.png" alt="Loupe-Swift-Vorschau mit Zeilennummern und Hervorhebung" width="100%">
 </picture>
 
-Ein in Swift geschriebener Tokenizer hebt **36 Sprachen** hervor: Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, PHP, Ruby, SQL, C#, F#, Visual Basic, Objective-C, Dart, Scala, Groovy, Lua, R, Perl, Elixir, Zig, AppleScript, Shell/Bash/Zsh, **PowerShell**, **Batch**, JSON, YAML, TOML/INI, XML/HTML, CSS, Dockerfile — mit Zeilennummern, Sprach-Badge und Dateistatistik. Die Vorschau füllt das Fenster wie ein Editor: Die Kopfzeile mit Dateiname, Sprache und Zeilenzahl bleibt stehen und nur der Code scrollt, bei langen Zeilen auch seitwärts. Logs und Charts nutzen denselben Aufbau. Tokens werden auf der Host-Seite zu `<span>`s; in der Vorschau läuft nichts.
+Ein in Swift geschriebener Tokenizer hebt **36 Sprachen** hervor: Swift, Rust, Python, JavaScript, TypeScript, Go, Java, Kotlin, C, C++, PHP, Ruby, SQL, C#, F#, Visual Basic, Objective-C, Dart, Scala, Groovy, Lua, R, Perl, Elixir, Zig, AppleScript, Shell/Bash/Zsh, **PowerShell**, **Batch**, JSON, YAML, TOML/INI, XML/HTML, CSS, Dockerfile — dazu Java-`.properties` — mit Zeilennummern, Sprach-Badge und Dateistatistik. Die Vorschau füllt das Fenster wie ein Editor: Die Kopfzeile mit Dateiname, Sprache und Zeilenzahl bleibt stehen und nur der Code scrollt, bei langen Zeilen auch seitwärts. Logs und Charts nutzen denselben Aufbau. Tokens werden auf der Host-Seite zu `<span>`s; in der Vorschau läuft nichts.
 
 ### 🧩 XML
 
@@ -266,6 +266,17 @@ Clone-Hero-/Moonscraper-Charts erscheinen abschnittsweise — `[Song]`, `[SyncTr
 - macOS kennt `.chart` nicht — Loupe deklariert `io.celox.loupe.chart` (abgeleitet von Text), sonst würde Quick Look Loupe nie fragen.
 - Eine Datei mit derselben Endung, die kein Chart ist, erscheint als Rohtext statt als Fehler.
 - Grenzen: 5.000 Zeilen je Abschnitt, 30.000 insgesamt, `.chart` wird bis 8 MB gelesen. Typische Charts liegen weit darunter (ein vollständiger Chart mit fünf Schwierigkeiten: ~27.000 Zeilen, 0,5 MB).
+
+### 🔐 Keystores & `.properties`
+
+**Java-Keystores** (`.jks`, `.keystore`) sind Binärdateien, macOS zeigt nur ein Dateisymbol. Loupe listet, was **ohne Passwort** lesbar ist: das Format (JKS, JCEKS oder PKCS #12), jeden Alias mit Art (privater Schlüssel, Zertifikat, geheimer Schlüssel) und Anlagedatum, und je Zertifikat Inhaber, Aussteller, Gültigkeit (mit *abgelaufen* / *läuft in N Tagen ab*), Schlüsselart und -länge, Signaturverfahren, Seriennummer und die **SHA-1- und SHA-256-Fingerabdrücke** — die Werte, nach denen Google Play, Firebase und API-Konsolen fragen.
+
+- **Nichts wird entschlüsselt und kein Passwort abgefragt.** Private Schlüssel bleiben verschlüsselt in der Datei und erscheinen nie in der Vorschau; Loupe liest nur, was das Format selbst offen ablegt.
+- `keytool` schreibt seit Java 9 **PKCS #12**, auch in Dateien namens `.jks`. Dieses Format verschlüsselt meist auch die Zertifikate: Loupe zeigt dann die Aliase der Schlüssel und sagt, dass der Rest das Passwort braucht.
+- Bouncy-Castle-Keystores (BKS) werden erkannt, aber nicht gelesen.
+- In der App abgeschaltet, zeigt ein Keystore wieder die schlichte Datei-Karte — als Rohtext wäre er Zeichensalat.
+
+**`.properties`**-Dateien (`gradle.properties`, `keystore.properties`, `local.properties`) werden nach Schlüssel, Trenner und Wert hervorgehoben, mit `#`- und `!`-Kommentaren und Fortsetzungszeilen per Backslash. Loupe zeigt die Datei, wie sie ist — samt der Passwörter, die darin stehen.
 
 ### 📊 TSV & CSV
 
@@ -316,12 +327,15 @@ Entscheidend ist nicht, was Loupe rendern *kann*, sondern was **Quick Look tats�
 | Elixir · Zig | `.ex` `.exs` `.zig` | `io.celox.loupe.elixir-source` · `io.celox.loupe.zig-source` *(von Loupe deklariert)* | ✅ |
 | Dockerfile | `.dockerfile` | `io.celox.loupe.dockerfile` *(von Loupe deklariert)* | ✅ |
 | Rhythmusspiel-Chart | `.chart` | `io.celox.loupe.chart` *(von Loupe deklariert)* | ✅ |
+| Java-Properties | `.properties` | `io.celox.loupe.java-properties` *(von Loupe deklariert)* | ✅ |
+| Java-Keystore | `.jks` `.keystore` | `io.celox.loupe.java-keystore` *(von Loupe deklariert)* | ✅ |
 <!-- filetypes:end -->
 
 **Hervorgehoben, aber aus dem Finder nicht erreichbar:**
 
 <!-- unreachable:start -->
 - `.ts` — macOS führt das als **MPEG-2-Transportstrom** (Video). Den Typ zu beanspruchen würde echte Videodateien als Text anzeigen.
+- `.txt` — macOS behält `public.plain-text` für seine eigene Textvorschau und gibt den Typ nie an eine Erweiterung (dieselbe Wand wie bei CSV-Dateien; im Unified Log nachgeprüft).
 <!-- unreachable:end -->
 
 *Von Loupe importiert* heißt: macOS selbst kennt diesen Typ nicht, nur Editoren wie CotEditor oder BBEdit bringen ihn mit. Ohne sie bekäme z. B. `.rs` oder `.cs` einen dynamischen Typ, und Quick Look fragte Loupe nie. Loupe übernimmt dieselbe Kennung wie diese Editoren, damit sich beides nicht stört. *Von Loupe deklariert* sind Typen, für die es gar keine verbreitete Kennung gibt.
@@ -381,6 +395,7 @@ In der Begleit-App (`Loupe.app`) schalten Sie Loupe ein und aus und stellen das 
 | **Log-Dateien** | `.log` |
 | **Code** | Alle Programmiersprachen, Skripte (PowerShell, Batch, Shell), XML und Konfigurationsdateien |
 | **Charts (.chart)** | `.chart` (Clone Hero / Moonscraper) |
+| **Keystores (.jks)** | `.jks`, `.keystore` |
 
 Ist Loupe aus – global oder für eine Rubrik –, erscheint der Rohtext, genau wie auf einem Mac ohne Loupe. Die Auswahl je Rubrik bleibt erhalten, solange der globale Schalter aus ist.
 
@@ -524,7 +539,7 @@ swift run LoupeTests              # Debug
 swift run -c release LoupeTests   # Release (wie im Release-Workflow)
 ```
 
-**394 Tests** in einem abhängigkeitsfreien Test-Harness, bei jedem Push von der CI ausgeführt:
+**420 Tests** in einem abhängigkeitsfreien Test-Harness, bei jedem Push von der CI ausgeführt:
 
 | Bereich | Tests | Schwerpunkte |
 | :--- | ---: | :--- |
@@ -535,6 +550,7 @@ swift run -c release LoupeTests   # Release (wie im Release-Workflow)
 | TSV / CSV | 22 | RFC-4180-Anführungszeichen, Trennzeichenerkennung, Grenzen |
 | Erscheinungsbild & Einstellungen | 40 | Helles/dunkles CSS, Migration der Einstellungen, Schalter je Rubrik, Kodierungen des Rohtexts, gemeinsame Präferenz-Domain + Entitlements |
 | Sprache & Über | 14 | App-Texte Englisch/Deutsch, Sprachauflösung, **Vorschau in jeder Sprache byte-gleich**, jeder „Über“-Link auf sein echtes Ziel festgenagelt |
+| Keystores & Properties | 26 | JKS, JCEKS und PKCS #12 gegen die Ausgabe von `keytool` (Aliase, Inhaber, Gültigkeit, Fingerabdrücke), **kein Schlüsselmaterial in der Vorschau**, jede abgeschnittene und verfälschte Datei läuft ohne Absturz durch, Gültigkeitszustände, `.properties`-Trenner, Kommentare und Fortsetzungszeilen |
 | Charts (`.chart`) | 31 | Abschnitte, BOM/CRLF, kaputte Dateien, Tempowechsel → Songzeit, **jeder Abschnitt startet zugeklappt**, Bundfarben, Escaping, Zeilen- und Lesegrenzen, WCAG-Kontrast, Typ-Anmeldung |
 | Registry & App | 19 | Typ-Zuordnung, CSP, ungültiges UTF-8, leere Dateien, pluginkit-Auswertung inkl. Sandbox-Verweigerung |
 | Doku-Abgleich | 6 | Diese README gegen den Code: Versionen, Test-Badge, Bildpfade, Gleichstand EN/DE, Erreichbarkeit im Finder |

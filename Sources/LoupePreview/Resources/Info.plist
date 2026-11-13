@@ -83,6 +83,8 @@
                 <string>io.celox.loupe.fish-script</string>
                 <string>io.celox.loupe.zsh-theme</string>
                 <string>io.celox.loupe.env</string>
+                <string>io.celox.loupe.java-properties</string>
+                <string>io.celox.loupe.java-keystore</string>
             </array>
             <key>QLSupportsSearchableItems</key><false/>
         </dict>

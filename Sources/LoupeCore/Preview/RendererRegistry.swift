@@ -9,6 +9,7 @@ public enum RendererRegistry {
         CSVPreviewRenderer(),
         LogPreviewRenderer(),
         ChartPreviewRenderer(),
+        KeystorePreviewRenderer(),
         SourceCodePreviewRenderer()
     ]
 
@@ -28,6 +29,8 @@ public enum RendererRegistry {
         let filename = url.lastPathComponent.lowercased()
         // .chart hat ausserhalb von Loupe keinen Typ -- ueber die Endung erkennen.
         if ext == "chart" { return ChartPreviewRenderer() }
+        // Keystores sind binaer und duerfen nie beim Code-Renderer landen.
+        if KeystorePreviewRenderer.supportedExtensions.contains(ext) { return KeystorePreviewRenderer() }
         if SourceCodePreviewRenderer.supportedExtensions.contains(ext) ||
            SourceCodePreviewRenderer.supportedExtensions.contains(filename) {
             return SourceCodePreviewRenderer()

@@ -44,6 +44,12 @@ public final class PreviewProvider: QLPreviewProvider, QLPreviewingController {
             // nur die Datei-Karte zeigen.
             let category = type(of: renderer).category
             guard settings.isEnabled(category) else {
+                guard type(of: renderer).plainTextWhenDisabled else {
+                    // Binaerformat: eine Absage zeigt die Datei-Karte, wie ohne Loupe.
+                    logger.notice("Preview disabled for category \(category.rawValue, privacy: .public), file card: \(url.lastPathComponent, privacy: .public)")
+                    completionHandler(nil, CocoaError(.featureUnsupported))
+                    return
+                }
                 logger.notice("Preview disabled for category \(category.rawValue, privacy: .public), plain text: \(url.lastPathComponent, privacy: .public)")
                 let read = try PreviewFileReader.read(url: url, strategy: .head, headLimit: Self.maxBytes)
                 let text = PlainTextFallback.text(from: read.data)

@@ -102,7 +102,7 @@ public enum PreviewToggleTests {
                     try assertEqual(Set(labels).count, labels.count)
                     for l in labels { try assertFalse(l.isEmpty) }
                 }
-                try assertEqual(PreviewCategory.allCases.count, 6)
+                try assertEqual(PreviewCategory.allCases.count, 7)
             }
         }
     }
