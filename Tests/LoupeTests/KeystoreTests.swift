@@ -190,6 +190,45 @@ public enum KeystoreTests {
                 try assertEqual(KeystoreParser.parse(Data([0, 0, 0, 2, 0, 0, 0, 20])).format, .bks)
             }
 
+            runner.runTest(name: "testPKCS12WithCountlessBagsIsCappedAndFast") {
+                // Praeparierte Datei: 60 000 Schluessel-Bags und 60 000 Zertifikat-Bags
+                // mit derselben localKeyID. Ohne Obergrenze waeren das 3,6 Mrd. Vergleiche.
+                func tlv(_ tag: UInt8, _ content: [UInt8]) -> [UInt8] {
+                    var out: [UInt8] = [tag]
+                    if content.count < 0x80 { out.append(UInt8(content.count)) } else {
+                        var n = content.count
+                        var len: [UInt8] = []
+                        while n > 0 { len.insert(UInt8(n & 0xFF), at: 0); n >>= 8 }
+                        out.append(0x80 | UInt8(len.count))
+                        out += len
+                    }
+                    return out + content
+                }
+                func oid(_ bytes: [UInt8]) -> [UInt8] { tlv(0x06, bytes) }
+                let pkcs7Data: [UInt8] = [0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x07, 0x01]
+                let bagPrefix: [UInt8] = [0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x0C, 0x0A, 0x01]
+                let localKeyID: [UInt8] = [0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x09, 0x15]
+                let attributes = tlv(0x31, tlv(0x30, oid(localKeyID) + tlv(0x31, tlv(0x04, [1]))))
+                let keyBag = tlv(0x30, oid(bagPrefix + [2]) + tlv(0xA0, []) + attributes)
+                let certBag = tlv(0x30, oid(bagPrefix + [3]) + tlv(0xA0, []) + attributes)
+                var bags: [UInt8] = []
+                for _ in 0..<60_000 { bags += keyBag }
+                for _ in 0..<60_000 { bags += certBag }
+                func dataInfo(_ payload: [UInt8]) -> [UInt8] {
+                    tlv(0x30, oid(pkcs7Data) + tlv(0xA0, tlv(0x04, payload)))
+                }
+                let safe = tlv(0x30, dataInfo(tlv(0x30, bags)))
+                let pfx = tlv(0x30, tlv(0x02, [3]) + dataInfo(safe))
+
+                let start = CFAbsoluteTimeGetCurrent()
+                let doc = KeystoreParser.parse(Data(pfx))
+                let elapsed = CFAbsoluteTimeGetCurrent() - start
+                try assertEqual(doc.format, .pkcs12)
+                try assertEqual(doc.entries.count, KeystoreParser.maxEntries)
+                try assertTrue(doc.notes.joined().contains("Nur die ersten"), "\(doc.notes)")
+                try assertLessThan(elapsed, 5.0, "Obergrenze greift nicht: \(elapsed) s")
+            }
+
             runner.runTest(name: "testHugeDeclaredLengthsDoNotAllocate") {
                 // Kopf behauptet 4 Mrd. Eintraege und ein Alias, das es nicht gibt.
                 var bytes: [UInt8] = [0xFE, 0xED, 0xFE, 0xED, 0, 0, 0, 2, 0xFF, 0xFF, 0xFF, 0xFF]

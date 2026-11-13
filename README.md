@@ -21,8 +21,8 @@ Press <kbd>Space</kbd> in Finder. Get a readable, theme-aware preview. Zero Java
 [![Latest release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-420%20passing-brightgreen?logo=checkmarx&logoColor=white)](#-testing)
-[![Swift LoC](https://img.shields.io/badge/Swift%20LoC-7%2C530-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-421%20passing-brightgreen?logo=checkmarx&logoColor=white)](#-testing)
+[![Swift LoC](https://img.shields.io/badge/Swift%20LoC-7%2C545-blue?logo=swift&logoColor=white)](Sources/)
 [![License](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Last commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit activity](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -539,7 +539,7 @@ swift run LoupeTests              # debug
 swift run -c release LoupeTests   # release (as in the release workflow)
 ```
 
-**420 tests** in a dependency-free harness, run by CI on every push:
+**421 tests** in a dependency-free harness, run by CI on every push:
 
 | Area | Tests | Highlights |
 | :--- | ---: | :--- |
@@ -551,7 +551,7 @@ swift run -c release LoupeTests   # release (as in the release workflow)
 | Theming & settings | 40 | Light/dark CSS, settings migration, on/off switches per category, plain-text fallback encodings, shared preference domain + entitlements |
 | Languages & about | 14 | English/German app texts, language resolution, **previews byte-identical in every language**, every About link pinned to its real target |
 | Charts (`.chart`) | 31 | Sections, BOM/CRLF, broken files, tempo map → song time, **every section starts collapsed**, fret colors, escaping, row and read limits, WCAG contrast, type registration |
-| Keystores & properties | 26 | JKS, JCEKS and PKCS #12 against `keytool`'s own output (aliases, owner, validity, fingerprints), **no key material in the preview**, every truncated and bit-flipped file parses without crashing, validity states, `.properties` separators, comments and continuations |
+| Keystores & properties | 27 | JKS, JCEKS and PKCS #12 against `keytool`'s own output (aliases, owner, validity, fingerprints), **no key material in the preview**, every truncated and bit-flipped file parses without crashing, entry cap against crafted files, validity states, `.properties` separators, comments and continuations |
 | Registry & app | 19 | Type routing, CSP, invalid UTF-8, empty files, pluginkit parsing incl. sandbox refusal |
 | Docs sync | 6 | This README against the code: versions, test badge, image paths, EN/DE parity, Finder reachability |
 | Performance | 4 | Hard time limits for large inputs |

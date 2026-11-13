@@ -21,8 +21,8 @@
 [![Aktuelles Release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release-Build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-420%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
-[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-7.530-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-421%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
+[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-7.545-blue?logo=swift&logoColor=white)](Sources/)
 [![Lizenz](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Letzter Commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit-Aktivität](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -539,7 +539,7 @@ swift run LoupeTests              # Debug
 swift run -c release LoupeTests   # Release (wie im Release-Workflow)
 ```
 
-**420 Tests** in einem abhängigkeitsfreien Test-Harness, bei jedem Push von der CI ausgeführt:
+**421 Tests** in einem abhängigkeitsfreien Test-Harness, bei jedem Push von der CI ausgeführt:
 
 | Bereich | Tests | Schwerpunkte |
 | :--- | ---: | :--- |
@@ -550,7 +550,7 @@ swift run -c release LoupeTests   # Release (wie im Release-Workflow)
 | TSV / CSV | 22 | RFC-4180-Anführungszeichen, Trennzeichenerkennung, Grenzen |
 | Erscheinungsbild & Einstellungen | 40 | Helles/dunkles CSS, Migration der Einstellungen, Schalter je Rubrik, Kodierungen des Rohtexts, gemeinsame Präferenz-Domain + Entitlements |
 | Sprache & Über | 14 | App-Texte Englisch/Deutsch, Sprachauflösung, **Vorschau in jeder Sprache byte-gleich**, jeder „Über“-Link auf sein echtes Ziel festgenagelt |
-| Keystores & Properties | 26 | JKS, JCEKS und PKCS #12 gegen die Ausgabe von `keytool` (Aliase, Inhaber, Gültigkeit, Fingerabdrücke), **kein Schlüsselmaterial in der Vorschau**, jede abgeschnittene und verfälschte Datei läuft ohne Absturz durch, Gültigkeitszustände, `.properties`-Trenner, Kommentare und Fortsetzungszeilen |
+| Keystores & Properties | 27 | JKS, JCEKS und PKCS #12 gegen die Ausgabe von `keytool` (Aliase, Inhaber, Gültigkeit, Fingerabdrücke), **kein Schlüsselmaterial in der Vorschau**, jede abgeschnittene und verfälschte Datei läuft ohne Absturz durch, Obergrenze gegen präparierte Dateien, Gültigkeitszustände, `.properties`-Trenner, Kommentare und Fortsetzungszeilen |
 | Charts (`.chart`) | 31 | Abschnitte, BOM/CRLF, kaputte Dateien, Tempowechsel → Songzeit, **jeder Abschnitt startet zugeklappt**, Bundfarben, Escaping, Zeilen- und Lesegrenzen, WCAG-Kontrast, Typ-Anmeldung |
 | Registry & App | 19 | Typ-Zuordnung, CSP, ungültiges UTF-8, leere Dateien, pluginkit-Auswertung inkl. Sandbox-Verweigerung |
 | Doku-Abgleich | 6 | Diese README gegen den Code: Versionen, Test-Badge, Bildpfade, Gleichstand EN/DE, Erreichbarkeit im Finder |

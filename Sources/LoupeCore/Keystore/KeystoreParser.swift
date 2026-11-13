@@ -203,12 +203,19 @@ public enum KeystoreParser {
         var certs: [(alias: String?, keyID: [UInt8]?, summary: X509Summary?)] = []
         var secrets: [String?] = []
         var encrypted = 0
+        // Dieselbe Obergrenze wie bei JKS: eine praeparierte Datei kann sonst
+        // hunderttausende winzige Bags enthalten.
+        var capped = false
 
-        for info in DERReader.first(in: safe[...])?.children ?? [] {
+        outer: for info in DERReader.first(in: safe[...])?.children ?? [] {
             guard let oid = info.children.first?.oid else { continue }
             if oid == oidEncryptedData { encrypted += 1; continue }
             guard oid == oidData, let bags = contentOfData(info) else { continue }
             for bag in DERReader.first(in: bags[...])?.children ?? [] {
+                guard keys.count + certs.count + secrets.count < maxEntries else {
+                    capped = true
+                    break outer
+                }
                 let parts = bag.children
                 guard let bagID = parts.first?.oid else { continue }
                 var alias: String?
@@ -237,13 +244,18 @@ public enum KeystoreParser {
 
         var entries: [KeystoreEntry] = []
         var used = Set<Int>()
+        // Ein Zertifikat gehoert zum Schluessel mit derselben localKeyID. Ueber
+        // ein Woerterbuch zugeordnet -- eine Schleife je Schluessel waere quadratisch.
+        var certsByKeyID: [[UInt8]: [Int]] = [:]
+        for (index, cert) in certs.enumerated() {
+            if let id = cert.keyID { certsByKeyID[id, default: []].append(index) }
+        }
         for key in keys {
-            // Ein Zertifikat gehoert zum Schluessel mit derselben localKeyID.
             var chain: [X509Summary] = []
             var unreadable = 0
-            for (index, cert) in certs.enumerated() where key.keyID != nil && cert.keyID == key.keyID {
+            for index in key.keyID.flatMap({ certsByKeyID[$0] }) ?? [] where !used.contains(index) {
                 used.insert(index)
-                if let summary = cert.summary { chain.append(summary) } else { unreadable += 1 }
+                if let summary = certs[index].summary { chain.append(summary) } else { unreadable += 1 }
             }
             entries.append(KeystoreEntry(alias: key.alias ?? "(ohne Alias)", kind: .privateKey, created: nil,
                                          certificates: chain, unreadableCertificates: unreadable))
@@ -259,6 +271,9 @@ public enum KeystoreParser {
         }
 
         var notes: [String] = []
+        if capped {
+            notes.append("Nur die ersten \(maxEntries) Einträge wurden gelesen.")
+        }
         if encrypted > 0 {
             notes.append(encrypted == 1
                 ? "Ein Teil der Datei ist mit dem Keystore-Passwort verschlüsselt — in der Regel die Zertifikate. Ohne Passwort bleiben sie unsichtbar."
