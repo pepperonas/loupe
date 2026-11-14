@@ -21,8 +21,8 @@
 [![Aktuelles Release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release-Build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-421%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
-[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-7.545-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-427%20bestanden-brightgreen?logo=checkmarx&logoColor=white)](#-tests)
+[![Swift-Zeilen](https://img.shields.io/badge/Swift%20LoC-7.716-blue?logo=swift&logoColor=white)](Sources/)
 [![Lizenz](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Letzter Commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit-Aktivität](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -384,6 +384,8 @@ Danach im Finder eine Datei auswählen und die <kbd>Leertaste</kbd> drücken.
 
 In der Begleit-App (`Loupe.app`) schalten Sie Loupe ein und aus und stellen das Aussehen der Vorschau ein. Änderungen gelten beim nächsten Druck auf die <kbd>Leertaste</kbd> – ohne Neustart.
 
+**Im Fenster öffnen:** Ein Doppelklick auf eine Datei, die Loupe kennt (oder *Ablage → Öffnen …*, <kbd>⌘O</kbd>), öffnet sie in einem normalen, vergrößerbaren Fenster mit genau der Quick-Look-Ansicht – gleiche Renderer, gleiche Einstellungen. <kbd>⌘R</kbd> lädt neu, nachdem Sie die Datei geändert haben, <kbd>⌘,</kbd> holt diese Einstellungen zurück. Das Fenster zeigt die Loupe-Ansicht auch dann, wenn eine Rubrik für Quick Look abgeschaltet ist.
+
 **Vorschauen an/aus**
 
 | Schalter | Umfasst |
@@ -442,7 +444,7 @@ Große Dateien werden nie vollständig gelesen: JSON und Code höchstens 20 MB v
 
 Entwicklerdateien stammen oft aus fremden Quellen (`git clone`, Downloads, Build-Artefakte). Loupe behandelt jede Datei als feindliche Eingabe:
 
-- **Sandbox & nur lesend** — die Erweiterung läuft in der App Sandbox mit `com.apple.security.files.user-selected.read-only`, sonst nichts.
+- **Sandbox & nur lesend** — die Erweiterung läuft in der App Sandbox mit `com.apple.security.files.user-selected.read-only`, sonst nichts. Die App hat zusätzlich `network.client`, nur weil der Hilfsprozess von WebKit in der Sandbox sonst nicht startet; ihr Dokumentfenster lädt trotzdem nichts aus dem Netz (gleiche CSP, JavaScript aus, jede Navigation abgefangen, Weblinks gehen an den Browser).
 - **Kein JavaScript, nirgends** — Vorschauen sind statisches HTML + CSS. Das Aufklappen nutzt `<details>`.
 - **Strikte Content Security Policy** — `default-src 'none'; style-src 'unsafe-inline'; img-src 'none'` (Markdown: `img-src data: cid:`). Keine Richtlinie erlaubt `script-src`.
 - **Alles wird maskiert** — jeder Wert, Schlüssel, jedes Log-Feld, jeder Dateiname und jedes Code-Token läuft durch HTML-Escaping; Tests schicken `<script>` und `onerror=` durch jeden Renderer.
@@ -539,7 +541,7 @@ swift run LoupeTests              # Debug
 swift run -c release LoupeTests   # Release (wie im Release-Workflow)
 ```
 
-**421 Tests** in einem abhängigkeitsfreien Test-Harness, bei jedem Push von der CI ausgeführt:
+**427 Tests** in einem abhängigkeitsfreien Test-Harness, bei jedem Push von der CI ausgeführt:
 
 | Bereich | Tests | Schwerpunkte |
 | :--- | ---: | :--- |

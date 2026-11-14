@@ -7,6 +7,18 @@ Versionierung nach [Semantic Versioning](https://semver.org/lang/de/).
 
 ## [Unveröffentlicht]
 
+### Hinzugefügt
+- **Dateien im Fenster öffnen:** Ein Doppelklick auf eine Datei, die Loupe kennt (oder *Ablage → Öffnen …*,
+  ⌘O), öffnet sie in einem normalen, vergrößerbaren Fenster mit genau der Quick-Look-Ansicht. Bisher öffnete
+  sich nur das Einstellungsfenster. ⌘R lädt neu, ⌘, zeigt die Einstellungen, ⌘C kopiert markierten Text.
+  Ohne Dateien startet die App wie bisher mit den Einstellungen.
+
+### Geändert
+- Quick Look und das neue Fenster nutzen dieselbe Pipeline (`PreviewPipeline` in LoupeCore: Renderer wählen,
+  Schalter beachten, lesen, rendern), mit eigenen Tests.
+- Die App hat zusätzlich das Sandbox-Recht `network.client`, weil WebKit sonst seinen Hilfsprozess nicht startet.
+  Geladen wird weiterhin nichts aus dem Netz; die Quick-Look-Erweiterung ist unverändert.
+
 ## [0.10.0] - 2026-11-13
 
 ### Hinzugefügt

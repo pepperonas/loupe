@@ -80,7 +80,11 @@ public enum LocalizationTests {
                     (en.textSize, de.textSize), (en.markdownWidth, de.markdownWidth), (en.language, de.language),
                     (en.setupGuide, de.setupGuide), (en.donate, de.donate), (en.licensePrefix, de.licensePrefix),
                     (en.licenseName, de.licenseName), (en.menuHideOthers, de.menuHideOthers),
-                    (en.menuShowAll, de.menuShowAll), (en.menuWindow, de.menuWindow), (en.menuMinimize, de.menuMinimize)]
+                    (en.menuShowAll, de.menuShowAll), (en.menuWindow, de.menuWindow), (en.menuMinimize, de.menuMinimize),
+                    (en.menuFile, de.menuFile), (en.menuOpen, de.menuOpen), (en.menuReload, de.menuReload),
+                    (en.menuClose, de.menuClose), (en.menuSettings, de.menuSettings), (en.menuEdit, de.menuEdit),
+                    (en.menuCopy, de.menuCopy), (en.menuSelectAll, de.menuSelectAll),
+                    (en.noPreviewForType, de.noPreviewForType)]
                 for (e, d) in pairs {
                     try assertFalse(e.isEmpty || d.isEmpty)
                     try assertFalse(e == d, "nicht uebersetzt: \(e)")

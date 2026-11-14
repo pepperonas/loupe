@@ -4,6 +4,10 @@
 <dict>
     <key>com.apple.security.app-sandbox</key><true/>
     <key>com.apple.security.files.user-selected.read-only</key><true/>
+    <!-- Nur fuer WebKit im Dokumentfenster: ohne dieses Recht startet sein Netzwerkprozess in der Sandbox nicht.
+         Geladen wird nichts aus dem Netz (CSP default-src 'none', JavaScript aus, Navigation abgefangen).
+         Die Quick-Look-Erweiterung hat dieses Recht nicht. -->
+    <key>com.apple.security.network.client</key><true/>
     <!-- Gemeinsame Einstellungen (LoupeSettings.sharedDomain). -->
     <key>com.apple.security.temporary-exception.shared-preference.read-write</key>
     <array><string>io.celox.loupe.shared</string></array>
