@@ -21,8 +21,8 @@ Press <kbd>Space</kbd> in Finder. Get a readable, theme-aware preview. Zero Java
 [![Latest release](https://img.shields.io/github/v/release/pepperonas/loupe?logo=github&label=release&color=007AFF)](https://github.com/pepperonas/loupe/releases/latest)
 [![CI](https://github.com/pepperonas/loupe/actions/workflows/ci.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/ci.yml)
 [![Release build](https://github.com/pepperonas/loupe/actions/workflows/release.yml/badge.svg)](https://github.com/pepperonas/loupe/actions/workflows/release.yml)
-[![Tests](https://img.shields.io/badge/Tests-421%20passing-brightgreen?logo=checkmarx&logoColor=white)](#-testing)
-[![Swift LoC](https://img.shields.io/badge/Swift%20LoC-7%2C545-blue?logo=swift&logoColor=white)](Sources/)
+[![Tests](https://img.shields.io/badge/Tests-427%20passing-brightgreen?logo=checkmarx&logoColor=white)](#-testing)
+[![Swift LoC](https://img.shields.io/badge/Swift%20LoC-7%2C716-blue?logo=swift&logoColor=white)](Sources/)
 [![License](https://img.shields.io/github/license/pepperonas/loupe?color=yellow)](LICENSE)
 [![Last commit](https://img.shields.io/github/last-commit/pepperonas/loupe?logo=git&logoColor=white)](https://github.com/pepperonas/loupe/commits/main)
 [![Commit activity](https://img.shields.io/github/commit-activity/m/pepperonas/loupe?logo=github)](https://github.com/pepperonas/loupe/graphs/commit-activity)
@@ -384,6 +384,8 @@ Then select a file in Finder and press <kbd>Space</kbd>.
 
 The companion app (`Loupe.app`) lets you switch Loupe on and off and tune how previews look. Changes apply the next time you press <kbd>Space</kbd> — no restart needed.
 
+**Open in a window:** Double-click a file Loupe handles (or use *File → Open…*, <kbd>⌘O</kbd>) and it opens in a regular, resizable window with exactly the Quick Look view — same renderers, same settings. <kbd>⌘R</kbd> reloads after you edit the file, <kbd>⌘,</kbd> brings back these settings. The window shows the Loupe view even when a category is switched off for Quick Look.
+
 **Previews on/off**
 
 | Switch | Covers |
@@ -442,7 +444,7 @@ Large files are never read completely: JSON and code are capped at 20 MB from th
 
 Developer files often come from untrusted sources (`git clone`, downloads, build artifacts). Loupe treats every file as hostile input:
 
-- **Sandboxed & read-only** — the extension runs in the App Sandbox with `com.apple.security.files.user-selected.read-only`, nothing else.
+- **Sandboxed & read-only** — the extension runs in the App Sandbox with `com.apple.security.files.user-selected.read-only`, nothing else. The app additionally holds `network.client`, only because WebKit's helper process refuses to start without it in the sandbox; its document window still loads nothing from the network (same CSP, JavaScript off, every navigation intercepted, web links go to your browser).
 - **No JavaScript, anywhere** — previews are static HTML + CSS. Collapsing uses `<details>`.
 - **Strict Content Security Policy** — `default-src 'none'; style-src 'unsafe-inline'; img-src 'none'` (Markdown: `img-src data: cid:`). No policy allows `script-src`.
 - **Everything is escaped** — every value, key, log field, file name and code token goes through HTML escaping; tests feed `<script>` and `onerror=` through every renderer.
@@ -539,7 +541,7 @@ swift run LoupeTests              # debug
 swift run -c release LoupeTests   # release (as in the release workflow)
 ```
 
-**421 tests** in a dependency-free harness, run by CI on every push:
+**427 tests** in a dependency-free harness, run by CI on every push:
 
 | Area | Tests | Highlights |
 | :--- | ---: | :--- |

@@ -53,4 +53,13 @@ public extension L10n {
     var menuWindow: String { isDE ? "Fenster" : "Window" }
     var menuMinimize: String { isDE ? "Im Dock ablegen" : "Minimize" }
     var menuZoom: String { isDE ? "Zoomen" : "Zoom" }
+    var menuFile: String { isDE ? "Ablage" : "File" }
+    var menuOpen: String { isDE ? "Öffnen …" : "Open…" }
+    var menuReload: String { isDE ? "Neu laden" : "Reload" }
+    var menuClose: String { isDE ? "Schließen" : "Close" }
+    var menuSettings: String { isDE ? "Einstellungen …" : "Settings…" }
+    var menuCopy: String { isDE ? "Kopieren" : "Copy" }
+    var menuSelectAll: String { isDE ? "Alles auswählen" : "Select All" }
+    var noPreviewForType: String { isDE ? "Für diesen Dateityp gibt es keine Vorschau." : "There is no preview for this file type." }
+    var menuEdit: String { isDE ? "Bearbeiten" : "Edit" }
 }

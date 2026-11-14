@@ -26,7 +26,8 @@ let package = Package(
             name: "Loupe",
             dependencies: ["LoupeCore"],
             path: "Sources/Loupe",
-            exclude: ["Resources"]
+            exclude: ["Resources"],
+            linkerSettings: [.linkedFramework("WebKit")]
         ),
         .executableTarget(
             name: "LoupePreview",
